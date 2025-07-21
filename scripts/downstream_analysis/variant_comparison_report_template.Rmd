@@ -1,0 +1,955 @@
+---
+title: "A pipeline for variant comparison: report"
+author: "Katherine Wang"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, message=FALSE}
+### Change working directory for the entire notebook so that data can be accessed.
+# Please modify root.dir as appropriate.
+# test_data is the directory of several subdirectories containing data used for this analysis.
+my_root_dir = "C:/Users/achro/OneDrive/Desktop/CMU/Spring 2025/Armbruster Lab research/ortholog_comparison_refactor/test_data"
+knitr::opts_knit$set(root.dir = my_root_dir)
+
+# working with dataframes
+library(tidyverse)
+
+# to read alignments
+library(seqinr)
+
+# to generate sequence logos
+library(ggseqlogo)
+
+# for fstrings
+library(glue)
+
+# to plot figures and combine multiple figures in a page
+library(ggplot2)
+library(gridExtra)
+library(purrr)
+
+theme_set(theme_classic())
+```
+
+# Make outdirs
+MANUAL: specify a name for the output subdirectory.
+```{r}
+outdir <- "../PA3565_analysis_outputs" # will be placed relative to my_root_dir; "../" navigates one level up so the outputs don't end up inside the root directory
+
+# creates directories with that name if they don't already exist
+make_dir <- function(new_dir) {
+  ifelse(!dir.exists(file.path(new_dir)),
+        dir.create(file.path(new_dir)),
+        glue("{new_dir} directory exists"))
+}
+
+# make the main output directory
+make_dir(outdir)
+
+# make subdirectories of outdir
+hist_path <- glue("{outdir}/histograms")
+make_dir(hist_path)
+
+seqlogo_path <- glue("{outdir}/sequence_logos")
+make_dir(seqlogo_path)
+
+anno_path <- glue("{outdir}/iTOL_annotations")
+make_dir(anno_path)
+```
+
+# Load data
+## Unaligned multifasta
+Define a function to mutate a sequence_length column into a multi-fasta and also join it with metadata. This will allow us to associate isolation source categories and subcategories with sequence lengths.
+```{r}
+process_multifasta_and_metadata <- function(multifasta_file, metadata_file, sequence_name_col, name_map_file=NULL) {
+  # Takes as input the filename of a multifasta
+  # as well as the name of a metadata file
+  # sequence_name_col is whichever column in the metadata serves as the long sequence names (e.g. protein_id, nucleotide_id)
+  # Optional argument name_map_file can be supplied to associate long sequence names from this multifasta
+  # to the short sequence names from a PHYLIP alignment produced using alignment_and_tree_wrapper.sh.
+  
+  data <- read.alignment(multifasta_file, format="fasta") # can still use read.alignment on non-aligned sequences
+  
+  seqs <- data[["seq"]] |>
+    unlist() |> # convert from list to vector
+    toupper() # originally in lowercase; convert to uppercase
+  
+  sequence_names = (data["nam"][[1]]) # need the [[1]] in order to get the actual list
+  df <- data.frame(locus_tags = sequence_names, sequence = seqs) |>
+    mutate(sequence_length = nchar(sequence))
+  
+  metadata <- read.csv(metadata_file, header=TRUE, sep="\t") # metadata is written in a standardized format by metadata_processing.py
+  
+  df <- left_join(df, metadata, by=c("locus_tags"=sequence_name_col))
+  
+  # add in short_names if name_map_file was provided
+  if (!is.null(name_map_file)) {
+    name_map <- read.csv(name_map_file, header=FALSE, sep="\t", col.names=c("short_names", "locus_tags")) 
+    # as created by fasta_to_phylip.sh: two tab-separated columns, no header, short names first
+    df <- left_join(df, name_map, by="locus_tags") |>
+      relocate(short_names, .after = locus_tags) # move short_names so that it's column 2, after locus_tags
+  }
+  
+  return(df)
+}
+```
+
+Note that sequences with duplicated locus tags will be filtered out before conversion from FASTA to PHYLIP, so there may be a few rows with no short_names values.  
+
+Load data to produce histograms.  
+The multifasta file was downloaded from [Pseudomonas.com](https://www.pseudomonas.com/orthologs/list?id=109949).  
+The name map used in this example was obtained by running alignment_and_tree_wrapper.sh, a wrapper script to produce a multiple sequence alignment with ClustalW and a bootstrap tree with RAxML. It's not necessary if you're only producing histograms, but I included it when loading the unaligned data because I later used the same df to produce iTOL annotations. (The tree uses short names, so the name map is used to map from the long names in this df to the short names in the tree.)
+The metadata file was obtained through metadata_processing.py.
+```{r}
+multifasta_file = "orthologs/POG002101.fasta"
+metadata_file = "processed_metadata/metadata_unique.tsv"
+sequence_name_col = "nucleotide_id" # This dataset featured protein sequences but used nucleotide IDs as sequence names
+name_map_file = "POG002101_seqs/alignment/name_map.tsv"
+
+unaligned_df <- process_multifasta_and_metadata(multifasta_file, metadata_file, sequence_name_col, name_map_file)
+```
+
+## Multiple sequence alignment
+Define a function to read in an alignment (either PHYLIP or FASTA), a name map (to associate long sequence names from the original FASTA alignment with the short sequence names from the PHYLIP format alignment that the FASTA was converted to in order to make a tree in RAxML), and a metadata file (which features long sequence names) and join the information into a single dataframe.
+```{r}
+process_alignment_and_metadata <- function(alignment_file, alignment_type, name_map_file, metadata_file, sequence_name_col) {
+  # Takes as input the filename of a multiple sequence alignment
+  # and the alignment_type ("fasta" or "phylip")
+  # as well as the name of the name map and metadata files
+  # sequence_name_col is whichever column in the metadata serves as the long sequence names (e.g. protein_id, nucleotide_id)
+  
+  alignment <- read.alignment(alignment_file, format=alignment_type)
+  
+  seqs <- alignment[["seq"]] |>
+    unlist() |> # convert from list to vector
+    toupper() # originally in lowercase; convert to uppercase
+  
+  alignment_names = (alignment["nam"][[1]]) # need the [[1]] in order to get the actual list
+  # join the name_map df
+  name_map <- read.csv(name_map_file, header=FALSE, sep="\t", col.names=c("short_names", "long_names")) 
+  # as created by fasta_to_phylip.sh: two tab-separated columns, no header, short names first
+  
+  if (alignment_type == "fasta") {
+    df <- data.frame(long_names = alignment_names, sequence = seqs)
+    df <- left_join(df, name_map, by="long_names")
+    # added a column from name_map: "short_names"
+  } else if (alignment_type == "phylip") {
+    # if it's a phylip, need to trim whitespace in the alignment names.
+    # This has to do with the phylip file, not with name_map.
+    alignment_names <- trimws(alignment_names)
+    
+    df <- data.frame(short_names = alignment_names, sequence = seqs)
+    df <- left_join(df, name_map, by="short_names")
+    # added a column from name_map: "long_names"
+  } else {
+    print("alignment_type must be either fasta or phylip (lowercase)")
+  }
+
+  metadata <- read.csv(metadata_file, header=TRUE, sep="\t") # metadata is written in a standardized format by metadata_processing.py
+  
+  df <- left_join(df, metadata, by=c("long_names"=sequence_name_col))
+  
+  # enforce a column order
+  df <- df |> 
+    select(long_names, short_names, sequence, organism, isolation_source, titles, rescued_source, category, subcategory) |> # leave out the id columns from the metadata; one of them was probably used to join the metadata, and we don't need them anymore because the analysis focuses on isolation source categories
+    rename_at('long_names', ~'locus_tags')
+  # alternative to select: relocate(long_names, short_names) to bring them to the front, then drop all three of the ID columns
+  # though there might be an error if one of them doesn't exist due to being the column by which the dfs were joined, i.e. sequence_name_col
+  return(df)
+}
+```
+
+Load data to produce sequence logos.  
+The alignments and name map used in this example were obtained by running alignment_and_tree_wrapper.sh, a wrapper script to produce a multiple sequence alignment with ClustalW and a bootstrap tree with RAxML. Refer to the end of the markdown for code to generate iTOL metadata annotations compatible with the bootstrap tree.  
+The metadata file was obtained through metadata_processing.py.
+```{r}
+alignment_file = "POG002101_seqs/alignment/aligned.fasta" # could use either the fasta or phylip with no issues
+
+metadata_file = "processed_metadata/metadata_unique.tsv"
+name_map_file = "POG002101_seqs/alignment/name_map.tsv"
+sequence_name_col = "nucleotide_id" # This dataset featured protein sequences but used nucleotide IDs as sequence names
+
+msa_df <- process_alignment_and_metadata(alignment_file, "fasta", name_map_file, metadata_file, sequence_name_col)
+```
+
+
+# Make a histogram of sequence lengths
+
+Make a histogram of the overall data, labeled with the length of a given locus tag treated as a reference sequence.
+```{r}
+reference_locus <- "NS33_RS12300" # can be any arbitrary value from the locus_tags column
+reference_locus <- "TC72_RS16265" # testing with a locus tag that has multiple entries
+
+reference_length <- unaligned_df[unaligned_df["locus_tags"] == reference_locus, ]$sequence_length[1]
+  # include the comma so the boolean indexing returns a df, not a list
+  # take the first item in the sequence length column; even if there are multiple entries with the same locus tag,
+  # they should all have the same sequence length anyway
+```
+
+```{r}
+unaligned_df |> ggplot() +
+  geom_histogram(aes(x=sequence_length)) +
+  geom_vline(aes(xintercept=reference_length, colour="length"), size=1.5) +
+  labs(x = "Length of sequence", y = "Count", title="Full dataset") + 
+  scale_color_manual(name = reference_locus, values = c(length = "red"))
+
+fname = glue("{hist_path}/overall_histogram.pdf")
+ggsave(fname)
+```
+
+
+Function to make histograms across categories and subcategories:
+```{r}
+# Function to save histograms based on grouping variable
+save_histograms <- function(df, group_var, reference_locus, outdir, pdf_suffix) {
+  if (!group_var %in% names(df)) stop(glue("Column '{group_var}' not found in df"))
+  
+  df <- df[!is.na(df[[group_var]]), ] # remove rows with NA's for group_var so that the split will work properly
+  
+  reference_length <- df[df["locus_tags"] == reference_locus, ]$sequence_length[1]
+
+  plots <- split(df, df[[group_var]]) |>
+    map(~ ggplot(.x) +
+          geom_histogram(aes(x=.x$sequence_length)) +
+          geom_vline(aes(xintercept=reference_length, colour="length"), size=1.5) +
+          labs(x = "Length of sequence", y = "Count", title = glue("{group_var}: {unique(.x[[group_var]])[1]}; n: {nrow(.x)}")) + 
+          scale_color_manual(name = reference_locus, values = c(length = "red")))
+
+  # print(plots)
+  # Split plots into groups of 4
+  plot_groups <- split(plots, ceiling(seq_along(plots) / 4))
+
+  # Create a PDF with multiple pages
+  pdf(glue("{outdir}/{pdf_suffix}.pdf"), width = 12, height = 6)
+  print(glue("Histogram saved to {outdir}/{pdf_suffix}.pdf"))
+
+  # Loop through groups and print each set of 4 to a new page
+  #print(is.vector(plot_groups))
+  walk(plot_groups, ~ grid.arrange(grobs = .x, nrow = 2, ncol = 2))
+
+  dev.off() # Close the PDF device
+  
+  # Split the dataframe by group_var
+  df_split <- split(df, df[[group_var]])
+  
+  # Save each sub-dataframe as a CSV (for debugging, but this could also be good for supplemental figures)
+  walk(df_split, ~ {
+    group_name <- unique(.x[[group_var]])[1]
+    outpath <- glue("{outdir}/{pdf_suffix}_{group_name}_locusTags.txt")
+    write.table(.x$locus_tags, file = outpath, row.names=FALSE, col.names=FALSE, quote=FALSE)
+  })
+
+}
+
+histograms_by_source <- function(df, reference_locus, outdir) {
+  # Generate category-level histogram PDF
+  save_histograms(df, "category", reference_locus, outdir, "category_histograms")
+  write.table(df$locus_tags, file=glue("{outdir}/category_histograms_locusTags.txt"), row.names=FALSE, col.names=FALSE, quote=FALSE)
+  
+  df <- df[!is.na(df$category), ] # remove rows with NA's for group_var so that the split will work properly
+  df_categories <- split(df, df$category)
+  
+  # Generate subcategory-level histogram PDF
+  walk(names(df_categories), ~ save_histograms(df_categories[[.x]], "subcategory", reference_locus, 
+                                              outdir, glue("{.x}_subcategories_histograms")))
+}
+```
+
+Producing histograms for categories and subcategories:
+```{r}
+histograms_by_source(unaligned_df, reference_locus, hist_path)
+```
+
+# Plot a sequence logo for the region of interest
+In order to generate a sequence logo that only contains a region of interest and is labeled with sites of interest, it is necessary to check how the multiple sequence alignment has shifted the coordinates relative to the reference sequence. In this case, the reference sequence is the sequence of PAO1 PA3565 before performing a multiple sequence alignment, and the insertion of gap characters will produce an offset from the original positions. In the case that gap characters are inserted between sites of interest, you will also need to manually adjust the list of calibrated positions.  
+
+
+## Setting up initial coordinates
+MANUAL: based on the coordinates of the reference sequence, define a list of your sites of interest, as well as a window start position and window size. The window parameters will determine the bounds of the sequence logo, and the sites of interest will be marked as x axis labels.  
+The chunk below features example data based on the sites of interest in the PAO1 PA3565 reference sequence, residues 216 and 219. The window start and window size were chosen to provide a bit of buffer to both sides of these residues.
+```{r}
+sites <- c(216, 219)
+window_start <- 211
+window_size <- 15
+```
+
+## Calibration of coordinates
+### Examine the multiple sequence alignment
+To assist with determining the the offset between the original and aligned reference sequences, a sequence logo for the entire aligned sequence will be generated.
+```{r, fig.height = 8, fig.width = 100}
+# you may adjust the figure dimensions if you'd like
+fname = glue("{seqlogo_path}/sequencelogo_full.pdf")
+
+ggseqlogo(msa_df$sequence)
+ggsave(fname, limitsize = FALSE) # it's easier to view it as a PDF
+```
+
+### Adjust coordinates
+MANUAL: set the offset between the original and aligned reference sequences.
+```{r}
+offset <- 24 # could be positive or negative; make sure it stays within range of the MSA sequences
+
+sites_adj <- sites + offset
+window_start_adj <- window_start + offset
+```
+
+MANUAL: plot the local sequence logo and confirm that the adjusted coordinates for sites and window_start are consistent with your expectations. If the sites are off because gaps were inserted between them in the MSA, you will have to assign a new vector to sites_adj.
+```{r, warning=FALSE}
+# you may adjust the figure dimensions if you'd like
+
+ggplot() + 
+  geom_logo(substring(msa_df$sequence, first=window_start_adj, last=window_start_adj+window_size)) +
+  scale_x_continuous(name = "Position",
+                     breaks = sites_adj-window_start_adj+1, # to correctly place the label locations 
+                     labels=sites) # label as if looking at the reference genome
+  # original x axis started at 1
+
+fname = glue("{seqlogo_path}/sequencelogo_local.pdf")
+ggsave(fname, height=4, width=8, units="in")
+```
+
+
+## Sequence logos by category and subcategory
+
+```{r}
+# Function to save sequence logos based on grouping variable
+save_sequence_logos <- function(df, group_var, sites, window_start, window_size, offset, outdir, pdf_suffix) {
+  # Adjust sites and window_start according to offset
+  sites_adj <- sites + offset
+  window_start_adj <- window_start + offset
+  
+  if (!group_var %in% names(df)) stop(glue("Column '{group_var}' not found in df"))
+  
+  df <- df[!is.na(df[[group_var]]), ] # remove rows with NA's for group_var so that the split will work properly
+  
+  plots <- split(df, df[[group_var]]) |>
+    map(~ ggplot(.x) +
+          geom_logo(substring(.x$sequence, window_start_adj, window_start_adj + window_size)) +
+          scale_x_continuous(name = "Position",
+                             breaks = sites_adj - window_start_adj + 1, 
+                             labels = sites) +  
+          labs(title = glue("{group_var}: {unique(.x[[group_var]])[1]}; n: {nrow(.x)}")))
+
+  # Split plots into groups of 4
+  plot_groups <- split(plots, ceiling(seq_along(plots) / 4))
+
+  # Create a PDF with multiple pages
+  pdf(glue("{outdir}/{pdf_suffix}.pdf"), width = 12, height = 6)
+  print(glue("Sequence logo saved to {outdir}/{pdf_suffix}.pdf"))
+
+  # Loop through groups and print each set of 4 to a new page
+  walk(plot_groups, ~ grid.arrange(grobs = .x, nrow = 2, ncol = 2))
+
+  dev.off() # Close the PDF device
+  
+  # Split the dataframe by group_var
+  df_split <- split(df, df[[group_var]])
+  
+  # Save each sub-dataframe as a CSV (for debugging, but this could also be good for supplemental figures)
+  walk(df_split, ~ {
+    group_name <- unique(.x[[group_var]])[1]
+    outpath <- glue("{outdir}/{pdf_suffix}_{group_name}_locusTags.txt")
+    write.table(.x$locus_tags, file = outpath, row.names=FALSE, col.names=FALSE, quote=FALSE)
+})
+
+}
+
+sequence_logos_by_source <- function(df, sites, window_start, window_size, offset, outdir) {
+  # Generate category-level sequence logo PDF
+  save_sequence_logos(df, "category", sites, window_start, window_size, offset, outdir, "category_seqlogos")
+  write.table(df$locus_tags, file=glue("{outdir}/category_seqlogos_locusTags.txt"), row.names=FALSE, col.names=FALSE, quote=FALSE)
+  
+  df <- df[!is.na(df$category), ] # remove rows with NA's for group_var so that the split will work properly
+  df_categories <- split(df, df$category)
+  
+  # Generate subcategory-level sequence logo PDF
+  walk(names(df_categories), ~ save_sequence_logos(df_categories[[.x]], "subcategory", sites,
+                                                   window_start, window_size, offset, outdir, glue("{.x}_subcategories_seqlogos")))
+
+}
+```
+
+Make sequence logos. 
+```{r}
+sequence_logos_by_source(msa_df, sites, window_start, window_size, offset, seqlogo_path)
+```
+
+
+# Additional plots and tables for the region of interest
+## Conservation
+Within the window, what are the conserved and variable sites? By default, if the occurrence of a particular symbol at a site is >= 75%, it's considered conserved. Please feel free to adjust conservation_threshold.
+```{r}
+# Input: substrings of aligned sequences, focusing on the window shown in the sequence logos
+sequences <- substring(msa_df$sequence, first=window_start_adj, last=window_start_adj+window_size)
+
+# Convert to a tibble with positions
+conservation <- map_df(seq_len(nchar(sequences[1])), ~ tibble(
+  position = .x+window_start-1, # instead of starting at 1, start at window_start
+  character = str_sub(sequences, .x, .x)
+)) |>
+  dplyr::count(position, character, name = "count") |> # seqinr also has a count function, so explicitly use dplyr's version
+  group_by(position) |>
+  mutate(percentage = count / sum(count)) |>
+  ungroup()
+
+# write the freq map to a file
+fname = glue("{outdir}/freq_map.csv")
+write.csv(conservation, fname, row.names = FALSE)
+
+conservation_threshold <- 0.75 # based on the literature
+conservation |>
+  group_by(position) |>
+  summarize(max_percent=max(percentage), is_conserved=max(percentage)>=conservation_threshold) |>
+  ggplot () +
+  geom_col(aes(x=position, y=max_percent, fill=is_conserved)) +
+  geom_hline(yintercept = conservation_threshold, lty=2, lwd=1) +
+  labs(title="Conserved and variable sites", x="Position", y="Percent agreement", fill="Conserved site?") +
+  scale_x_continuous(breaks=sites, labels=sites)
+
+fname = glue("{outdir}/conservation.pdf")
+ggsave(fname)
+```
+
+## Species diversity
+### Functions
+Define a function to count species in a given dataframe.
+```{r}
+count_species <- function(df) {
+  # input: a df with genus and species columns
+  # output: df with two columns: species_name (the genus and species strings joined), and count (number of occurrences)
+  df <- df |>
+    mutate(species_name = sapply(organism, function(x) { # species_name contains just genus + species, no strain
+      words <- strsplit(x, " ")[[1]]
+      paste(head(words, 2), collapse = " ")
+    })) |>
+    filter(!(species_name %in% c("NA", ""))) |> # get rid of NA's and empty data
+    group_by(species_name) |>
+    summarize(count=n()) |>
+    arrange(desc(count))
+  
+  return(df)
+}
+```
+
+Define a function to summarize species diversity, given the dataframe output of count_species(). Species diversity incorporates two concepts: how many species there are (species richness), and how many individuals there are in each species (species evenness). The summary produced here won't be very rigorous and might not control all that well for the difference in sample size between categories, but it should give a general sense of how diverse each category is.
+```{r}
+library(abdiv) # for Simpson diversity index
+
+summarize_diversity <- function(df) {
+  # Input: df output of count_species() (species_name column and count column)
+  # Output: prints a variety of diversity metrics
+  # print(df)
+
+  out1 <- glue("Species richness: {nrow(df)}")
+
+  single <- df |>
+    filter(count==1) |>
+    nrow()
+  out2 <- glue("Percentage of species that appear only once: {round(single/nrow(df), digits=2)}")
+
+  out3 <- glue("Simpson diversity index (ranges from 0 to 1, higher = greater evenness): {round(simpson(df$count), digits=2)}")
+  
+  out4 <- glue("Number of observations: {sum(df$count)}")
+  
+  return(paste(out4, out1, out2, out3, sep="; ")) #even if sep="\n", R won't print the newlines
+}
+```
+
+Define a function to print a species diversity summary for each category/subcategory within a df. category_col may be either category or subcategory.
+```{r}
+diversity_by_category <- function(df, category_col = "category") {
+  data_by_category <- split(df, df[category_col])
+  print(glue("Summarizing species diversity by {category_col}."))
+  # print(glue("{category_col}: {names(data_by_category)}")) # to determine which set of results corresponds to which category- go in order.
+  
+  map(data_by_category, ~summarize_diversity(count_species(.x)))
+}
+```
+
+Define a function to downsample to the smallest category/subcategory to make comparisons fairer. category_col may be either category or subcategory.
+```{r}
+downsampling <- function(df, category_col = "category") {
+  # Ensure category column exists
+  if (!category_col %in% names(df)) {
+    stop("Specified category column not found in the dataframe.")
+  }
+  
+  # Get the smallest count across categories
+  counts <- df |>
+    group_by(across(all_of(category_col))) |>
+    summarize(n=n(), .groups = "drop")
+  
+  smallest <- min(counts$n)
+  print(glue("Downsampling to {smallest} observations per {category_col}"))
+
+  # Downsample each category to the smallest size
+  ds_df <- df |>
+    group_by(across(all_of(category_col))) |>
+    slice_sample(n = smallest) |>
+    ungroup()
+  
+  return(ds_df)
+}
+```
+
+### Analysis
+How many species are in the dataset?
+```{r}
+species_count <- count_species(msa_df)
+head(species_count) # print just the first few
+```
+
+Show the size of each category.
+```{r}
+msa_df |>
+  group_by(category) |>
+  summarize(count=n())
+
+print(glue("Number of records: {nrow(msa_df)}"))
+```
+
+All of the data together:
+```{r}
+count_species(msa_df) |>
+  summarize_diversity()
+```
+
+Summarizing the same data, split by category:
+```{r}
+diversity_by_category(msa_df)
+```
+
+Downsampling for more fair comparisons, as sample size varies greatly between isolation source categories:
+```{r}
+set.seed(42)
+
+downsampled_df <- msa_df |>
+  filter(category != "built environment") |> # I decided to exclude built environment from the analysis because the sample size is small
+  downsampling()
+
+print("Summary for the entire downsampled df:")
+count_species(downsampled_df) |>
+  summarize_diversity()
+
+print("Summary by category within the downsampled df:")
+diversity_by_category(downsampled_df)
+```
+
+# Generating iTOL phylogeny annotations
+A bootstrap tree was generated in RAxML using a multiple sequence alignment produced by ClustalW. It can be found at POG002101_seqs/trees/RAxML_bipartitions.POG002101.txt. I will annotate this tree in iTOL, with information such as clade, species, and isolation source. To do this, I'll generate annotation files from the metadata.  
+For most of the annotations, we use metadata corresponding to the multiple sequence alignment (msa_df) because the tree was generated from the MSA, but the sequence length annotations use unaligned_df because sequence lengths are homogenized when aligned.  
+
+If there are no records matching the specified criteria, the node ID will be "FALSE", but you can still use the annotation file because iTOL ignores invalid node IDs.  
+
+Refer to these colnames when writing information from columns to annotation files. The way it's set up, it relies on column numbers, so it's important that the columns are where we expect them to be.
+```{r}
+colnames(msa_df) # metadata joined to sequences and short names
+```
+
+
+To facilitate labeling of the RAxML bootstrap tree (made from the alignment featured in msa_df) in iTOL, I will write information from the metadata (in msa_df) into text files that can be dragged and dropped onto an iTOL tree.  
+
+## Adding sequence name, genus, and species to node labels in iTOL:
+```{r}
+# based on labels.txt in the folder of example annotation files from https://itol.embl.de/help.cgi#webEditor
+# First write the invariable portion
+fname = glue("{anno_path}/node_labels.txt")
+cat("LABELS\nSEPARATOR TAB\nDATA\n", file = fname) # no append; overwrites the file
+
+msa_df |>
+  select(short_names, locus_tags, organism) |>
+  apply(1, function(row) {
+  # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab. 
+  cat(row[1], file = fname, append=TRUE)
+  cat("\t", file = fname, append=TRUE)
+  cat(row[2], row[3], "\n", file = fname, append=TRUE) # appends each line to the file
+})
+
+# # print short_names (row[2]) which is the node ID because the tree was made from a PHYLIP file, then a tab,
+# # then (the following are space-separated) the locus (row[1]) and organism (row[4])
+# apply(msa_df, 1, function(row) {
+#   # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab. 
+#   cat(row[2], file = fname, append=TRUE)
+#   cat("\t", file = fname, append=TRUE)
+#   cat(row[1], row[4], "\n", file = fname, append=TRUE) # appends each line to the file
+# })
+```
+
+
+## Coloring by genus
+We can automate the coloring of node labels by genus.  
+First, get the set of unique species and assign colors from a palette.
+
+```{r}
+### Color node labels by genus
+library(paletteer)
+library(ggthemes)
+
+msa_df <- msa_df |>
+  mutate(genus = sapply(organism, function(x) strsplit(x, " ")[[1]][1])) |>
+  mutate(genus = ifelse(is.na(genus), " ", genus))
+colnames(msa_df) # the genus column was added to the end, so it won't affect the numbers of the prior columns
+#head(msa_df)
+
+genera = levels(as.factor(msa_df$genus)) # get the unique values
+
+num_colors = length(genera)
+
+# Because there could be a lot of species, we can't use a discrete palette- we must sample from a continuous palette.
+my_colors <- paletteer_c("grDevices::rainbow", n = num_colors) # grDevices is built into R
+
+# Trim the color strings to remove the extra "FF" at the end
+my_colors <- sapply(my_colors, function(x) substr(x, 1, nchar(x) - 2))
+
+# Lighten the colors so that black text is easier to read against them
+# It seems like the colors must be trimmed before, not after, this operation.
+library(colorspace)
+my_colors <- lighten(my_colors, amount = 0.25)
+```
+
+To mimic dictionary functionality in R, create a vector with key-value pairs.
+```{r}
+keyword_color_map <- setNames(my_colors, genera) # first the values, then the keys
+
+keyword_color_map[" "] <- "#FFFFFF" # color white if no genus found for the entry
+
+# Check that the map has been created correctly
+for (keyword in names(keyword_color_map)) {
+  cat("Key:", keyword, "\tValue:", keyword_color_map[keyword], "\n")
+}
+```
+
+Now that colors have been assigned to genera, write an annotation file containing the colors corresponding to each node ID (depending on its species)
+```{r}
+# based on colors_styles_template.txt https://itol.embl.de/help/colors_styles_template.txt 
+# First write the invariable portion
+fname = glue("{anno_path}/genera_colors.txt")
+cat("TREE_COLORS\nSEPARATOR TAB\nDATA\n", file = fname) # no append; overwrites the file
+
+msa_df |>
+  select(short_names, genus) |>
+  apply(1, function(row) {
+  # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab. 
+  cat(row[1], file = fname, append=TRUE)
+  cat("\t", file = fname, append=TRUE)
+  cat("range\t", file = fname, append=TRUE)
+  cat(keyword_color_map[row[2]], "\n", file = fname, append=TRUE) # appends each line to the file
+})
+
+# # First print the short name (row[2]) which is the node ID, then a tab,
+# # then the word "range" to indicate the type of color label
+# # then the color corresponding to the genus (row[10])
+# apply(msa_df, 1, function(row) {
+#   # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab. 
+#   cat(row[2], file = fname, append=TRUE)
+#   cat("\t", file = fname, append=TRUE)
+#   cat("range\t", file = fname, append=TRUE)
+#   cat(keyword_color_map[row[10]], "\n", file = fname, append=TRUE) # appends each line to the file
+#   #cat(ifelse(!is.null(keyword_color_map[row[10]]), keyword_color_map[row[10]], "#FFFFFF"), "\n", file = fname, append=TRUE) # color white if no genus found
+# })
+```
+
+### Adding isolation source categories and subcategories next to nodes in iTOL:  
+First get the set of unique values for category and subcategory.
+```{r}
+# combine the categories and subcategories into one list so there are no repeated colors between the two
+categories_and_subcategories = c(as.factor(msa_df$category), as.factor(msa_df$subcategory))
+
+categories_and_subcategories = levels(categories_and_subcategories) # get the unique values
+categories_and_subcategories = Filter(function(x) !(x %in% c("no category", "no subcategory")), categories_and_subcategories)
+# don't want to annotate "no category" or "no subcategory at all, so we remove it
+
+num_colors = length(categories_and_subcategories)
+```
+
+Automatically assign colors to values from category and subcategory.
+```{r}
+library(paletteer)
+library(ggthemes)
+
+my_colors <- paletteer_d("ggthemes::Tableau_20", n = num_colors) # select a palette with more colors than elements in your list
+
+# Additionally, I've found that these hex colors include an additional "FF" at the end?
+# The colors display in iTOL just fine when I drag and drop the file onto the tree, but
+# when creating the legend in iTOL (click the gear icon for this color strip dataset >
+# Control panel > Editing functions > Legend > Automatic legend) you need to take off the extra FF.
+# For the sake of convenience, I will trim the color strings here.
+my_colors <- sapply(my_colors, function(x) substr(x, 1, nchar(x) - 2)) # R is so unnecessarily complicated sometimes
+```
+
+To mimic dictionary functionality in R, create a vector with key-value pairs.
+```{r}
+keyword_color_map <- setNames(my_colors, categories_and_subcategories) # first the values, then the keys
+
+# Check that the map has been created correctly
+for (keyword in names(keyword_color_map)) {
+  cat("Key:", keyword, "\tValue:", keyword_color_map[keyword], "\n")
+}
+```
+
+Finally, write these color strip colors and labels to files that can be dragged and dropped onto the iTOL tree.  
+Color strip for category:
+```{r}
+# based on dataset_color_strip_template.txt in the folder of annotation templates from https://itol.embl.de/help.cgi#webEditor
+# First write the invariable portion
+fname = glue("{anno_path}/category_colors.txt")
+cat("DATASET_COLORSTRIP\nSEPARATOR TAB\nDATASET_LABEL\tcategory\nDATA\n", file = fname) 
+# no append; overwrites the file
+# The example file had " " between DATASET_LABEL and the field, but that was because it was space-separated
+# Because my file is tab-separated, I put a tab between DATASET_LABEL and "category"
+
+msa_df |>
+  select(short_names, category) |>
+  apply(1, function(row) {
+  if (!is.na(row[2]) && row[2] != "no category") { # do not write anything if the category is "no category"; filter NA's because R doesn't know how to compare NAs against strings
+    # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab.
+    cat(row[1], file = fname, append=TRUE)
+    cat("\t", file = fname, append=TRUE)
+    cat(keyword_color_map[row[2]], file = fname, append=TRUE)
+    cat("\t", file = fname, append=TRUE)
+    cat(row[2], "\n", file = fname, append=TRUE) # appends each line to the file
+  }
+})
+
+# # print the short names (row[2]) which is the node ID, then a tab,
+# # then the color corresponding to the category (keyword_color_map[row[8]]), then a tab,
+# # then the category itself (row[8])
+# apply(msa_df, 1, function(row) {
+#   if (!is.na(row[8]) && row[8] != "no category") { # do not write anything if the category is "no category"; filter NA's because R doesn't know how to compare NAs against strings
+#     # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab.
+#     cat(row[2], file = fname, append=TRUE)
+#     cat("\t", file = fname, append=TRUE)
+#     cat(keyword_color_map[row[8]], file = fname, append=TRUE)
+#     cat("\t", file = fname, append=TRUE)
+#     cat(row[8], "\n", file = fname, append=TRUE) # appends each line to the file
+#   }
+# })
+```
+
+Color strip for subcategory:
+```{r}
+# based on dataset_color_strip_template.txt in the folder of annotation templates from https://itol.embl.de/help.cgi#webEditor
+# First write the invariable portion
+fname = glue("{anno_path}/subcategory_colors.txt")
+cat("DATASET_COLORSTRIP\nSEPARATOR TAB\nDATASET_LABEL\tsubcategory\nDATA\n", file = fname) 
+# no append; overwrites the file
+# The example file had " " between DATASET_LABEL and the field, but that was because it was space-separated
+# Because my file is tab-separated, I put a tab between DATASET_LABEL and "subcategory"
+
+msa_df |>
+  select(short_names, subcategory) |>
+  apply(1, function(row) {
+  if (!is.na(row[2]) && row[2] != "no subcategory") { # do not write anything if the subcategory is "no subcategory"
+    # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab.
+    cat(row[1], file = fname, append=TRUE)
+    cat("\t", file = fname, append=TRUE)
+    cat(keyword_color_map[row[2]], file = fname, append=TRUE)
+    cat("\t", file = fname, append=TRUE)
+    cat(row[2], "\n", file = fname, append=TRUE) # appends each line to the file
+  }
+})
+
+# # print the short name (row[2]) which is the node ID, then a tab,
+# # then the color corresponding to the subcategory (keyword_color_map[row[9]]), then a tab,
+# # then the subcategory itself (row[9])
+# apply(msa_df, 1, function(row) {
+#   if (!is.na(row[9]) && row[9] != "no subcategory") { # do not write anything if the subcategory is "no subcategory"
+#     # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab.
+#     cat(row[2], file = fname, append=TRUE)
+#     cat("\t", file = fname, append=TRUE)
+#     cat(keyword_color_map[row[9]], file = fname, append=TRUE)
+#     cat("\t", file = fname, append=TRUE)
+#     cat(row[9], "\n", file = fname, append=TRUE) # appends each line to the file
+#   }
+# })
+```
+
+### Adding specific isolation sources to nodes
+This will appear next to the color strips that indicate category and subcategory. I'll use the isolation_sources_comprehensive column that was mutated in earlier. This way, rescued isolation sources will also appear on the tree.
+```{r}
+# Adding an isolation_sources_comprehensive column in case the rescued_source column has an isolation source that doesn't appear in isolation_source
+msa_df <- msa_df |>
+  mutate(isolation_sources_comprehensive = case_when(
+    is.na(isolation_source) | isolation_source == "" ~ rescued_source,
+    TRUE ~ isolation_source
+  ))
+
+# View(msa_df |> select(short_names, isolation_source, rescued_source, isolation_sources_comprehensive))
+colnames(msa_df)
+```
+
+
+```{r}
+# based on tol_text1.txt in the folder of example annotation files from https://itol.embl.de/help.cgi#webEditor
+# First write the invariable portion
+fname = glue("{anno_path}/isolation_source_labels.txt")
+cat("DATASET_TEXT\nSEPARATOR TAB\nDATASET_LABEL\tisolation source\nMARGIN\t0\nALIGN_TO_TREE\t0\nDATA\n", file = fname) 
+# no append; overwrites the file
+# This is a tab-separated file, so in this line of text, tabs separate fields from their values.
+# Set ALIGN_TO_TREE as 0; if it's set to 1, all the text is rotated perpendicular to the branches.
+# (I think ALIGN_TO_TREE is meant for use with circular trees.)
+
+msa_df |>
+  select(short_names, isolation_sources_comprehensive) |>
+  apply(1, function(row) {
+  if (!is.na(row[2]) && row[2] != "" && (length(grep("not provided", row[2])) == 0)) { # don't write "not provided" isolation sources; not informative
+    # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab.
+    cat(row[1], file = fname, append=TRUE)
+    cat("\t", file = fname, append=TRUE)
+    cat(row[2], file = fname, append=TRUE)
+    cat("\t-1\t#000000\tnormal\t1\t0\n", file = fname, append=TRUE)
+    # appends each line to the file
+    # Position is -1 so that the text label appears outside of the tree (i.e. lined up as a column next to the color strip);
+    # otherwise, the text will go right next to the node itself
+  }
+})
+
+# # print the short name (row[2]) which is the node ID, then a tab,
+# # then the isolation source from isolation_sources_comprehensive (row[11]), then a tab,
+# # then several mandatory fields: position, color, style, size_factor, rotation
+# apply(msa_df, 1, function(row) {
+#   if (!is.na(row[11]) && row[11] != "" && (length(grep("not provided", row[11])) == 0)) { # don't write "not provided" isolation sources; not informative
+#     # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab.
+#     cat(row[2], file = fname, append=TRUE)
+#     cat("\t", file = fname, append=TRUE)
+#     cat(row[11], file = fname, append=TRUE)
+#     cat("\t-1\t#000000\tnormal\t1\t0\n", file = fname, append=TRUE)
+#     # appends each line to the file
+#     # Position is -1 so that the text label appears outside of the tree (i.e. lined up as a column next to the color strip);
+#     # otherwise, the text will go right next to the node itself
+#   }
+# })
+```
+
+### Sequence length annotations
+Set a lower bound and upper bound for sequence length. Sequences shorter than the lower bound will be annotated with a red circle, and sequences longer than the upper bound will be annotated with a blue circle. The upper and lower may be the same, e.g. if you want to annotate all sequences that are a different length from a reference sequence.
+```{r}
+# decide the lower and upper bound based on the sequence length histograms plotted earlier
+len_sd = sd(unaligned_df$sequence_length)
+len_mean = mean(unaligned_df$sequence_length)
+
+# although one standard deviation above/below the mean sequence length is a good place to start, feel free to use other bounds
+lower_bound = round(len_mean - len_sd)
+upper_bound = round(len_mean + len_sd)
+
+print(glue("Mean sequence length: ", round(len_mean), " bp"))
+cat("Suggested lower bound:", lower_bound, "\tSuggested upper bound:", upper_bound)
+
+# check the column names of unaligned_df to ensure that we have the correct column for short_names
+colnames(unaligned_df)
+```
+
+Create the annotation file based on sequence lengths in unaligned_df. Don't use msa_df, as the alignment pads all sequences with gaps to bring them to the same length. The following code requires that a name_map_file was provided when producing unaligned_df, as the tree was produced from a PHYLIP alignment and thus uses short_names.
+```{r}
+# based on tol_symbols.txt from the iTOL help webpage https://itol.embl.de/help.cgi
+
+# For the records with sequence_length < lower-bound, use red left-pointing triangles
+# First write the invariable portion, which includes mandatory settings
+fname = glue("{anno_path}/sequence_length_outliers.txt")
+cat("DATASET_SYMBOL\nSEPARATOR TAB\nDATASET_LABEL\tSequence length outliers\nCOLOR\t#ffff00\nDATA\n", file = fname) # no append; overwrites the file
+
+# First print the short name which is the node ID, then a tab,
+# then the shape info
+unaligned_df |>
+  filter(sequence_length < lower_bound) |>
+  drop_na(short_names) |> # drop rows that didn't make it into the alignment
+  select(short_names) |>
+  apply(1, function(row) {
+  # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab. 
+  cat(row[1], file = fname, append=TRUE) # get the short name
+  cat("\t2\t20\t#ff0000\t1\t1\n", file = fname, append=TRUE) # shape (circle), size, color (red), fill=True, place at end of branch
+})
+
+
+# For the records with sequence_length > upper_bound, use blue right-pointing triangles
+unaligned_df |>
+  filter(sequence_length > upper_bound) |>
+  drop_na(short_names) |> # drop rows that didn't make it into the alignment
+  select(short_names) |>
+  apply(1, function(row) {
+  # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab. 
+  cat(row[1], file = fname, append=TRUE) # get the short name
+  cat("\t2\t20\t#0000ff\t1\t1\n", file = fname, append=TRUE) # shape (circle), size, color (blue), fill=True, place at end of branch
+})
+
+# # First print the short name (row[2]) which is the node ID, then a tab,
+# # then the shape info
+# unaligned_df |>
+#   filter(sequence_length < lower_bound) |>
+#   drop_na(short_names) |> # drop rows that didn't make it into the alignment
+#   apply(1, function(row) {
+#   # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab. 
+#   cat(row[2], file = fname, append=TRUE) # get the short name
+#   cat("\t2\t20\t#ff0000\t1\t1\n", file = fname, append=TRUE) # shape (circle), size, color (red), fill=True, place at end of branch
+# })
+# 
+# 
+# # For the records with sequence_length > upper_bound, use blue right-pointing triangles
+# unaligned_df |>
+#   filter(sequence_length > upper_bound) |>
+#   drop_na(short_names) |> # drop rows that didn't make it into the alignment
+#   apply(1, function(row) {
+#   # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab. 
+#   cat(row[2], file = fname, append=TRUE) # get the short name
+#   cat("\t2\t20\t#0000ff\t1\t1\n", file = fname, append=TRUE) # shape (circle), size, color (blue), fill=True, place at end of branch
+# })
+```
+
+### Annotate with synteny block context
+Take a list of locus tags of proteins that occurred in a specific synteny block context. This list should overlap with the locus tags of msa_df, though it's okay if it contains proteins that aren't in msa_df. (They'll exist in the annotation file but won't affect the tree in any way.)  
+
+First, get the list of locus tags that appeared in using read.alignment(). Map them to short names (which are node IDs in the tree) using name_map_file, and drop NAs. For this example, I'd like to annotate two different synteny block contexts in the same file.
+```{r}
+get_synteny_ids <- function(synteny_fasta, name_map_file) {
+  # Inputs: fasta file of sequences for a certain synteny context,
+  # name map to map the locus tags from the fasta to short names that appear in the tree created from a PHYLIP alignment
+  name_map <- read.csv(name_map_file, header=FALSE, sep="\t", col.names=c("short_names", "locus_tags"))
+  synteny_locus_tags <- read.alignment(synteny_fasta, format="fasta")["nam"][[1]]
+  
+  df <- data.frame(locus_tags = synteny_locus_tags) |>
+    left_join(name_map, by="locus_tags") |>
+    drop_na(short_names)
+  
+  return(df$short_names)
+}
+```
+
+
+Load data and get the locus tag lists.
+```{r}
+name_map_file <- "POG002101_seqs/alignment/name_map.tsv"
+
+synteny_fasta_1 <- "orthologs/POG002101_synteny_filtered_PA3566optional.fasta"
+synteny_ids_1 <- get_synteny_ids(synteny_fasta_1, name_map_file)
+
+synteny_fasta_2 <- "orthologs/POG002101_synteny_filtered.fasta"
+synteny_ids_2 <- get_synteny_ids(synteny_fasta_2, name_map_file)
+```
+
+Then, for each locus tag in synteny_locus_tags_1 and synteny_locus_tags_2, write a line to an annotation file with a specific symbol or color. For this example, I'll use squares for both synteny structures, but with different colors. 
+```{r}
+shape1 <- 1 # square
+color1 <- "#808080" # gray
+
+shape2 <- 1 # square
+color2 <- "#000000" # black
+
+# First write the invariable portion, which includes mandatory settings
+fname = glue("{anno_path}/synteny_context.txt")
+cat("DATASET_SYMBOL\nSEPARATOR TAB\nDATASET_LABEL\tSynteny block context\nCOLOR\t#ffff00\nDATA\n", file = fname) # no append; overwrites the file
+
+# First print the short name, which is the node ID, then a tab,
+# then the shape info
+for (id in synteny_ids_1) {
+  # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab. 
+  cat(glue("{id}\t{shape1}\t20\t{color1}\t1\t1"), file = fname, append=TRUE) # shape (square), size, color, fill=True, place at end of branch
+  cat("\n", file = fname, append=TRUE) # need this on a separate line because it doesn't work in glue()
+}
+
+for (id in synteny_ids_2) {
+  # had to separate the items before and after the tab into separate calls to cat to avoid adding spaces around the tab. 
+  cat(glue("{id}\t{shape2}\t20\t{color2}\t1\t1\n"), file = fname, append=TRUE) # shape (square), size, color, fill=True, place at end of branch
+  cat("\n", file = fname, append=TRUE) # need this on a separate line because it doesn't work in glue()
+}
+```
