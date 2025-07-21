@@ -14,6 +14,9 @@
 # $2: file containing a list of RefSeq accessions
 # $3: directory in which to download the databases
 
+# Example run:
+# bash ortholog-comparison-pipeline/scripts/setup/download_databases.sh ~/data/testing/genome_ids_gb.txt ~/data/testing/genome_ids_ref.txt ~/data/testing/test_database_download2
+
 # I should later set this up so that the user can use flags rather than relying on the order of CLIs
 # Also set up an optional argument for the section to search, with bacteria being the default
 gb=$1
@@ -28,15 +31,23 @@ cd $dbdir # so that the databases are placed in the correct location
 # yet another thing that could be refactored into flags
 ncbi-genome-download --section genbank --assembly-accessions "${gb}" bacteria --parallel 12 --progress-bar &
 #ncbi-genome-download --section genbank --assembly-accessions "${gb}" bacteria --parallel 12 --progress-bar --dry-run # for testing
-echo "Downloading genbank with job id ${!}"
+pid1=$!
+echo "Downloading genbank with job id ${pid1}"
 
 ncbi-genome-download --section refseq --assembly-accessions "${ref}" bacteria --parallel 12 --progress-bar &
 #ncbi-genome-download --section refseq --assembly-accessions "${ref}" bacteria --parallel 12 --progress-bar --dry-run # for testing
-echo "Downloading refseq with job id ${!}"
+pid2=$!
+echo "Downloading refseq with job id ${pid2}"
 
+wait $pid1 $pid2
 echo "Moving genomes to ${dbdir}..."
-mv "${dbdir}/genbank/bacteria/*" "${dbdir}"
-mv "${dbdir}/refseq/bacteria/*" "${dbdir}"
+for dir in "${dbdir}/genbank/bacteria/"*/; do
+  mv "$dir" "$dbdir"
+done
+
+for dir in "${dbdir}/refseq/bacteria/"*/; do
+  mv "$dir" "$dbdir"
+done
 
 echo "Removing now-empty directories..."
 rm -rf "${dbdir}/genbank"
