@@ -1,0 +1,24 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PAKAF.RS07045__NZLR657304_1390_1501467_1501761_neg -          ABM                  PF03992.22   4.7e-26   89.2   0.2   5.5e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+PAKAF.RS14610__NZLR657304_2881_3164723_3165068_neg -          ABM                  PF03992.22   3.9e-24   83.0   0.3   5.3e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+PAKAF.RS07935__NZLR657304_1569_1696461_1696764_pos -          ABM                  PF03992.22   6.4e-23   79.2   0.0   8.5e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+PAKAF.RS22390__NZLR657304_4416_4841652_4841949_neg -          ABM                  PF03992.22   5.7e-18   63.3   0.1   6.5e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+PAKAF.RS15350__NZLR657304_3027_3332438_3332735_neg -          ABM                  PF03992.22   1.4e-16   58.9   0.1   1.7e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+PAKAF.RS01350__NZLR657304_266_294337_294622_pos    -          ABM                  PF03992.22   7.4e-15   53.3   0.0   1.1e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+PAKAF.RS14155__NZLR657304_2790_3055181_3056252_neg -          ABM                  PF03992.22   7.7e-11   40.4   0.2   1.5e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+PAKAF.RS07695__NZLR657304_1521_1647222_1647780_neg -          ABM                  PF03992.22   2.5e-05   22.8   0.1   3.4e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+PAKAF.RS14125__NZLR657304_2784_3050000_3050378_neg -          ABM                  PF03992.22   7.8e-05   21.2   0.1    0.0001   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+PAKAF.RS14445__NZLR657304_2848_3125922_3127347_pos -          ABM                  PF03992.22     0.032   12.8   0.4       4.1    6.1   0.0   3.2   3   0   0   3   3   3   0 -
+PAKAF.RS07545__NZLR657304_1490_1614485_1616201_neg -          ABM                  PF03992.22     0.034   12.7   0.0      0.06   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_902172305.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_902172305.2/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_902172305.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:34:05 2025
+# [ok]

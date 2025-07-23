@@ -1,0 +1,29 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PSYR.RS18270__NC007005_3504_4217885_4218887_pos -          ADH_zinc_N_2         PF13602.12   2.3e-27   94.7   0.3   7.6e-27   93.1   0.2   2.0   2   0   0   2   2   2   1 -
+PSYR.RS01600__NC007005_305_332887_333874_neg    -          ADH_zinc_N_2         PF13602.12   7.8e-25   86.6   0.0   1.4e-24   85.7   0.0   1.4   1   0   0   1   1   1   1 -
+PSYR.RS05980__NC007005_1121_1304458_1305469_pos -          ADH_zinc_N_2         PF13602.12   5.8e-20   70.8   0.0   1.6e-19   69.4   0.0   1.8   1   0   0   1   1   1   1 -
+PSYR.RS03400__NC007005_645_746022_747036_neg    -          ADH_zinc_N_2         PF13602.12   4.8e-18   64.6   0.1   8.4e-18   63.8   0.1   1.4   1   0   0   1   1   1   1 -
+PSYR.RS00125__NC007005_22_26571_27549_neg       -          ADH_zinc_N_2         PF13602.12   9.4e-16   57.2   0.0   1.7e-15   56.4   0.0   1.4   1   0   0   1   1   1   1 -
+PSYR.RS09565__NC007005_1805_2117211_2118219_neg -          ADH_zinc_N_2         PF13602.12   1.3e-13   50.3   0.0     3e-13   49.1   0.0   1.7   1   0   0   1   1   1   1 -
+PSYR.RS15105__NC007005_2880_3495305_3496328_neg -          ADH_zinc_N_2         PF13602.12   2.6e-13   49.3   0.0   4.3e-13   48.5   0.0   1.4   1   0   0   1   1   1   1 -
+PSYR.RS08335__NC007005_1572_1799853_1800816_pos -          ADH_zinc_N_2         PF13602.12     2e-12   46.4   0.0   3.6e-12   45.6   0.0   1.4   1   0   0   1   1   1   1 -
+PSYR.RS12625__NC007005_2394_2812967_2814044_neg -          ADH_zinc_N_2         PF13602.12   8.6e-08   31.4   0.0   1.6e-07   30.5   0.0   1.4   1   0   0   1   1   1   1 -
+PSYR.RS13310__NC007005_2530_2980695_2981811_neg -          ADH_zinc_N_2         PF13602.12   2.1e-06   26.9   0.1   7.5e-06   25.1   0.1   1.9   1   1   0   1   1   1   1 -
+PSYR.RS27125__NC007005_2563_3053148_3053262_pos -          ADH_zinc_N_2         PF13602.12   4.7e-06   25.8   0.2   4.9e-06   25.7   0.2   1.0   1   0   0   1   1   1   1 -
+PSYR.RS15325__NC007005_2925_3543484_3544594_pos -          ADH_zinc_N_2         PF13602.12   5.7e-05   22.3   0.0   0.00012   21.3   0.0   1.5   1   0   0   1   1   1   1 -
+PSYR.RS07070__NC007005_1332_1550471_1551584_pos -          ADH_zinc_N_2         PF13602.12   6.1e-05   22.2   0.0   0.00013   21.1   0.0   1.5   1   0   0   1   1   1   1 -
+PSYR.RS10375__NC007005_1957_2312798_2313851_neg -          ADH_zinc_N_2         PF13602.12    0.0001   21.4   0.0    0.0002   20.5   0.0   1.4   1   0   0   1   1   1   1 -
+PSYR.RS18210__NC007005_3492_4203865_4205101_pos -          ADH_zinc_N_2         PF13602.12   0.00097   18.3   0.5    0.0095   15.1   0.5   2.3   1   1   0   1   1   1   1 -
+PSYR.RS10190__NC007005_1925_2252806_2259271_pos -          ADH_zinc_N_2         PF13602.12      0.12   11.5   1.6       1.5    7.9   0.1   3.0   2   0   0   2   2   2   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000012245.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_000012245.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000012245.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:00 2025
+# [ok]

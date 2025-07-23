@@ -1,0 +1,23 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+N1H87.15275__CP124672_2905_3218152_3218446_neg -          ABM                  PF03992.22   5.2e-26   89.2   0.2   6.2e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+N1H87.24210__CP124672_4632_5141474_5141819_neg -          ABM                  PF03992.22     3e-24   83.6   0.3   4.1e-24   83.1   0.3   1.2   1   0   0   1   1   1   1 -
+N1H87.16175__CP124672_3085_3415582_3415885_pos -          ABM                  PF03992.22   1.7e-22   77.9   0.0   2.3e-22   77.5   0.0   1.1   1   0   0   1   1   1   1 -
+N1H87.33060__CP124672_6355_6979147_6979444_neg -          ABM                  PF03992.22   6.4e-18   63.3   0.1   7.3e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+N1H87.25140__CP124672_4810_5327189_5327486_neg -          ABM                  PF03992.22   4.2e-17   60.6   0.1   5.3e-17   60.3   0.1   1.1   1   0   0   1   1   1   1 -
+N1H87.09465__CP124672_1763_1988978_1989263_pos -          ABM                  PF03992.22   8.2e-15   53.3   0.0   1.2e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+N1H87.23730__CP124672_4538_5022245_5023316_neg -          ABM                  PF03992.22   8.6e-11   40.4   0.2   1.7e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+N1H87.15935__CP124672_3037_3366531_3367089_neg -          ABM                  PF03992.22   2.8e-05   22.8   0.1   3.8e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+N1H87.23700__CP124672_4532_5017064_5017442_neg -          ABM                  PF03992.22   0.00014   20.5   0.1   0.00019   20.1   0.1   1.2   1   0   0   1   1   1   1 -
+N1H87.15780__CP124672_3006_3334250_3335966_neg -          ABM                  PF03992.22     0.038   12.7   0.0     0.067   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_024922265.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_024922265.2/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_024922265.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:13 2025
+# [ok]

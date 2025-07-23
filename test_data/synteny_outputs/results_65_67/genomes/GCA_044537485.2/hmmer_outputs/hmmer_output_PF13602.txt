@@ -1,0 +1,25 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACISAN.03525__CP180040_648_719623_720622_pos    -          ADH_zinc_N_2         PF13602.12   1.3e-24   85.4   0.1   2.7e-24   84.4   0.0   1.5   2   0   0   2   2   1   1 -
+ACISAN.08325__CP180040_1574_1747252_1748239_neg -          ADH_zinc_N_2         PF13602.12   1.8e-23   81.7   1.1   4.1e-23   80.5   0.3   1.9   2   1   0   2   2   2   1 -
+ACISAN.16745__CP180040_3203_3471448_3472459_pos -          ADH_zinc_N_2         PF13602.12   1.3e-15   56.3   0.0   2.1e-15   55.6   0.0   1.4   1   0   0   1   1   1   1 -
+ACISAN.05480__CP180040_1027_1143428_1144430_neg -          ADH_zinc_N_2         PF13602.12   8.3e-15   53.6   0.0   1.6e-14   52.7   0.0   1.5   1   0   0   1   1   1   1 -
+ACISAN.18770__CP180040_3581_3896525_3897554_pos -          ADH_zinc_N_2         PF13602.12   1.8e-12   46.1   0.0   3.1e-12   45.3   0.0   1.4   1   0   0   1   1   1   1 -
+ACISAN.00980__CP180040_182_214207_215185_pos    -          ADH_zinc_N_2         PF13602.12   3.8e-07   28.9   0.1   7.5e-07   27.9   0.1   1.5   1   0   0   1   1   1   1 -
+ACISAN.08905__CP180040_1686_1872360_1873470_neg -          ADH_zinc_N_2         PF13602.12   5.6e-06   25.1   0.0   1.3e-05   23.8   0.0   1.6   1   0   0   1   1   1   1 -
+ACISAN.09250__CP180040_1755_1946395_1947454_neg -          ADH_zinc_N_2         PF13602.12   1.9e-05   23.3   0.0     4e-05   22.3   0.0   1.5   1   0   0   1   1   1   1 -
+ACISAN.11465__CP180040_2188_2408889_2410053_neg -          ADH_zinc_N_2         PF13602.12   5.3e-05   21.9   0.3    0.0003   19.5   0.3   2.1   1   1   0   1   1   1   1 -
+ACISAN.08745__CP180040_1656_1834516_1835569_pos -          ADH_zinc_N_2         PF13602.12   0.00011   20.9   0.0    0.0002   20.1   0.0   1.4   1   0   0   1   1   1   1 -
+ACISAN.15535__CP180040_2973_3212140_3213316_neg -          ADH_zinc_N_2         PF13602.12    0.0057   15.3   0.0     0.014   14.1   0.0   1.6   2   0   0   2   2   1   1 -
+ACISAN.04695__CP180040_872_973688_974303_neg    -          ADH_zinc_N_2         PF13602.12     0.014   14.1   0.0     0.026   13.2   0.0   1.6   1   1   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_044537485.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCA_044537485.2/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_044537485.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:47 2025
+# [ok]

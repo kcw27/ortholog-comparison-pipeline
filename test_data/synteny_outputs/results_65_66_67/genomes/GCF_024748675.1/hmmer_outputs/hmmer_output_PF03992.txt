@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+LOY43.RS03620__NZCP087175_703_858503_858818_neg    -          ABM                  PF03992.22   1.7e-24   84.1   0.2   2.2e-24   83.8   0.2   1.1   1   0   0   1   1   1   1 -
+LOY43.RS03365__NZCP087175_657_795317_795611_neg    -          ABM                  PF03992.22   6.8e-24   82.2   0.2   8.1e-24   82.0   0.2   1.1   1   0   0   1   1   1   1 -
+LOY43.RS12480__NZCP087175_2430_2797943_2798252_pos -          ABM                  PF03992.22   1.3e-16   58.9   0.0   1.5e-16   58.6   0.0   1.1   1   0   0   1   1   1   1 -
+LOY43.RS14135__NZCP087175_2754_3172211_3172601_pos -          ABM                  PF03992.22   5.2e-15   53.8   0.3   6.9e-15   53.4   0.3   1.2   1   0   0   1   1   1   1 -
+LOY43.RS22285__NZCP087175_4327_5021345_5021699_neg -          ABM                  PF03992.22   2.5e-13   48.3   0.0   4.4e-13   47.6   0.0   1.4   1   1   0   1   1   1   1 -
+LOY43.RS21520__NZCP087175_4178_4841477_4841783_pos -          ABM                  PF03992.22     3e-13   48.1   0.1   4.1e-13   47.7   0.1   1.2   1   0   0   1   1   1   1 -
+LOY43.RS10230__NZCP087175_1984_2309032_2309659_pos -          ABM                  PF03992.22   1.8e-09   36.0   0.0     3e-09   35.3   0.0   1.4   1   0   0   1   1   1   1 -
+LOY43.RS16475__NZCP087175_3211_3764102_3764411_pos -          ABM                  PF03992.22   2.3e-07   29.2   0.0   3.2e-07   28.8   0.0   1.2   1   0   0   1   1   1   1 -
+LOY43.RS19375__NZCP087175_3774_4388858_4389212_neg -          ABM                  PF03992.22   4.1e-07   28.4   0.2   5.7e-07   28.0   0.2   1.2   1   0   0   1   1   1   1 -
+LOY43.RS04570__NZCP087175_882_1064520_1065087_neg  -          ABM                  PF03992.22   2.4e-05   22.8   0.0   3.5e-05   22.3   0.0   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_024748675.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_024748675.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_024748675.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:26:41 2025
+# [ok]

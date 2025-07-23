@@ -1,0 +1,20 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+K3F44.RS15550__NZCP080625_3023_3375545_3375860_pos -          ABM                  PF03992.22   1.3e-24   84.3   1.2   1.6e-24   84.0   1.2   1.1   1   0   0   1   1   1   1 -
+K3F44.RS06465__NZCP080625_1266_1440427_1440736_pos -          ABM                  PF03992.22   7.8e-18   62.6   0.0   9.9e-18   62.3   0.0   1.1   1   0   0   1   1   1   1 -
+K3F44.RS14605__NZCP080625_2834_3168771_3169068_neg -          ABM                  PF03992.22   2.1e-14   51.6   0.0   2.7e-14   51.2   0.0   1.1   1   0   0   1   1   1   1 -
+K3F44.RS20435__NZCP080625_3968_4435852_4436419_pos -          ABM                  PF03992.22     3e-09   35.1   0.1   4.1e-09   34.7   0.1   1.2   1   0   0   1   1   1   1 -
+K3F44.RS16185__NZCP080625_3141_3527099_3528158_pos -          ABM                  PF03992.22   2.7e-05   22.4   0.3    0.0015   16.8   0.0   2.5   2   0   0   2   2   2   1 -
+K3F44.RS23425__NZCP080625_4546_5094786_5095359_neg -          ABM                  PF03992.22   0.00025   19.3   0.1   0.00035   18.8   0.1   1.2   1   0   0   1   1   1   1 -
+K3F44.RS03840__NZCP080625_749_840008_840350_pos    -          ABM                  PF03992.22    0.0029   15.9   1.0    0.0062   14.8   0.2   1.8   2   1   0   2   2   2   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_019599025.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_019599025.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_019599025.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:24:57 2025
+# [ok]

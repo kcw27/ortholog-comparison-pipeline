@@ -1,0 +1,24 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+IPV38.RS07360__NZCP063396_1454_1580024_1580318_neg -          ABM                  PF03992.22   4.9e-26   89.2   0.2   5.7e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+IPV38.RS15330__NZCP063396_3019_3322394_3322739_neg -          ABM                  PF03992.22   4.1e-24   83.0   0.3   5.6e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+IPV38.RS08175__NZCP063396_1617_1761627_1761930_pos -          ABM                  PF03992.22   6.6e-23   79.2   0.0   8.9e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+IPV38.RS22995__NZCP063396_4527_4962156_4962453_neg -          ABM                  PF03992.22   5.9e-18   63.3   0.1   6.8e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+IPV38.RS16120__NZCP063396_3177_3498005_3498302_neg -          ABM                  PF03992.22   1.4e-16   58.9   0.1   1.8e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+IPV38.RS01540__NZCP063396_304_349575_349860_pos    -          ABM                  PF03992.22   7.7e-15   53.3   0.0   1.2e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+IPV38.RS14865__NZCP063396_2927_3211746_3212817_neg -          ABM                  PF03992.22   8.1e-11   40.4   0.2   1.6e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+IPV38.RS07935__NZCP063396_1569_1712169_1712727_neg -          ABM                  PF03992.22   2.6e-05   22.8   0.1   3.6e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+IPV38.RS14835__NZCP063396_2921_3206565_3206943_neg -          ABM                  PF03992.22   8.1e-05   21.2   0.1   0.00011   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+IPV38.RS15165__NZCP063396_2986_3283593_3285018_pos -          ABM                  PF03992.22     0.033   12.8   0.4       3.7    6.3   0.0   3.2   3   0   0   3   3   3   0 -
+IPV38.RS07780__NZCP063396_1538_1679602_1681318_neg -          ABM                  PF03992.22     0.035   12.7   0.0     0.063   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_022811045.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_022811045.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_022811045.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:25:57 2025
+# [ok]

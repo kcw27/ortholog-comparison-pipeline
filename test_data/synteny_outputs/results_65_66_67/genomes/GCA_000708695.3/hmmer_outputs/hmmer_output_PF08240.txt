@@ -1,0 +1,24 @@
+#                                                                                        --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                 accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                         ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+BG51.16435__CP169220_2723_3531823_3532903_pos -          ADH_N                PF08240.17   3.7e-27   92.8   1.8   8.6e-27   91.6   1.8   1.6   1   0   0   1   1   1   1 -
+BG51.24375__CP169220_4073_5295780_5296848_neg -          ADH_N                PF08240.17   1.7e-26   90.7   2.2   3.1e-26   89.8   2.2   1.4   1   0   0   1   1   1   1 -
+BG51.14235__CP169220_2354_3090446_3091499_neg -          ADH_N                PF08240.17   1.7e-25   87.4   2.4   1.7e-25   87.4   2.4   2.0   3   0   0   3   3   3   1 -
+BG51.28730__CP169220_4798_6265364_6266477_neg -          ADH_N                PF08240.17   3.7e-23   79.9   0.4   3.7e-23   79.9   0.4   2.4   2   0   0   2   2   2   1 -
+BG51.18390__CP169220_3046_3963263_3964379_neg -          ADH_N                PF08240.17   4.1e-23   79.8   0.5   8.1e-23   78.8   0.5   1.5   1   0   0   1   1   1   1 -
+BG51.04545__CP169220_752_974592_975573_pos    -          ADH_N                PF08240.17   9.9e-20   68.9   0.0   2.5e-19   67.6   0.0   1.7   1   0   0   1   1   1   1 -
+BG51.26275__CP169220_4397_5759669_5760632_neg -          ADH_N                PF08240.17   2.4e-16   58.0   1.5   5.5e-16   56.9   0.3   2.0   2   0   0   2   2   2   1 -
+BG51.23010__CP169220_3828_5021750_5022761_neg -          ADH_N                PF08240.17   1.6e-15   55.4   0.1   4.1e-15   54.1   0.1   1.7   1   0   0   1   1   1   1 -
+BG51.09235__CP169220_1523_2038735_2039749_neg -          ADH_N                PF08240.17   1.2e-14   52.6   0.1   2.1e-14   51.8   0.1   1.4   1   0   0   1   1   1   1 -
+BG51.20530__CP169220_3402_4475889_4476912_neg -          ADH_N                PF08240.17   1.6e-13   49.0   0.0     3e-13   48.1   0.0   1.5   1   0   0   1   1   1   1 -
+BG51.28160__CP169220_4702_6148921_6149863_neg -          ADH_N                PF08240.17     0.023   13.1   0.0     0.053   11.9   0.0   1.6   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_000708695.3/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_000708695.3/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_000708695.3/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:19:59 2025
+# [ok]

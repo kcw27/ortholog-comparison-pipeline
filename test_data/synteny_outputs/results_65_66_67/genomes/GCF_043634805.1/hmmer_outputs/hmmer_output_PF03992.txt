@@ -1,0 +1,23 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACFJ75.RS03695__NZCP171611_715_827027_827321_neg    -          ABM                  PF03992.22   4.2e-21   73.5   0.5   5.6e-21   73.1   0.5   1.2   1   0   0   1   1   1   1 -
+ACFJ75.RS03965__NZCP171611_764_890076_890391_neg    -          ABM                  PF03992.22   2.5e-20   71.0   0.5   3.2e-20   70.6   0.5   1.1   1   0   0   1   1   1   1 -
+ACFJ75.RS26400__NZCP171611_5125_5742929_5743214_pos -          ABM                  PF03992.22   4.5e-18   63.8   0.1   5.2e-18   63.5   0.1   1.1   1   0   0   1   1   1   1 -
+ACFJ75.RS18650__NZCP171611_3622_4050139_4050487_pos -          ABM                  PF03992.22   8.1e-17   59.7   0.1     1e-16   59.4   0.1   1.1   1   0   0   1   1   1   1 -
+ACFJ75.RS25940__NZCP171611_5033_5649238_5649604_neg -          ABM                  PF03992.22   3.8e-14   51.2   0.1   8.1e-14   50.1   0.0   1.6   2   0   0   2   2   2   1 -
+ACFJ75.RS24995__NZCP171611_4850_5453518_5453842_pos -          ABM                  PF03992.22   8.1e-13   46.9   0.1   1.2e-12   46.3   0.1   1.3   1   0   0   1   1   1   1 -
+ACFJ75.RS18835__NZCP171611_3658_4087638_4088217_neg -          ABM                  PF03992.22   4.3e-08   31.8   0.0   6.2e-08   31.3   0.0   1.2   1   0   0   1   1   1   1 -
+ACFJ75.RS23025__NZCP171611_4468_5024225_5024591_neg -          ABM                  PF03992.22   5.3e-08   31.5   0.3   7.4e-08   31.0   0.3   1.3   1   0   0   1   1   1   1 -
+ACFJ75.RS05010__NZCP171611_966_1105430_1106000_neg  -          ABM                  PF03992.22   1.3e-05   23.9   0.0   1.8e-05   23.4   0.0   1.2   1   0   0   1   1   1   1 -
+ACFJ75.RS22770__NZCP171611_4423_4965805_4966150_neg -          ABM                  PF03992.22   9.4e-05   21.1   0.1   0.00012   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_043634805.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_043634805.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_043634805.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:31:49 2025
+# [ok]

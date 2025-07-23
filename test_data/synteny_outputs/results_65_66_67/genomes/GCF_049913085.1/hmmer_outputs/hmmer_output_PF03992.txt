@@ -1,0 +1,22 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACN9MA.RS03780__NZCP183970_728_883344_883659_neg    -          ABM                  PF03992.22   4.9e-23   79.5   0.4   6.1e-23   79.2   0.4   1.1   1   0   0   1   1   1   1 -
+ACN9MA.RS17115__NZCP183970_3342_3893504_3893786_pos -          ABM                  PF03992.22   1.1e-15   56.0   0.0   1.2e-15   55.8   0.0   1.1   1   0   0   1   1   1   1 -
+ACN9MA.RS23745__NZCP183970_4623_5325239_5325593_neg -          ABM                  PF03992.22   9.6e-13   46.6   0.0   3.5e-12   44.7   0.0   1.8   1   1   1   2   2   2   1 -
+ACN9MA.RS22930__NZCP183970_4463_5140607_5140922_pos -          ABM                  PF03992.22     6e-12   44.0   0.1   7.3e-12   43.7   0.1   1.1   1   0   0   1   1   1   1 -
+ACN9MA.RS13455__NZCP183970_2617_3058246_3058573_pos -          ABM                  PF03992.22   5.1e-09   34.6   0.0   7.9e-09   34.0   0.0   1.3   1   0   0   1   1   1   1 -
+ACN9MA.RS20715__NZCP183970_4036_4698223_4698589_neg -          ABM                  PF03992.22   2.9e-08   32.2   1.1   4.5e-08   31.6   1.0   1.4   1   1   0   1   1   1   1 -
+ACN9MA.RS19050__NZCP183970_3723_4312602_4313241_neg -          ABM                  PF03992.22   5.9e-08   31.2   0.0     9e-08   30.6   0.0   1.3   1   0   0   1   1   1   1 -
+ACN9MA.RS24870__NZCP183970_4847_5579788_5580349_pos -          ABM                  PF03992.22   2.2e-06   26.2   0.0   3.2e-06   25.7   0.0   1.3   1   0   0   1   1   1   1 -
+ACN9MA.RS14520__NZCP183970_2827_3298923_3299577_neg -          ABM                  PF03992.22    0.0012   17.4   0.6    0.0023   16.5   0.1   1.7   2   0   0   2   2   2   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_049913085.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_049913085.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_049913085.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:32:58 2025
+# [ok]

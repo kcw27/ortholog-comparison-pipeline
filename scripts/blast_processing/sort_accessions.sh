@@ -15,7 +15,7 @@ name_root=$(basename "${1}" | cut -d "." -f 1)
 # basename to strip the filepath
 # assume the name of the file is the part that cones before the first period
 
-cat $1 | grep "GCF_" > "${2%/}/${name_root}_refseq.txt" # if there's a "/" at the end of $2, strip it so there's no redundant slash; also add the suffix to the filename
-cat $1 | grep "GCA_" > "${2%/}/${name_root}_genbank.txt"
+cat $1 | grep "GCF_" > "${2%/}/${name_root}_ref.txt" # if there's a "/" at the end of $2, strip it so there's no redundant slash; also add the suffix to the filename
+cat $1 | grep "GCA_" > "${2%/}/${name_root}_gb.txt"
 
 echo "Wrote outputs to ${2%/}/${name_root}_refseq.txt and ${2%/}/${name_root}_genbank.txt."

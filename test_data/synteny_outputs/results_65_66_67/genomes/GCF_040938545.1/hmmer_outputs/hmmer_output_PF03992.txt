@@ -1,0 +1,17 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+AB4K07.RS24365__NZCP162509_4716_5358825_5359140_neg -          ABM                  PF03992.22   9.9e-24   81.6   0.1   1.2e-23   81.3   0.1   1.1   1   0   0   1   1   1   1 -
+AB4K07.RS15980__NZCP162509_3096_3552179_3552488_neg -          ABM                  PF03992.22   3.1e-14   51.1   0.0   3.8e-14   50.9   0.0   1.2   1   0   0   1   1   1   1 -
+AB4K07.RS04195__NZCP162509_816_880355_880745_pos    -          ABM                  PF03992.22   1.7e-05   23.1   0.4   2.5e-05   22.6   0.4   1.3   1   0   0   1   1   1   1 -
+AB4K07.RS25165__NZCP162509_4871_5522148_5522718_neg -          ABM                  PF03992.22   2.1e-05   22.9   0.0   2.8e-05   22.4   0.0   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_040938545.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_040938545.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_040938545.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:31:15 2025
+# [ok]

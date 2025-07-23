@@ -1,0 +1,29 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+FXF61.RS06570__NZCP043320_1271_1439479_1440349_pos -          HTH_1                PF00126.33   3.2e-24   82.1   1.7   3.2e-24   82.1   1.7   2.1   3   0   0   3   3   3   1 -
+FXF61.RS08605__NZCP043320_1670_1896182_1897082_pos -          HTH_1                PF00126.33   9.3e-22   74.2   0.2   9.3e-22   74.2   0.2   1.8   2   0   0   2   2   1   1 -
+FXF61.RS07935__NZCP043320_1543_1753687_1754569_pos -          HTH_1                PF00126.33     2e-21   73.2   0.4   3.9e-21   72.2   0.4   1.5   1   0   0   1   1   1   1 -
+FXF61.RS13350__NZCP043320_2589_2902288_2903176_pos -          HTH_1                PF00126.33   1.3e-20   70.6   1.6   2.7e-20   69.5   1.6   1.6   1   0   0   1   1   1   1 -
+FXF61.RS02010__NZCP043320_389_419959_420880_neg    -          HTH_1                PF00126.33   8.2e-20   68.0   0.3   1.7e-19   67.0   0.3   1.6   1   0   0   1   1   1   1 -
+FXF61.RS02670__NZCP043320_521_564742_565633_neg    -          HTH_1                PF00126.33   8.4e-20   67.9   1.9   1.3e-19   67.3   1.9   1.4   1   0   0   1   1   1   1 -
+FXF61.RS12615__NZCP043320_2445_2743543_2744386_neg -          HTH_1                PF00126.33   8.9e-20   67.8   0.6   1.8e-19   66.8   0.6   1.6   1   0   0   1   1   1   1 -
+FXF61.RS12575__NZCP043320_2437_2734573_2735494_pos -          HTH_1                PF00126.33   2.1e-19   66.7   0.6   3.4e-19   66.0   0.0   1.7   2   0   0   2   2   2   1 -
+FXF61.RS01110__NZCP043320_217_226329_227211_pos    -          HTH_1                PF00126.33   6.1e-18   62.0   0.3   1.6e-17   60.6   0.1   1.9   2   0   0   2   2   1   1 -
+FXF61.RS09000__NZCP043320_1741_1975002_1975929_pos -          HTH_1                PF00126.33   6.8e-18   61.8   1.0   1.5e-17   60.7   1.0   1.7   1   0   0   1   1   1   1 -
+FXF61.RS07510__NZCP043320_1458_1660653_1661628_neg -          HTH_1                PF00126.33   1.3e-16   57.7   0.1   2.2e-16   57.0   0.1   1.4   1   0   0   1   1   1   1 -
+FXF61.RS14640__NZCP043320_2836_3171722_3172631_neg -          HTH_1                PF00126.33     2e-16   57.1   0.1   8.8e-16   55.1   0.0   2.1   2   0   0   2   2   2   1 -
+FXF61.RS04120__NZCP043320_796_884253_885162_neg    -          HTH_1                PF00126.33   8.8e-16   55.1   0.0   1.6e-15   54.2   0.0   1.4   1   0   0   1   1   1   1 -
+FXF61.RS06330__NZCP043320_1224_1379251_1380058_neg -          HTH_1                PF00126.33   2.2e-11   41.0   0.0   3.7e-11   40.2   0.0   1.4   1   0   0   1   1   1   1 -
+FXF61.RS11000__NZCP043320_2133_2413517_2413997_pos -          HTH_1                PF00126.33   0.00018   18.9   0.2   0.00058   17.2   0.2   1.8   1   1   0   1   1   1   1 -
+FXF61.RS11955__NZCP043320_2317_2599652_2600606_neg -          HTH_1                PF00126.33    0.0053   14.1   0.0     0.017   12.5   0.0   1.7   2   0   0   2   2   2   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF00126.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_008807395.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_008807395.1/hmmer_outputs/hmmer_output_PF00126.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF00126.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_008807395.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:23:19 2025
+# [ok]

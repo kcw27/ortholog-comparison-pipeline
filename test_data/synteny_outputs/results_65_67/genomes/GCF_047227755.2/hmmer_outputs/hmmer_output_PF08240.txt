@@ -1,0 +1,23 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACKWDP.RS11695__NZCP178354_2255_2390915_2392079_neg -          ADH_N                PF08240.17   3.3e-26   89.4   0.8   1.2e-25   87.6   0.8   1.9   1   1   0   1   1   1   1 -
+ACKWDP.RS19090__NZCP178354_3657_3928431_3929460_pos -          ADH_N                PF08240.17   8.4e-26   88.1   2.3   1.5e-25   87.3   2.3   1.4   1   0   0   1   1   1   1 -
+ACKWDP.RS19785__NZCP178357_90_89850_90963_neg       -          ADH_N                PF08240.17   5.6e-24   82.2   5.2   5.6e-24   82.2   5.2   2.9   3   1   0   3   3   3   1 -
+ACKWDP.RS09055__NZCP178354_1736_1840968_1842078_neg -          ADH_N                PF08240.17   1.8e-23   80.6   5.3   1.8e-23   80.6   5.3   2.9   3   1   0   3   3   3   1 -
+ACKWDP.RS09395__NZCP178354_1802_1915000_1916059_neg -          ADH_N                PF08240.17   3.3e-20   70.1   0.4   7.3e-20   69.0   0.4   1.6   1   0   0   1   1   1   1 -
+ACKWDP.RS15925__NZCP178354_3061_3280799_3281798_neg -          ADH_N                PF08240.17   4.3e-20   69.8   1.2   9.1e-20   68.7   1.2   1.6   1   0   0   1   1   1   1 -
+ACKWDP.RS18360__NZCP178354_3514_3765255_3766233_neg -          ADH_N                PF08240.17   4.5e-14   50.4   2.0   1.2e-13   49.0   0.4   2.4   2   1   1   3   3   3   1 -
+ACKWDP.RS02625__NZCP178354_489_542198_543209_neg    -          ADH_N                PF08240.17   1.1e-13   49.2   0.2   1.9e-13   48.4   0.2   1.3   1   0   0   1   1   1   1 -
+ACKWDP.RS03770__NZCP178354_708_781776_782952_pos    -          ADH_N                PF08240.17   4.3e-13   47.3   0.0   9.6e-13   46.1   0.0   1.6   1   0   0   1   1   1   1 -
+ACKWDP.RS04330__NZCP178354_820_906198_906579_neg    -          ADH_N                PF08240.17     0.006   14.7   0.1    0.0092   14.1   0.0   1.4   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_047227755.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_047227755.2/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_047227755.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:32:30 2025
+# [ok]

@@ -1,0 +1,23 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ABS648.RS26820__NZCP158373_5259_5894070_5894364_pos -          ABM                  PF03992.22   9.7e-24   81.8   0.3   1.1e-23   81.6   0.3   1.0   1   0   0   1   1   1   1 -
+ABS648.RS21605__NZCP158373_4242_4763339_4763642_neg -          ABM                  PF03992.22   1.7e-23   81.0   0.8   2.2e-23   80.7   0.8   1.1   1   0   0   1   1   1   1 -
+ABS648.RS23760__NZCP158373_4661_5223861_5224164_neg -          ABM                  PF03992.22   1.8e-22   77.8   0.0   2.2e-22   77.4   0.0   1.1   1   0   0   1   1   1   1 -
+ABS648.RS19345__NZCP158373_3804_4252954_4253251_neg -          ABM                  PF03992.22   4.6e-14   50.8   0.0   5.7e-14   50.5   0.0   1.1   1   0   0   1   1   1   1 -
+ABS648.RS11185__NZCP158373_2194_2386093_2386453_neg -          ABM                  PF03992.22   3.9e-09   35.0   0.0     6e-09   34.4   0.0   1.3   1   0   0   1   1   1   1 -
+ABS648.RS25545__NZCP158373_5015_5615198_5615768_pos -          ABM                  PF03992.22   2.3e-06   26.2   0.1   3.2e-06   25.7   0.1   1.2   1   0   0   1   1   1   1 -
+ABS648.RS16615__NZCP158373_3265_3590859_3591426_neg -          ABM                  PF03992.22   6.7e-06   24.6   0.0   9.5e-06   24.2   0.0   1.2   1   0   0   1   1   1   1 -
+ABS648.RS04340__NZCP158373_853_905914_906217_pos    -          ABM                  PF03992.22     9e-06   24.2   0.0     1e-05   24.0   0.0   1.1   1   0   0   1   1   1   1 -
+ABS648.RS19040__NZCP158373_3745_4198973_4199474_neg -          ABM                  PF03992.22    0.0048   15.5   0.0      0.33    9.6   0.0   2.7   3   0   0   3   3   3   1 -
+ABS648.RS28205__NZCP158373_5534_6212835_6215055_pos -          ABM                  PF03992.22     0.022   13.4   0.1       0.1   11.2   0.1   2.2   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_040281505.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_040281505.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_040281505.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:31:02 2025
+# [ok]

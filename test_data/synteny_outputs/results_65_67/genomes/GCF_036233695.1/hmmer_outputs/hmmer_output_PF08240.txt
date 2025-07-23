@@ -1,0 +1,29 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PCP32.RS20275__NZCP115285_3940_4352977_4354006_pos -          ADH_N                PF08240.17   1.9e-31  107.0   1.1   1.9e-31  107.0   1.1   2.0   2   0   0   2   2   2   1 -
+PCP32.RS25540__NZCP115285_4969_5495319_5496378_neg -          ADH_N                PF08240.17   2.8e-31  106.4   0.2   4.9e-31  105.6   0.2   1.4   1   0   0   1   1   1   1 -
+PCP32.RS28385__NZCP115285_5533_6102928_6104041_pos -          ADH_N                PF08240.17   4.8e-26   89.6   1.2   1.7e-25   87.9   1.2   1.9   1   0   0   1   1   1   1 -
+PCP32.RS00340__NZCP115285_66_71715_72777_neg       -          ADH_N                PF08240.17   1.4e-25   88.1   0.3   2.5e-25   87.3   0.3   1.5   1   0   0   1   1   1   1 -
+PCP32.RS20245__NZCP115285_3934_4347751_4348951_pos -          ADH_N                PF08240.17   5.4e-24   83.0   2.4     1e-23   82.1   2.4   1.5   1   0   0   1   1   1   1 -
+PCP32.RS19265__NZCP115285_3743_4136796_4137774_pos -          ADH_N                PF08240.17   8.2e-19   66.4   0.1     2e-18   65.1   0.1   1.7   1   0   0   1   1   1   1 -
+PCP32.RS26935__NZCP115285_5248_5790118_5791111_neg -          ADH_N                PF08240.17   9.1e-19   66.2   0.8   1.5e-18   65.5   0.2   1.7   1   1   1   2   2   2   1 -
+PCP32.RS21115__NZCP115285_4107_4535095_4536073_neg -          ADH_N                PF08240.17   1.5e-17   62.3   0.1   4.9e-17   60.6   0.0   1.9   2   0   0   2   2   2   1 -
+PCP32.RS10935__NZCP115285_2128_2354105_2355092_pos -          ADH_N                PF08240.17   7.7e-17   60.0   0.2     2e-16   58.7   0.2   1.7   1   0   0   1   1   1   1 -
+PCP32.RS07345__NZCP115285_1429_1581111_1582104_neg -          ADH_N                PF08240.17   5.8e-16   57.2   1.1     4e-15   54.5   0.1   2.3   2   0   0   2   2   2   1 -
+PCP32.RS30345__NZCP115285_5918_6525607_6526570_pos -          ADH_N                PF08240.17   1.1e-15   56.3   0.4   1.1e-15   56.3   0.4   1.9   2   0   0   2   2   2   1 -
+PCP32.RS03245__NZCP115285_633_727766_728741_pos    -          ADH_N                PF08240.17   2.2e-13   48.9   0.1   7.8e-13   47.2   0.0   2.0   2   0   0   2   2   2   1 -
+PCP32.RS28700__NZCP115285_5595_6170199_6171213_neg -          ADH_N                PF08240.17   1.1e-12   46.6   0.0   2.3e-12   45.7   0.0   1.5   1   0   0   1   1   1   1 -
+PCP32.RS25215__NZCP115285_4904_5421400_5422387_neg -          ADH_N                PF08240.17   4.3e-12   44.8   0.1   7.8e-12   43.9   0.1   1.4   1   0   0   1   1   1   1 -
+PCP32.RS12420__NZCP115285_2413_2648038_2648998_pos -          ADH_N                PF08240.17   6.2e-11   41.1   0.0   1.6e-10   39.7   0.0   1.8   1   0   0   1   1   1   1 -
+PCP32.RS01690__NZCP115285_328_403771_404791_neg    -          ADH_N                PF08240.17   6.8e-11   40.9   0.0   2.5e-10   39.1   0.0   2.0   2   0   0   2   2   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_036233695.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_036233695.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_036233695.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:29:33 2025
+# [ok]

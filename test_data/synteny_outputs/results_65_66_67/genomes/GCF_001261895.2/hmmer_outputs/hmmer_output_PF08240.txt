@@ -1,0 +1,23 @@
+#                                                                                               --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                        accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                                ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ABR2090.RS08675__NZLN868200_1663_1809732_1810785_pos -          ADH_N                PF08240.17   1.4e-27   93.7   2.6   3.7e-27   92.3   1.6   2.1   2   0   0   2   2   2   1 -
+ABR2090.RS11395__NZLN868200_2202_2385233_2386397_neg -          ADH_N                PF08240.17   3.1e-26   89.4   0.8   1.1e-25   87.6   0.8   1.9   1   1   0   1   1   1   1 -
+ABR2090.RS00230__NZLN868200_40_53481_54510_neg       -          ADH_N                PF08240.17   7.7e-26   88.1   2.3   1.3e-25   87.3   2.3   1.4   1   0   0   1   1   1   1 -
+ABR2090.RS08925__NZLN868200_1715_1864855_1865965_neg -          ADH_N                PF08240.17   1.6e-23   80.7   5.2   1.6e-23   80.7   5.2   2.9   3   1   0   3   3   3   1 -
+ABR2090.RS09265__NZLN868200_1783_1938853_1939912_neg -          ADH_N                PF08240.17   2.7e-20   70.3   0.4   6.7e-20   69.0   0.4   1.7   1   0   0   1   1   1   1 -
+ABR2090.RS03635__NZLN868200_679_744542_745541_pos    -          ADH_N                PF08240.17   3.8e-20   69.8   1.1     8e-20   68.8   1.1   1.6   1   0   0   1   1   1   1 -
+ABR2090.RS00995__NZLN868200_186_220993_221971_pos    -          ADH_N                PF08240.17   3.8e-14   50.5   1.9   1.1e-13   49.0   0.4   2.4   2   1   1   3   3   3   1 -
+ABR2090.RS16060__NZLN868200_3108_3336058_3337069_pos -          ADH_N                PF08240.17   8.1e-14   49.5   0.1   1.4e-13   48.7   0.1   1.3   1   0   0   1   1   1   1 -
+ABR2090.RS14705__NZLN868200_2849_3054237_3055413_neg -          ADH_N                PF08240.17   5.6e-13   46.8   0.0   1.2e-12   45.7   0.0   1.6   1   0   0   1   1   1   1 -
+ABR2090.RS14125__NZLN868200_2735_2928564_2928945_pos -          ADH_N                PF08240.17    0.0045   14.9   0.0    0.0066   14.4   0.0   1.3   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_001261895.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_001261895.2/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_001261895.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:25 2025
+# [ok]

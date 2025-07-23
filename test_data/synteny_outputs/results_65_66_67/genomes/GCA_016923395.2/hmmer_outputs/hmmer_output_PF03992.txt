@@ -1,0 +1,26 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+JTM13.008450__CP128281_1649_1765554_1765848_neg -          ABM                  PF03992.22   5.3e-26   89.2   0.2   6.3e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+JTM13.017275__CP128281_3372_3663938_3664283_neg -          ABM                  PF03992.22   4.4e-24   83.0   0.3   6.1e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+JTM13.009550__CP128281_1868_1982851_1983154_pos -          ABM                  PF03992.22   7.2e-23   79.2   0.0   9.7e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+JTM13.001615__CP128281_314_346896_347190_pos    -          ABM                  PF03992.22   5.1e-21   73.2   0.4   6.9e-21   72.8   0.4   1.1   1   0   0   1   1   1   1 -
+JTM13.025625__CP128281_5001_5390922_5391219_neg -          ABM                  PF03992.22   6.5e-18   63.3   0.1   7.4e-18   63.1   0.1   1.0   1   0   0   1   1   1   1 -
+JTM13.018070__CP128281_3528_3837134_3837431_neg -          ABM                  PF03992.22   1.6e-16   58.9   0.1     2e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+JTM13.001760__CP128281_338_378279_378564_pos    -          ABM                  PF03992.22   8.4e-15   53.3   0.0   1.3e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+JTM13.016610__CP128281_3245_3515547_3516618_neg -          ABM                  PF03992.22   8.8e-11   40.4   0.2   1.7e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+JTM13.009305__CP128281_1819_1932241_1932799_neg -          ABM                  PF03992.22   2.9e-05   22.8   0.1   3.9e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+JTM13.016580__CP128281_3239_3510366_3510744_neg -          ABM                  PF03992.22   8.8e-05   21.2   0.1   0.00012   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+JTM13.001705__CP128281_328_366656_366959_pos    -          ABM                  PF03992.22     0.007   15.1   0.0    0.0096   14.7   0.0   1.2   1   0   0   1   1   1   1 -
+JTM13.008860__CP128281_1731_1862029_1863745_neg -          ABM                  PF03992.22     0.039   12.7   0.0     0.069   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+JTM13.017110__CP128281_3339_3625148_3626573_pos -          ABM                  PF03992.22     0.043   12.6   0.5       4.7    6.1   0.0   3.2   3   0   0   3   3   3   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_016923395.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_016923395.2/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_016923395.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:19:58 2025
+# [ok]

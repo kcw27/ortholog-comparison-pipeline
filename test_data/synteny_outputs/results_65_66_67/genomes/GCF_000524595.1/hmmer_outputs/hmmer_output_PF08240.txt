@@ -1,0 +1,29 @@
+#                                                                                            --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                     accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                             ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+AI22.RS29030__NZCP007147_5718_6317244_6318303_pos -          ADH_N                PF08240.17   2.5e-31  106.4   0.2   4.4e-31  105.6   0.2   1.4   1   0   0   1   1   1   1 -
+AI22.RS04665__NZCP007147_911_994824_995853_neg    -          ADH_N                PF08240.17   2.9e-31  106.2   1.2   2.9e-31  106.2   1.2   2.0   2   0   0   2   2   2   1 -
+AI22.RS29320__NZCP007147_5776_6384377_6385439_pos -          ADH_N                PF08240.17   1.2e-29  101.0   0.3   3.2e-29   99.7   0.3   1.7   1   0   0   1   1   1   1 -
+AI22.RS26425__NZCP007147_5193_5758973_5760086_neg -          ADH_N                PF08240.17   4.3e-26   89.6   1.2   1.5e-25   87.9   1.2   1.9   1   0   0   1   1   1   1 -
+AI22.RS19465__NZCP007147_3825_4215131_4216193_neg -          ADH_N                PF08240.17   6.5e-26   89.0   0.2   1.2e-25   88.1   0.2   1.5   1   0   0   1   1   1   1 -
+AI22.RS18720__NZCP007147_3680_4048420_4049668_neg -          ADH_N                PF08240.17   3.3e-24   83.6   0.6   7.9e-24   82.3   0.6   1.7   1   0   0   1   1   1   1 -
+AI22.RS04695__NZCP007147_917_999880_1001080_neg   -          ADH_N                PF08240.17   4.8e-24   83.0   2.4   9.2e-24   82.1   2.4   1.5   1   0   0   1   1   1   1 -
+AI22.RS05660__NZCP007147_1104_1210328_1211306_neg -          ADH_N                PF08240.17   2.3e-18   64.8   0.1   5.4e-18   63.6   0.1   1.7   1   0   0   1   1   1   1 -
+AI22.RS03785__NZCP007147_737_804423_805401_pos    -          ADH_N                PF08240.17   1.4e-17   62.2   0.1   4.8e-17   60.5   0.0   1.9   2   0   0   2   2   2   1 -
+AI22.RS13650__NZCP007147_2675_2936815_2937802_neg -          ADH_N                PF08240.17   6.8e-17   60.0   0.2   1.8e-16   58.7   0.2   1.7   1   0   0   1   1   1   1 -
+AI22.RS17080__NZCP007147_3350_3667316_3668309_pos -          ADH_N                PF08240.17   5.2e-16   57.2   1.1   3.6e-15   54.5   0.1   2.3   2   0   0   2   2   2   1 -
+AI22.RS24585__NZCP007147_4827_5353304_5354267_neg -          ADH_N                PF08240.17     1e-15   56.3   0.4     1e-15   56.3   0.4   1.9   2   0   0   2   2   2   1 -
+AI22.RS21540__NZCP007147_4239_4746946_4747921_pos -          ADH_N                PF08240.17   3.8e-14   51.2   0.1   1.5e-13   49.3   0.0   2.0   2   0   0   2   2   2   1 -
+AI22.RS26105__NZCP007147_5130_5691908_5692922_pos -          ADH_N                PF08240.17   3.8e-12   44.8   0.0   7.7e-12   43.8   0.0   1.5   1   0   0   1   1   1   1 -
+AI22.RS11755__NZCP007147_2297_2567288_2568248_neg -          ADH_N                PF08240.17   3.9e-11   41.5   0.0   1.4e-10   39.8   0.0   2.0   2   0   0   2   2   2   1 -
+AI22.RS20565__NZCP007147_4049_4527331_4528351_neg -          ADH_N                PF08240.17   6.1e-11   40.9   0.0   2.2e-10   39.1   0.0   2.0   2   0   0   2   2   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000524595.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_000524595.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000524595.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:12 2025
+# [ok]

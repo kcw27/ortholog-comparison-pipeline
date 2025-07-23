@@ -1,0 +1,28 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+L2Y00.RS04640__NZCP091143_878_1030041_1031118_neg  -          ADH_N                PF08240.17   9.1e-26   88.5   2.1   1.6e-25   87.7   2.1   1.4   1   0   0   1   1   1   1 -
+L2Y00.RS00155__NZCP091143_27_29692_30928_neg       -          ADH_N                PF08240.17   6.9e-25   85.7   0.8   2.1e-24   84.1   0.8   1.8   1   1   0   1   1   1   1 -
+L2Y00.RS06270__NZCP091143_1173_1456325_1457465_pos -          ADH_N                PF08240.17     2e-24   84.2   0.4   4.4e-24   83.1   0.4   1.6   1   0   0   1   1   1   1 -
+L2Y00.RS03295__NZCP091143_629_733731_734730_neg    -          ADH_N                PF08240.17   4.8e-24   82.9   1.5   4.8e-24   82.9   1.5   1.7   2   0   0   2   2   2   1 -
+L2Y00.RS22410__NZCP091143_4178_4956873_4958073_neg -          ADH_N                PF08240.17   1.2e-23   81.7   0.8   1.2e-23   81.7   0.8   1.8   2   0   0   2   2   2   1 -
+L2Y00.RS12160__NZCP091143_2261_2722914_2724027_neg -          ADH_N                PF08240.17   4.5e-22   76.6   1.1   4.5e-22   76.6   1.1   2.6   3   1   0   3   3   3   1 -
+L2Y00.RS18210__NZCP091143_3386_4064652_4065639_pos -          ADH_N                PF08240.17   1.6e-19   68.4   0.0   4.4e-19   67.0   0.0   1.8   1   0   0   1   1   1   1 -
+L2Y00.RS20545__NZCP091143_3830_4535503_4536481_pos -          ADH_N                PF08240.17   5.1e-18   63.6   0.4   2.2e-17   61.6   0.2   2.1   2   0   0   2   2   2   1 -
+L2Y00.RS00095__NZCP091143_15_16779_17781_neg       -          ADH_N                PF08240.17   4.1e-17   60.7   0.0   2.4e-16   58.2   0.0   2.2   2   0   0   2   2   2   1 -
+L2Y00.RS11400__NZCP091143_2124_2574428_2575391_neg -          ADH_N                PF08240.17   4.3e-16   57.4   1.8   8.6e-16   56.4   0.5   2.1   2   0   0   2   2   2   1 -
+L2Y00.RS13915__NZCP091143_2583_3114394_3115408_pos -          ADH_N                PF08240.17   4.7e-13   47.6   0.2   8.5e-13   46.8   0.2   1.4   1   0   0   1   1   1   1 -
+L2Y00.RS04275__NZCP091143_812_948566_949589_pos    -          ADH_N                PF08240.17   1.3e-12   46.3   0.2   4.4e-12   44.5   0.1   1.9   2   0   0   2   2   2   1 -
+L2Y00.RS08620__NZCP091143_1607_1973651_1974635_neg -          ADH_N                PF08240.17   1.3e-12   46.2   0.0   3.7e-12   44.7   0.0   1.8   1   0   0   1   1   1   1 -
+L2Y00.RS02595__NZCP091143_495_590819_591830_pos    -          ADH_N                PF08240.17   1.4e-12   46.1   0.6   3.6e-12   44.8   0.1   1.9   2   0   0   2   2   2   1 -
+L2Y00.RS24325__NZCP091143_4529_5354324_5354816_pos -          ADH_N                PF08240.17     0.033   12.8   0.0      0.06   11.9   0.0   1.5   1   1   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_023515865.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_023515865.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_023515865.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:26:19 2025
+# [ok]

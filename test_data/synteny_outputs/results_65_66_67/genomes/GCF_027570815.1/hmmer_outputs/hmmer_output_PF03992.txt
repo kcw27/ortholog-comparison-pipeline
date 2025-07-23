@@ -1,0 +1,24 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PALA29.RS07825__NZCP109843_1544_1631088_1631382_neg -          ABM                  PF03992.22   5.1e-26   89.2   0.2     6e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+PALA29.RS15595__NZCP109843_3063_3311067_3311412_neg -          ABM                  PF03992.22   4.2e-24   83.0   0.3   5.8e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+PALA29.RS08635__NZCP109843_1706_1809405_1809708_pos -          ABM                  PF03992.22   6.9e-23   79.2   0.0   9.3e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+PALA29.RS24895__NZCP109843_4883_5157807_5158104_neg -          ABM                  PF03992.22   6.2e-18   63.3   0.1   7.1e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+PALA29.RS16350__NZCP109843_3211_3477829_3478126_neg -          ABM                  PF03992.22   1.5e-16   58.9   0.1   1.9e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+PALA29.RS01385__NZCP109843_271_305339_305624_pos    -          ABM                  PF03992.22     8e-15   53.3   0.0   1.2e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+PALA29.RS14695__NZCP109843_2888_3141625_3142696_neg -          ABM                  PF03992.22   8.5e-11   40.4   0.2   1.6e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+PALA29.RS08395__NZCP109843_1658_1760202_1760760_neg -          ABM                  PF03992.22   2.8e-05   22.8   0.1   3.7e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+PALA29.RS14665__NZCP109843_2882_3136444_3136822_neg -          ABM                  PF03992.22   8.5e-05   21.2   0.1   0.00011   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+PALA29.RS08240__NZCP109843_1627_1727582_1729298_neg -          ABM                  PF03992.22     0.037   12.7   0.0     0.066   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+PALA29.RS15430__NZCP109843_3031_3272261_3273686_pos -          ABM                  PF03992.22     0.038   12.7   0.4       4.5    6.1   0.0   3.2   3   0   0   3   3   3   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_027570815.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_027570815.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_027570815.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:27:29 2025
+# [ok]

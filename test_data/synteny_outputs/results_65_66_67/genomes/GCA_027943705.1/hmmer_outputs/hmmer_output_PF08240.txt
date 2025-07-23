@@ -1,0 +1,25 @@
+#                                                                                           --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                    accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                            ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+OCUAc20.00480__AP025535_47_53598_54627_neg       -          ADH_N                PF08240.17   7.9e-26   88.5   1.9   1.4e-25   87.6   1.9   1.4   1   0   0   1   1   1   1 -
+OCUAc20.27970__AP025535_2796_2439634_2440084_neg -          ADH_N                PF08240.17   7.4e-24   82.1   0.1   9.4e-24   81.8   0.1   1.1   1   0   0   1   1   1   1 -
+OCUAc20.21330__AP025535_2132_1880272_1881382_neg -          ADH_N                PF08240.17   2.2e-23   80.7   5.2   2.2e-23   80.7   5.2   2.9   3   1   0   3   3   3   1 -
+OCUAc20.22200__AP025535_2219_1955486_1956545_neg -          ADH_N                PF08240.17   3.6e-20   70.3   0.4     9e-20   69.0   0.4   1.7   1   0   0   1   1   1   1 -
+OCUAc20.08130__AP025535_812_712361_713360_pos    -          ADH_N                PF08240.17   7.2e-20   69.3   1.5   1.5e-19   68.3   1.5   1.6   1   0   0   1   1   1   1 -
+OCUAc20.19520__AP025535_1951_1734081_1735068_neg -          ADH_N                PF08240.17   1.5e-17   61.9   2.1   2.7e-17   61.1   0.8   2.0   2   0   0   2   2   2   1 -
+OCUAc20.12300__AP025535_1229_1119417_1120461_neg -          ADH_N                PF08240.17   4.8e-17   60.2   0.2   2.2e-15   54.9   0.2   2.4   1   1   0   1   1   1   1 -
+OCUAc20.02280__AP025535_227_216551_217529_pos    -          ADH_N                PF08240.17   5.6e-14   50.4   1.8   1.5e-13   49.0   0.4   2.4   2   1   1   3   3   3   1 -
+OCUAc20.39500__AP025535_3949_3407521_3408532_pos -          ADH_N                PF08240.17   1.2e-13   49.3   0.1   2.1e-13   48.5   0.1   1.3   1   0   0   1   1   1   1 -
+OCUAc20.36750__AP025535_3674_3171748_3172924_neg -          ADH_N                PF08240.17   5.3e-13   47.3   0.0   1.2e-12   46.1   0.0   1.6   1   0   0   1   1   1   1 -
+OCUAc20.20460__AP025535_2045_1809279_1810077_pos -          ADH_N                PF08240.17   0.00012   20.4   1.8   0.00046   18.5   0.7   2.2   2   1   0   2   2   2   1 -
+OCUAc20.35050__AP025535_3504_3021541_3021922_pos -          ADH_N                PF08240.17    0.0061   14.9   0.0     0.009   14.4   0.0   1.3   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_027943705.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_027943705.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_027943705.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:20 2025
+# [ok]

@@ -1,0 +1,22 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+GKC70.RS12550__NZCP046139_2261_2759274_2760498_neg -          ADH_N                PF08240.17   1.8e-25   87.1   1.3   4.9e-25   85.8   1.3   1.7   1   1   0   1   1   1   1 -
+GKC70.RS12960__NZCP046139_2330_2854320_2855373_neg -          ADH_N                PF08240.17   1.6e-24   84.1   1.5     3e-24   83.2   1.5   1.5   1   0   0   1   1   1   1 -
+GKC70.RS01890__NZCP046139_352_417228_418428_pos    -          ADH_N                PF08240.17   5.5e-23   79.2   1.5     1e-22   78.3   1.5   1.4   1   0   0   1   1   1   1 -
+GKC70.RS06075__NZCP046139_1123_1315544_1316657_pos -          ADH_N                PF08240.17   1.4e-22   77.9   1.7   1.4e-22   77.9   1.7   2.4   2   1   0   2   2   2   1 -
+GKC70.RS00130__NZCP046139_24_28552_29530_neg       -          ADH_N                PF08240.17   8.2e-18   62.5   0.4   5.8e-17   59.8   0.1   2.3   2   0   0   2   2   2   1 -
+GKC70.RS06890__NZCP046139_1276_1473239_1474208_pos -          ADH_N                PF08240.17   2.1e-15   54.8   2.3   3.4e-15   54.1   0.3   2.2   2   0   0   2   2   2   1 -
+GKC70.RS11385__NZCP046139_2056_2503876_2504902_pos -          ADH_N                PF08240.17   5.9e-13   46.9   0.1   1.3e-12   45.8   0.1   1.6   1   0   0   1   1   1   1 -
+GKC70.RS17340__NZCP046139_3081_3803443_3804427_pos -          ADH_N                PF08240.17   8.6e-12   43.2   0.0   2.1e-11   41.9   0.0   1.7   1   0   0   1   1   1   1 -
+GKC70.RS07575__NZCP046139_1406_1598939_1601084_pos -          ADH_N                PF08240.17   8.1e-06   24.0   0.3   4.2e-05   21.7   0.2   2.3   2   0   0   2   2   2   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_038813925.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_038813925.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_038813925.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:30:57 2025
+# [ok]

@@ -1,0 +1,22 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+HIN87.RS16600__NZCP051869_3170_3407068_3408121_neg -          ADH_N                PF08240.17   1.5e-27   93.8   2.6     4e-27   92.4   1.6   2.1   2   0   0   2   2   2   1 -
+HIN87.RS05920__NZCP051869_1130_1216590_1217619_pos -          ADH_N                PF08240.17   8.4e-26   88.1   2.3   1.5e-25   87.3   2.3   1.4   1   0   0   1   1   1   1 -
+HIN87.RS16165__NZCP051869_3082_3325607_3326717_pos -          ADH_N                PF08240.17   1.8e-23   80.7   5.2   1.8e-23   80.7   5.2   2.9   3   1   0   3   3   3   1 -
+HIN87.RS15800__NZCP051869_3013_3248992_3250051_pos -          ADH_N                PF08240.17   2.9e-20   70.3   0.4   7.3e-20   69.0   0.4   1.7   1   0   0   1   1   1   1 -
+HIN87.RS02710__NZCP051869_522_554911_555910_neg    -          ADH_N                PF08240.17   4.3e-20   69.8   1.2   9.1e-20   68.7   1.2   1.6   1   0   0   1   1   1   1 -
+HIN87.RS05195__NZCP051869_985_1056661_1057639_neg  -          ADH_N                PF08240.17   4.2e-14   50.5   1.9   1.2e-13   49.0   0.4   2.4   2   1   1   3   3   3   1 -
+HIN87.RS08595__NZCP051869_1622_1779155_1780166_neg -          ADH_N                PF08240.17   9.6e-14   49.4   0.1   1.6e-13   48.7   0.1   1.4   1   0   0   1   1   1   1 -
+HIN87.RS09650__NZCP051869_1822_2000669_2001845_pos -          ADH_N                PF08240.17   4.2e-13   47.3   0.0   9.6e-13   46.1   0.0   1.6   1   0   0   1   1   1   1 -
+HIN87.RS10275__NZCP051869_1945_2146706_2147087_neg -          ADH_N                PF08240.17     0.005   14.9   0.0    0.0073   14.4   0.0   1.3   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_012931625.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_012931625.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_012931625.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:23:39 2025
+# [ok]

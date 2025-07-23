@@ -1,0 +1,23 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACNUEH.RS13345__NZOZ197095_2541_2785678_2786731_neg -          ADH_N                PF08240.17   1.3e-27   93.7   2.6   3.6e-27   92.3   1.6   2.1   2   0   0   2   2   2   1 -
+ACNUEH.RS10610__NZOZ197095_2009_2213101_2214265_pos -          ADH_N                PF08240.17     3e-26   89.4   0.8   1.1e-25   87.6   0.8   1.9   1   1   0   1   1   1   1 -
+ACNUEH.RS03570__NZOZ197095_676_739180_740209_pos    -          ADH_N                PF08240.17   7.5e-26   88.1   2.3   1.3e-25   87.3   2.3   1.4   1   0   0   1   1   1   1 -
+ACNUEH.RS13110__NZOZ197095_2502_2738075_2739185_pos -          ADH_N                PF08240.17   1.6e-23   80.7   5.2   1.6e-23   80.7   5.2   2.9   3   1   0   3   3   3   1 -
+ACNUEH.RS12750__NZOZ197095_2431_2660516_2661575_pos -          ADH_N                PF08240.17   2.6e-20   70.3   0.4   6.5e-20   69.0   0.4   1.7   1   0   0   1   1   1   1 -
+ACNUEH.RS00355__NZOZ197095_68_81997_82996_neg       -          ADH_N                PF08240.17   3.8e-20   69.8   1.2   8.1e-20   68.7   1.2   1.6   1   0   0   1   1   1   1 -
+ACNUEH.RS02845__NZOZ197095_531_581550_582528_neg    -          ADH_N                PF08240.17   1.5e-14   51.8   1.7   4.8e-14   50.2   0.3   2.4   2   1   1   3   3   3   1 -
+ACNUEH.RS05990__NZOZ197095_1126_1250568_1251579_neg -          ADH_N                PF08240.17   8.5e-14   49.4   0.1   1.4e-13   48.7   0.1   1.4   1   0   0   1   1   1   1 -
+ACNUEH.RS07415__NZOZ197095_1393_1541469_1542645_pos -          ADH_N                PF08240.17   3.8e-13   47.3   0.0   8.6e-13   46.1   0.0   1.6   1   0   0   1   1   1   1 -
+ACNUEH.RS08005__NZOZ197095_1511_1671727_1672108_neg -          ADH_N                PF08240.17    0.0044   14.9   0.0    0.0065   14.4   0.0   1.3   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_964290795.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_964290795.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_964290795.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:34:10 2025
+# [ok]

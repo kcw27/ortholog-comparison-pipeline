@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ### Description:
 # Takes a protein BLAST output with -outfmt "6 sallgi sallseqid sseq evalue salltitles",
 # and using the organism names in salltitles, adds a sixth column featuring organism names,

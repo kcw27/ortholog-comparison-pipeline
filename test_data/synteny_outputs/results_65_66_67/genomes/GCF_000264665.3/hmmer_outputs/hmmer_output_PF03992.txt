@@ -1,0 +1,23 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+YSA.RS08820__NC017986_1529_1763495_1763810_pos -          ABM                  PF03992.22   1.1e-22   78.3   0.1   1.3e-22   78.1   0.1   1.1   1   0   0   1   1   1   1 -
+YSA.RS09085__NC017986_1576_1826730_1827033_pos -          ABM                  PF03992.22   1.2e-21   75.0   0.0   1.6e-21   74.6   0.0   1.1   1   0   0   1   1   1   1 -
+YSA.RS04975__NC017986_823_952383_952671_pos    -          ABM                  PF03992.22   3.5e-20   70.3   0.0   4.1e-20   70.1   0.0   1.1   1   0   0   1   1   1   1 -
+YSA.RS26230__NC017986_4816_5462029_5462416_pos -          ABM                  PF03992.22   2.6e-17   61.1   0.0   3.2e-17   60.8   0.0   1.1   1   0   0   1   1   1   1 -
+YSA.RS07800__NC017986_1337_1551155_1551449_neg -          ABM                  PF03992.22   8.7e-15   53.0   0.0     1e-14   52.8   0.0   1.1   1   0   0   1   1   1   1 -
+YSA.RS03770__NC017986_590_680345_680726_neg    -          ABM                  PF03992.22   2.7e-06   25.8   0.7   7.2e-06   24.5   0.2   1.8   2   0   0   2   2   2   1 -
+YSA.RS28000__NC017986_5152_5826624_5826978_neg -          ABM                  PF03992.22     3e-06   25.7   0.0   4.5e-06   25.1   0.0   1.2   1   0   0   1   1   1   1 -
+YSA.RS08645__NC017986_1497_1728909_1729470_pos -          ABM                  PF03992.22   4.5e-05   21.9   0.0   6.3e-05   21.4   0.0   1.2   1   0   0   1   1   1   1 -
+YSA.RS12245__NC017986_2173_2517670_2519269_pos -          ABM                  PF03992.22   0.00037   19.0   0.1   0.00065   18.2   0.1   1.4   1   0   0   1   1   1   1 -
+YSA.RS26200__NC017986_4810_5456072_5457131_neg -          ABM                  PF03992.22   0.00075   18.0   0.0     0.055   12.0   0.0   2.5   2   0   0   2   2   2   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000264665.3/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_000264665.3/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000264665.3/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:59 2025
+# [ok]

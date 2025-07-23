@@ -1,0 +1,25 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+VRC34.12765__CP142188_2204_2776557_2777730_pos -          ADH_N                PF08240.17     3e-25   86.5   0.1   9.8e-25   84.9   0.0   1.9   2   0   0   2   2   2   1 -
+VRC34.18385__CP142188_3157_4093970_4095023_pos -          ADH_N                PF08240.17   6.2e-25   85.5   2.6   6.2e-25   85.5   2.6   2.0   3   0   0   3   3   3   1 -
+VRC34.14400__CP142188_2472_3215653_3216901_neg -          ADH_N                PF08240.17   1.5e-24   84.3   0.1   3.5e-24   83.1   0.1   1.6   1   0   0   1   1   1   1 -
+VRC34.23135__CP142188_4009_5087974_5089174_neg -          ADH_N                PF08240.17   3.8e-24   83.0   1.0   8.8e-24   81.8   1.0   1.6   1   0   0   1   1   1   1 -
+VRC34.06000__CP142188_1078_1344274_1345387_pos -          ADH_N                PF08240.17   3.6e-23   79.9   1.7   3.6e-23   79.9   1.7   2.4   2   1   0   2   2   2   1 -
+VRC34.24265__CP142188_4228_5320784_5321762_pos -          ADH_N                PF08240.17     4e-20   70.0   0.1   1.1e-19   68.7   0.1   1.8   1   0   0   1   1   1   1 -
+VRC34.10750__CP142188_1891_2326279_2327278_neg -          ADH_N                PF08240.17   5.1e-19   66.5   0.8   9.8e-19   65.6   0.1   1.9   2   0   0   2   2   2   1 -
+VRC34.00105__CP142188_18_22728_23706_neg       -          ADH_N                PF08240.17   6.7e-17   59.7   0.1   2.6e-16   57.8   0.0   2.0   2   0   0   2   2   2   1 -
+VRC34.16425__CP142188_2803_3642148_3643063_neg -          ADH_N                PF08240.17   6.4e-16   56.5   0.1   2.4e-15   54.7   0.0   2.0   2   0   0   2   2   2   1 -
+VRC34.12755__CP142188_2202_2775688_2776111_neg -          ADH_N                PF08240.17   4.7e-14   50.5   0.1   2.3e-13   48.3   0.0   2.0   2   1   0   2   2   2   1 -
+VRC34.03025__CP142188_539_710809_711823_neg    -          ADH_N                PF08240.17   1.3e-13   49.1   0.1   2.4e-13   48.3   0.1   1.4   1   0   0   1   1   1   1 -
+VRC34.11625__CP142188_2014_2518398_2519412_pos -          ADH_N                PF08240.17   1.4e-13   49.0   0.0   3.1e-13   47.9   0.0   1.6   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_036865365.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_036865365.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_036865365.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:24 2025
+# [ok]

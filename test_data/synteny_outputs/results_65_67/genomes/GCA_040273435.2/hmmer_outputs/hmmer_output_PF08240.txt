@@ -1,0 +1,24 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ABUV82.09045__CP166843_1719_1870643_1871696_pos -          ADH_N                PF08240.17   1.4e-27   93.7   2.6   3.9e-27   92.3   1.6   2.1   2   0   0   2   2   2   1 -
+ABUV82.11795__CP166843_2253_2449772_2450936_neg -          ADH_N                PF08240.17     4e-26   89.1   0.8   1.2e-25   87.5   0.8   1.8   1   1   0   1   1   1   1 -
+ABUV82.19100__CP166843_3647_3939967_3940996_pos -          ADH_N                PF08240.17   8.1e-26   88.1   2.3   1.4e-25   87.3   2.3   1.4   1   0   0   1   1   1   1 -
+ABUV82.09215__CP166843_1751_1909676_1910786_neg -          ADH_N                PF08240.17   1.7e-23   80.7   5.2   1.7e-23   80.7   5.2   2.9   3   1   0   3   3   3   1 -
+ABUV82.09555__CP166843_1819_1983711_1984770_neg -          ADH_N                PF08240.17   2.8e-20   70.3   0.4     7e-20   69.0   0.4   1.7   1   0   0   1   1   1   1 -
+ABUV82.03505__CP166843_648_715267_716266_pos    -          ADH_N                PF08240.17   4.4e-20   69.7   1.2   9.4e-20   68.6   1.2   1.6   1   0   0   1   1   1   1 -
+ABUV82.08635__CP166843_1637_1784568_1785555_neg -          ADH_N                PF08240.17   1.3e-17   61.7   2.3   2.1e-17   61.1   0.8   2.1   2   0   0   2   2   2   1 -
+ABUV82.00965__CP166843_181_211036_212014_pos    -          ADH_N                PF08240.17   4.7e-14   50.3   2.0   1.2e-13   49.0   0.4   2.4   2   1   1   3   3   3   1 -
+ABUV82.17085__CP166843_3270_3516276_3517287_pos -          ADH_N                PF08240.17   8.6e-14   49.4   0.1   1.5e-13   48.7   0.1   1.3   1   0   0   1   1   1   1 -
+ABUV82.15875__CP166843_3039_3256934_3258110_neg -          ADH_N                PF08240.17   4.8e-13   47.1   0.0   1.1e-12   45.9   0.0   1.6   1   0   0   1   1   1   1 -
+ABUV82.15230__CP166843_2914_3121689_3122070_pos -          ADH_N                PF08240.17    0.0048   14.9   0.0     0.007   14.4   0.0   1.3   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_040273435.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCA_040273435.2/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_040273435.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:33 2025
+# [ok]

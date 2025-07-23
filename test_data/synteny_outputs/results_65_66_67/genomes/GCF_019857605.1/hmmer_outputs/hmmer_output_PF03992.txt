@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+KUU80.RS22240__NZCP078006_4331_4750404_4750698_pos -          ABM                  PF03992.22   5.2e-26   89.2   0.2   6.2e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+KUU80.RS14205__NZCP078006_2755_3060649_3060994_neg -          ABM                  PF03992.22   4.4e-24   83.0   0.3     6e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+KUU80.RS21315__NZCP078006_4148_4545465_4545768_neg -          ABM                  PF03992.22   7.1e-23   79.2   0.0   9.6e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+KUU80.RS03925__NZCP078006_771_832252_832549_pos    -          ABM                  PF03992.22   6.4e-18   63.3   0.1   7.3e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+KUU80.RS14960__NZCP078006_2904_3229318_3229615_neg -          ABM                  PF03992.22   1.5e-16   58.9   0.1   1.9e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+KUU80.RS01540__NZCP078006_302_337681_337966_pos    -          ABM                  PF03992.22   8.3e-15   53.3   0.0   1.3e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+KUU80.RS21560__NZCP078006_4195_4594399_4594957_pos -          ABM                  PF03992.22   2.9e-05   22.8   0.1   3.9e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+KUU80.RS13100__NZCP078006_2561_2846454_2846832_neg -          ABM                  PF03992.22   8.7e-05   21.2   0.1   0.00012   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+KUU80.RS21715__NZCP078006_4226_4625712_4627428_pos -          ABM                  PF03992.22     0.038   12.7   0.0     0.068   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+KUU80.RS14040__NZCP078006_2722_3021860_3023285_pos -          ABM                  PF03992.22     0.043   12.6   0.5       4.7    6.1   0.0   3.2   3   0   0   3   3   3   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_019857605.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_019857605.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_019857605.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:25:05 2025
+# [ok]

@@ -1,0 +1,22 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PALA42.RS25100__NZCP109931_4911_5369690_5369984_pos -          ABM                  PF03992.22   4.7e-26   89.2   0.2   5.6e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+PALA42.RS17625__NZCP109931_3448_3760444_3760789_pos -          ABM                  PF03992.22   3.7e-24   83.1   0.3   5.1e-24   82.7   0.3   1.2   1   0   0   1   1   1   1 -
+PALA42.RS24270__NZCP109931_4747_5188131_5188434_neg -          ABM                  PF03992.22   6.4e-23   79.2   0.0   8.6e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+PALA42.RS09505__NZCP109931_1849_2055392_2055689_pos -          ABM                  PF03992.22   5.7e-18   63.3   0.1   6.5e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+PALA42.RS16870__NZCP109931_3299_3593718_3594015_pos -          ABM                  PF03992.22   1.4e-16   58.9   0.1   1.7e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+PALA42.RS01345__NZCP109931_262_298461_298746_pos    -          ABM                  PF03992.22   7.4e-15   53.3   0.0   1.1e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+PALA42.RS17950__NZCP109931_3513_3835289_3836360_pos -          ABM                  PF03992.22   7.8e-11   40.4   0.2   1.5e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+PALA42.RS24535__NZCP109931_4798_5240181_5240739_pos -          ABM                  PF03992.22   2.6e-05   22.8   0.1   3.5e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+PALA42.RS24690__NZCP109931_4829_5271751_5273467_pos -          ABM                  PF03992.22     0.034   12.7   0.0     0.061   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_027571015.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_027571015.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_027571015.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:27:34 2025
+# [ok]

@@ -1,0 +1,23 @@
+#                                                                                            --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                     accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                             ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+RPPX.RS13740__NZCP009974_2694_3086734_3087049_neg -          ABM                  PF03992.22   5.2e-22   76.2   0.1     6e-22   76.0   0.1   1.1   1   0   0   1   1   1   1 -
+RPPX.RS13480__NZCP009974_2647_3023467_3023770_neg -          ABM                  PF03992.22   9.5e-22   75.4   0.0   1.2e-21   75.0   0.0   1.1   1   0   0   1   1   1   1 -
+RPPX.RS17335__NZCP009974_3401_3891481_3891769_neg -          ABM                  PF03992.22   9.8e-21   72.1   0.0   1.1e-20   71.9   0.0   1.1   1   0   0   1   1   1   1 -
+RPPX.RS23380__NZCP009974_4596_5259590_5259977_neg -          ABM                  PF03992.22   2.7e-16   57.9   0.0   3.4e-16   57.6   0.0   1.1   1   0   0   1   1   1   1 -
+RPPX.RS14690__NZCP009974_2884_3297550_3297844_pos -          ABM                  PF03992.22   2.5e-14   51.6   0.0   2.9e-14   51.4   0.0   1.1   1   0   0   1   1   1   1 -
+RPPX.RS18500__NZCP009974_3637_4159143_4159524_pos -          ABM                  PF03992.22   6.6e-06   24.6   1.0   1.2e-05   23.7   0.4   1.7   2   0   0   2   2   2   1 -
+RPPX.RS13900__NZCP009974_2726_3121345_3121906_neg -          ABM                  PF03992.22   4.7e-05   21.9   0.0   6.4e-05   21.4   0.0   1.2   1   0   0   1   1   1   1 -
+RPPX.RS10235__NZCP009974_2006_2281936_2283535_neg -          ABM                  PF03992.22   0.00035   19.1   0.1   0.00063   18.3   0.1   1.4   1   0   0   1   1   1   1 -
+RPPX.RS23410__NZCP009974_4602_5264879_5265938_pos -          ABM                  PF03992.22   0.00051   18.6   0.1      0.05   12.2   0.0   2.5   2   0   0   2   2   2   1 -
+RPPX.RS27675__NZCP009975_351_347075_347393_pos    -          ABM                  PF03992.22     0.028   13.0   0.0     0.037   12.6   0.0   1.1   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000495455.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_000495455.2/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000495455.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:09 2025
+# [ok]

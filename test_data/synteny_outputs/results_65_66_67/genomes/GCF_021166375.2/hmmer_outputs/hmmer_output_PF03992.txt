@@ -1,0 +1,24 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+LSP21.RS13985__NZCP089068_2732_3023752_3024046_neg -          ABM                  PF03992.22   4.6e-26   89.2   0.2   5.4e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+LSP21.RS21390__NZCP089068_4187_4678798_4679143_neg -          ABM                  PF03992.22   3.9e-24   83.0   0.3   5.3e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+LSP21.RS14900__NZCP089068_2914_3222269_3222572_pos -          ABM                  PF03992.22   6.3e-23   79.2   0.0   8.4e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+LSP21.RS28945__NZCP089068_5674_6290666_6290963_neg -          ABM                  PF03992.22   5.6e-18   63.3   0.1   6.4e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+LSP21.RS22140__NZCP089068_4334_4847524_4847821_neg -          ABM                  PF03992.22   1.4e-16   58.9   0.1   1.7e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+LSP21.RS08325__NZCP089068_1618_1822406_1822691_pos -          ABM                  PF03992.22   7.3e-15   53.3   0.0   1.1e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+LSP21.RS20895__NZCP089068_4089_4558969_4560040_neg -          ABM                  PF03992.22   7.6e-11   40.4   0.2   1.5e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+LSP21.RS14660__NZCP089068_2866_3172867_3173425_neg -          ABM                  PF03992.22   2.5e-05   22.8   0.1   3.4e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+LSP21.RS20865__NZCP089068_4083_4553788_4554166_neg -          ABM                  PF03992.22   7.7e-05   21.2   0.1    0.0001   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+LSP21.RS14505__NZCP089068_2837_3139827_3141543_neg -          ABM                  PF03992.22     0.034   12.7   0.0      0.06   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+LSP21.RS21225__NZCP089068_4154_4640003_4641428_pos -          ABM                  PF03992.22     0.038   12.6   0.5       4.1    6.1   0.0   3.2   3   0   0   3   3   3   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_021166375.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_021166375.2/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_021166375.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:25:18 2025
+# [ok]

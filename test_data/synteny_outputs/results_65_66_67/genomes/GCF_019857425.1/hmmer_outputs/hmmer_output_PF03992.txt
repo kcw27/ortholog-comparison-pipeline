@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+KUU70.RS07805__NZCP077977_1536_1628658_1628952_neg -          ABM                  PF03992.22   5.3e-26   89.2   0.2   6.3e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+KUU70.RS15755__NZCP077977_3095_3355566_3355911_neg -          ABM                  PF03992.22   4.4e-24   83.0   0.3   6.1e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+KUU70.RS08610__NZCP077977_1697_1806893_1807196_pos -          ABM                  PF03992.22   7.2e-23   79.2   0.0   9.7e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+KUU70.RS23525__NZCP077977_4628_4991238_4991535_neg -          ABM                  PF03992.22   6.5e-18   63.3   0.1   7.4e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+KUU70.RS16515__NZCP077977_3247_3524525_3524822_neg -          ABM                  PF03992.22   1.6e-16   58.9   0.1     2e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+KUU70.RS01375__NZCP077977_268_302060_302345_pos    -          ABM                  PF03992.22   8.4e-15   53.3   0.0   1.3e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+KUU70.RS15285__NZCP077977_3002_3243431_3244502_neg -          ABM                  PF03992.22   8.6e-11   40.5   0.2   1.7e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+KUU70.RS08370__NZCP077977_1649_1757874_1758432_neg -          ABM                  PF03992.22   2.8e-05   22.8   0.1   3.9e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+KUU70.RS15255__NZCP077977_2996_3238250_3238628_neg -          ABM                  PF03992.22   8.9e-05   21.2   0.1   0.00012   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+KUU70.RS08215__NZCP077977_1618_1725179_1726895_neg -          ABM                  PF03992.22     0.039   12.7   0.0     0.069   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_019857425.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_019857425.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_019857425.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:25:03 2025
+# [ok]

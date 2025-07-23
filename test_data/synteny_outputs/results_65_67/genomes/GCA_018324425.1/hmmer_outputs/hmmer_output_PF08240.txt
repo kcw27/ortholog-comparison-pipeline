@@ -1,0 +1,33 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+TRE132.35960__AP020336_3595_3903548_3904613_pos -          ADH_N                PF08240.17     5e-32  108.8   1.0   8.9e-32  108.0   1.0   1.4   1   0   0   1   1   1   1 -
+TRE132.37680__AP020336_3767_4077468_4078518_pos -          ADH_N                PF08240.17   7.1e-27   92.3   1.9   1.5e-26   91.2   1.9   1.5   1   0   0   1   1   1   1 -
+TRE132.22260__AP020336_2225_2409951_2411055_pos -          ADH_N                PF08240.17   7.9e-27   92.1   1.2   7.9e-27   92.1   1.2   1.8   2   0   0   2   2   2   1 -
+TRE132.39030__AP020336_3902_4238780_4239704_neg -          ADH_N                PF08240.17   9.2e-26   88.7   1.3   1.6e-25   87.9   0.6   1.8   2   0   0   2   2   2   1 -
+TRE132.19050__AP020336_1904_2076780_2077833_neg -          ADH_N                PF08240.17   9.7e-25   85.4   2.2   9.7e-25   85.4   2.2   2.2   3   0   0   3   3   2   1 -
+TRE132.59740__AP020336_5973_6381421_6382621_neg -          ADH_N                PF08240.17   1.1e-23   82.0   1.2   1.1e-23   82.0   1.2   1.7   2   0   0   2   2   1   1 -
+TRE132.12230__AP020336_1222_1362345_1363458_pos -          ADH_N                PF08240.17     5e-23   79.9   0.4     5e-23   79.9   0.4   2.4   2   0   0   2   2   2   1 -
+TRE132.62220__AP020336_6221_6649872_6650850_pos -          ADH_N                PF08240.17   1.4e-18   65.6   0.2   4.6e-18   64.0   0.2   1.9   2   0   0   2   2   1   1 -
+TRE132.00320__AP020336_31_35068_36046_neg       -          ADH_N                PF08240.17   2.8e-17   61.5   0.2     1e-16   59.7   0.0   2.0   2   0   0   2   2   2   1 -
+TRE132.47070__AP020336_4706_5106639_5107602_neg -          ADH_N                PF08240.17   1.1e-16   59.5   2.3   1.6e-16   59.0   0.3   2.1   2   0   0   2   2   2   1 -
+TRE132.27850__AP020336_2784_2994420_2995419_pos -          ADH_N                PF08240.17   1.3e-16   59.3   0.0   1.2e-15   56.2   0.0   2.3   2   0   0   2   2   2   1 -
+TRE132.57650__AP020336_5764_6164484_6164934_neg -          ADH_N                PF08240.17   5.3e-15   54.1   0.0   1.2e-14   53.0   0.0   1.6   1   1   0   1   1   1   1 -
+TRE132.07260__AP020336_725_805891_806905_neg    -          ADH_N                PF08240.17   1.2e-13   49.8   0.2   2.4e-13   48.8   0.2   1.5   1   0   0   1   1   1   1 -
+TRE132.36800__AP020336_3679_3976434_3977409_pos -          ADH_N                PF08240.17   1.5e-13   49.5   1.0   5.4e-13   47.7   0.1   2.2   2   0   0   2   2   2   1 -
+TRE132.34950__AP020336_3494_3792199_3793222_neg -          ADH_N                PF08240.17   2.1e-13   49.0   0.0   4.5e-13   47.9   0.0   1.6   1   0   0   1   1   1   1 -
+TRE132.44540__AP020336_4453_4839983_4841909_pos -          ADH_N                PF08240.17   1.2e-12   46.6   0.1   2.5e-12   45.6   0.1   1.6   1   0   0   1   1   1   1 -
+TRE132.22870__AP020336_2286_2473218_2474175_pos -          ADH_N                PF08240.17   1.2e-12   46.6   0.1   2.5e-12   45.6   0.1   1.6   1   0   0   1   1   1   1 -
+TRE132.36470__AP020336_3646_3951120_3952104_neg -          ADH_N                PF08240.17   6.4e-11   41.0   0.0   1.8e-10   39.6   0.0   1.8   1   0   0   1   1   1   1 -
+TRE132.32710__AP020336_3270_3526962_3527184_neg -          ADH_N                PF08240.17   4.1e-05   22.3   0.0   5.8e-05   21.9   0.0   1.2   1   0   0   1   1   1   1 -
+TRE132.55410__AP020336_5540_5942782_5943163_pos -          ADH_N                PF08240.17     0.032   13.0   0.0     0.037   12.9   0.0   1.2   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_018324425.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCA_018324425.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_018324425.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:06 2025
+# [ok]

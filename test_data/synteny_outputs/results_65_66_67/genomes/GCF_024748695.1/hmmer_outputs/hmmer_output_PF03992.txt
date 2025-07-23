@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+LOY55.RS03415__NZCP087176_650_770998_771313_neg    -          ABM                  PF03992.22   6.7e-22   75.9   0.1   8.8e-22   75.5   0.1   1.2   1   0   0   1   1   1   1 -
+LOY55.RS03210__NZCP087176_615_724603_724897_neg    -          ABM                  PF03992.22   1.4e-21   74.9   0.2   1.8e-21   74.5   0.2   1.1   1   0   0   1   1   1   1 -
+LOY55.RS24150__NZCP087176_4663_5273118_5273472_neg -          ABM                  PF03992.22   3.2e-15   54.5   0.0   7.8e-15   53.3   0.0   1.6   1   1   1   2   2   2   1 -
+LOY55.RS16980__NZCP087176_3279_3710538_3710832_pos -          ABM                  PF03992.22     1e-13   49.7   0.0   1.2e-13   49.5   0.0   1.1   1   0   0   1   1   1   1 -
+LOY55.RS23415__NZCP087176_4521_5104011_5104323_pos -          ABM                  PF03992.22   9.4e-12   43.4   0.2   1.1e-11   43.2   0.2   1.1   1   0   0   1   1   1   1 -
+LOY55.RS31185__NZCP087176_2761_3078890_3079211_neg -          ABM                  PF03992.22   7.7e-09   34.1   0.0   9.8e-09   33.7   0.0   1.1   1   0   0   1   1   1   1 -
+LOY55.RS12315__NZCP087176_2372_2685021_2685348_neg -          ABM                  PF03992.22   9.4e-07   27.4   0.3   2.1e-06   26.3   0.2   1.6   1   1   0   1   1   1   1 -
+LOY55.RS11815__NZCP087176_2276_2568432_2569026_pos -          ABM                  PF03992.22   1.3e-06   26.9   0.0   1.8e-06   26.5   0.0   1.2   1   0   0   1   1   1   1 -
+LOY55.RS21510__NZCP087176_4153_4710446_4710812_neg -          ABM                  PF03992.22   3.5e-06   25.6   0.1   4.8e-06   25.1   0.1   1.2   1   0   0   1   1   1   1 -
+LOY55.RS04465__NZCP087176_854_1002128_1002698_neg  -          ABM                  PF03992.22   1.1e-05   24.0   0.0   1.4e-05   23.6   0.0   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_024748695.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_024748695.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_024748695.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:26:43 2025
+# [ok]

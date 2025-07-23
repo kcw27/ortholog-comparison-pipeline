@@ -1,0 +1,24 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACIRUC.RS07090__NZCP173125_1391_1523427_1523721_neg -          ABM                  PF03992.22   1.7e-25   87.4   0.2     2e-25   87.2   0.2   1.1   1   0   0   1   1   1   1 -
+ACIRUC.RS14275__NZCP173125_2776_3109298_3109643_neg -          ABM                  PF03992.22   5.3e-23   79.4   0.3   7.2e-23   79.0   0.3   1.2   1   0   0   1   1   1   1 -
+ACIRUC.RS07895__NZCP173125_1550_1702010_1702313_pos -          ABM                  PF03992.22   6.3e-23   79.2   0.0   8.5e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+ACIRUC.RS21805__NZCP173125_4239_4703328_4703625_neg -          ABM                  PF03992.22   4.7e-18   63.6   0.1   5.3e-18   63.4   0.1   1.1   1   0   0   1   1   1   1 -
+ACIRUC.RS15065__NZCP173125_2928_3277007_3277304_neg -          ABM                  PF03992.22   1.3e-17   62.1   0.4   1.7e-17   61.7   0.4   1.1   1   0   0   1   1   1   1 -
+ACIRUC.RS01415__NZCP173125_274_313303_313588_pos    -          ABM                  PF03992.22   7.7e-14   50.1   0.0   1.2e-13   49.5   0.0   1.3   1   1   0   1   1   1   1 -
+ACIRUC.RS13825__NZCP173125_2688_3000552_3001623_neg -          ABM                  PF03992.22   7.1e-11   40.5   0.2   1.5e-10   39.5   0.2   1.6   1   0   0   1   1   1   1 -
+ACIRUC.RS07655__NZCP173125_1502_1652556_1653114_neg -          ABM                  PF03992.22   2.5e-05   22.8   0.1   3.4e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+ACIRUC.RS13795__NZCP173125_2682_2995371_2995749_neg -          ABM                  PF03992.22   7.8e-05   21.2   0.1    0.0001   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+ACIRUC.RS07505__NZCP173125_1473_1620134_1621850_neg -          ABM                  PF03992.22     0.034   12.7   0.0      0.06   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+ACIRUC.RS14110__NZCP173125_2744_3070432_3071857_pos -          ABM                  PF03992.22     0.038   12.6   0.5       4.1    6.1   0.0   3.2   3   0   0   3   3   3   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_051015895.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_051015895.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_051015895.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:33:28 2025
+# [ok]

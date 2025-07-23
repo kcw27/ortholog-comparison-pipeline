@@ -1,0 +1,24 @@
+#                                                                                               --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                        accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                                ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+CCOS191.RS10680__NZLN847264_2110_2314026_2315079_pos -          ADH_N                PF08240.17   4.6e-26   89.4   2.2   8.4e-26   88.5   2.2   1.4   1   0   0   1   1   1   1 -
+CCOS191.RS25220__NZLN847264_5017_5638428_5639628_neg -          ADH_N                PF08240.17   3.2e-24   83.5   1.0   5.7e-24   82.6   1.0   1.4   1   0   0   1   1   1   1 -
+CCOS191.RS05770__NZLN847264_1142_1266478_1267591_pos -          ADH_N                PF08240.17   1.9e-22   77.8   1.6   1.9e-22   77.8   1.6   2.4   3   1   0   3   3   3   1 -
+CCOS191.RS03510__NZLN847264_701_760826_761810_neg    -          ADH_N                PF08240.17   9.3e-20   69.1   1.1   1.9e-19   68.1   0.1   1.9   2   0   0   2   2   2   1 -
+CCOS191.RS15425__NZLN847264_3073_3482815_3483808_pos -          ADH_N                PF08240.17   2.2e-19   67.9   1.2   1.1e-18   65.7   0.3   2.4   2   1   0   2   2   2   1 -
+CCOS191.RS00995__NZLN847264_198_207674_208655_neg    -          ADH_N                PF08240.17     2e-18   64.8   0.0   5.3e-18   63.5   0.0   1.7   1   0   0   1   1   1   1 -
+CCOS191.RS00145__NZLN847264_29_31146_32124_neg       -          ADH_N                PF08240.17   5.1e-18   63.5   0.4   6.6e-17   60.0   0.1   2.4   2   0   0   2   2   2   1 -
+CCOS191.RS21035__NZLN847264_4191_4713511_4714474_neg -          ADH_N                PF08240.17   7.8e-17   59.7   1.9   1.5e-16   58.8   0.3   2.1   2   0   0   2   2   2   1 -
+CCOS191.RS15040__NZLN847264_2995_3396250_3397261_pos -          ADH_N                PF08240.17   1.1e-13   49.7   0.3   2.3e-13   48.6   0.1   1.7   2   0   0   2   2   1   1 -
+CCOS191.RS23730__NZLN847264_4728_5330599_5331610_neg -          ADH_N                PF08240.17     2e-13   48.8   0.1   8.8e-13   46.7   0.1   2.0   2   0   0   2   2   2   1 -
+CCOS191.RS15155__NZLN847264_3018_3422879_3423905_neg -          ADH_N                PF08240.17   3.4e-13   48.0   0.2     1e-12   46.5   0.1   1.8   2   0   0   2   2   2   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_001007005.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_001007005.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_001007005.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:27 2025
+# [ok]

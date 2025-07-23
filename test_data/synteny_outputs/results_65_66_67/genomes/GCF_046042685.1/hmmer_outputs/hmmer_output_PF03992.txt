@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+DKB71.RS04070__NZCP064949_781_917076_917391_neg    -          ABM                  PF03992.22   1.3e-21   75.3   0.1   1.7e-21   74.9   0.1   1.2   1   0   0   1   1   1   1 -
+DKB71.RS10450__NZCP064949_2018_2270433_2270787_pos -          ABM                  PF03992.22   1.2e-16   59.3   0.1   1.7e-16   58.9   0.1   1.2   1   0   0   1   1   1   1 -
+DKB71.RS14855__NZCP064949_2858_3199307_3199616_pos -          ABM                  PF03992.22   4.9e-16   57.4   0.0   5.8e-16   57.2   0.0   1.1   1   0   0   1   1   1   1 -
+DKB71.RS15995__NZCP064949_3073_3453719_3454013_neg -          ABM                  PF03992.22   4.9e-15   54.2   0.0   5.8e-15   54.0   0.0   1.1   1   0   0   1   1   1   1 -
+DKB71.RS27380__NZCP064949_5246_6011800_6012154_neg -          ABM                  PF03992.22   6.6e-15   53.8   0.0   1.2e-14   53.0   0.0   1.4   1   1   0   1   1   1   1 -
+DKB71.RS16865__NZCP064949_3238_3664833_3665220_pos -          ABM                  PF03992.22   7.2e-14   50.5   0.2     1e-13   50.0   0.2   1.1   1   0   0   1   1   1   1 -
+DKB71.RS06790__NZCP064949_1308_1496570_1496918_neg -          ABM                  PF03992.22   9.2e-13   46.9   0.0   1.1e-12   46.6   0.0   1.1   1   0   0   1   1   1   1 -
+DKB71.RS21565__NZCP064949_4142_4762255_4762858_neg -          ABM                  PF03992.22     2e-08   33.0   0.0   2.7e-08   32.6   0.0   1.2   1   0   0   1   1   1   1 -
+DKB71.RS24325__NZCP064949_4666_5369798_5370164_neg -          ABM                  PF03992.22   1.5e-06   27.0   0.5   2.5e-06   26.3   0.4   1.4   1   1   0   1   1   1   1 -
+DKB71.RS04950__NZCP064949_951_1109419_1109989_neg  -          ABM                  PF03992.22   3.6e-05   22.6   0.0   4.8e-05   22.2   0.0   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_046042685.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_046042685.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_046042685.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:32:10 2025
+# [ok]

@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+M2J77.RS25160__NZCP096909_4912_5356341_5356635_pos -          ABM                  PF03992.22   1.9e-25   87.4   0.2   2.2e-25   87.2   0.2   1.1   1   0   0   1   1   1   1 -
+M2J77.RS16425__NZCP096909_3211_3486616_3486961_pos -          ABM                  PF03992.22   3.5e-24   83.3   0.4   4.7e-24   82.9   0.4   1.2   1   0   0   1   1   1   1 -
+M2J77.RS24345__NZCP096909_4751_5176581_5176884_neg -          ABM                  PF03992.22     7e-23   79.2   0.0   9.4e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+M2J77.RS08425__NZCP096909_1640_1824766_1825063_pos -          ABM                  PF03992.22   6.3e-18   63.3   0.1   7.2e-18   63.1   0.1   1.0   1   0   0   1   1   1   1 -
+M2J77.RS15670__NZCP096909_3062_3319964_3320261_pos -          ABM                  PF03992.22   1.5e-16   58.9   0.1   1.9e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+M2J77.RS01455__NZCP096909_281_329377_329662_pos    -          ABM                  PF03992.22   8.1e-15   53.3   0.0   1.2e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+M2J77.RS16940__NZCP096909_3314_3604172_3605243_pos -          ABM                  PF03992.22   8.5e-11   40.4   0.2   1.7e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+M2J77.RS24590__NZCP096909_4800_5226713_5227271_pos -          ABM                  PF03992.22   2.7e-05   22.8   0.1   3.8e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+M2J77.RS16970__NZCP096909_3320_3610046_3610424_pos -          ABM                  PF03992.22   8.6e-05   21.2   0.1   0.00011   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+M2J77.RS24745__NZCP096909_4830_5258467_5260183_pos -          ABM                  PF03992.22     0.038   12.7   0.0     0.067   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_027594985.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_027594985.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_027594985.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:27:37 2025
+# [ok]

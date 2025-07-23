@@ -1,0 +1,23 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACSC9U.RS21690__NZCP195316_4226_4734209_4734503_pos -          ABM                  PF03992.22   1.3e-24   84.6   0.3   1.4e-24   84.5   0.3   1.0   1   0   0   1   1   1   1 -
+ACSC9U.RS04560__NZCP195316_884_958433_958754_pos    -          ABM                  PF03992.22   1.1e-23   81.6   0.8   1.4e-23   81.3   0.8   1.1   1   0   0   1   1   1   1 -
+ACSC9U.RS02460__NZCP195316_477_527211_527514_pos    -          ABM                  PF03992.22   1.7e-22   77.8   0.0   2.2e-22   77.4   0.0   1.1   1   0   0   1   1   1   1 -
+ACSC9U.RS14135__NZCP195316_2751_3089409_3089706_neg -          ABM                  PF03992.22   4.6e-14   50.8   0.0   5.6e-14   50.5   0.0   1.1   1   0   0   1   1   1   1 -
+ACSC9U.RS15180__NZCP195316_2957_3332502_3332862_pos -          ABM                  PF03992.22   6.9e-10   37.4   0.0     1e-09   36.9   0.0   1.3   1   0   0   1   1   1   1 -
+ACSC9U.RS00675__NZCP195316_124_132979_133549_neg    -          ABM                  PF03992.22   2.1e-06   26.3   0.1   3.2e-06   25.7   0.1   1.3   1   0   0   1   1   1   1 -
+ACSC9U.RS09980__NZCP195316_1932_2171198_2171765_pos -          ABM                  PF03992.22   6.7e-06   24.6   0.0   9.4e-06   24.2   0.0   1.2   1   0   0   1   1   1   1 -
+ACSC9U.RS29600__NZCP195316_5768_6525442_6525745_pos -          ABM                  PF03992.22   1.4e-05   23.6   0.0   1.7e-05   23.4   0.0   1.1   1   0   0   1   1   1   1 -
+ACSC9U.RS13835__NZCP195316_2693_3036219_3036720_neg -          ABM                  PF03992.22    0.0048   15.5   0.0      0.33    9.6   0.0   2.7   3   0   0   3   3   3   1 -
+ACSC9U.RS23090__NZCP195316_4500_5052315_5054535_pos -          ABM                  PF03992.22     0.021   13.4   0.1       0.1   11.2   0.1   2.2   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_051244225.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_051244225.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_051244225.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:33:48 2025
+# [ok]

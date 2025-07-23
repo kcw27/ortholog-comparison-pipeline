@@ -1,0 +1,23 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACI7Q4.RS07040__NZCP177227_1389_1500606_1500900_neg -          ABM                  PF03992.22   1.9e-25   87.3   0.2   2.2e-25   87.1   0.2   1.1   1   0   0   1   1   1   1 -
+ACI7Q4.RS14840__NZCP177227_2918_3179715_3180060_neg -          ABM                  PF03992.22   4.1e-24   83.0   0.3   5.4e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+ACI7Q4.RS07845__NZCP177227_1550_1679123_1679426_pos -          ABM                  PF03992.22   6.4e-23   79.2   0.0   8.5e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+ACI7Q4.RS22605__NZCP177227_4449_4848585_4848882_neg -          ABM                  PF03992.22   5.7e-18   63.3   0.1   6.5e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+ACI7Q4.RS15550__NZCP177227_3059_3343179_3343476_neg -          ABM                  PF03992.22   3.8e-17   60.6   0.1   4.8e-17   60.3   0.1   1.1   1   0   0   1   1   1   1 -
+ACI7Q4.RS01325__NZCP177227_261_291270_291555_pos    -          ABM                  PF03992.22   7.4e-15   53.3   0.0   1.1e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+ACI7Q4.RS14385__NZCP177227_2827_3070342_3071413_neg -          ABM                  PF03992.22   7.8e-11   40.4   0.2   1.5e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+ACI7Q4.RS07605__NZCP177227_1502_1629874_1630432_neg -          ABM                  PF03992.22   2.5e-05   22.8   0.1   3.5e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+ACI7Q4.RS14355__NZCP177227_2821_3065161_3065539_neg -          ABM                  PF03992.22   7.8e-05   21.2   0.1    0.0001   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+ACI7Q4.RS07450__NZCP177227_1471_1597136_1598852_neg -          ABM                  PF03992.22     0.034   12.7   0.0     0.061   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_046764335.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_046764335.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_046764335.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:32:20 2025
+# [ok]

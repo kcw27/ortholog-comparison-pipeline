@@ -1,0 +1,29 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ABNP31.RS25245__NZCP157874_4904_5661797_5662775_pos -          ADH_zinc_N_2         PF13602.12   3.9e-26   90.8   0.1   8.7e-26   89.6   0.1   1.6   1   0   0   1   1   1   1 -
+ABNP31.RS11785__NZCP157874_2267_2622751_2623744_neg -          ADH_zinc_N_2         PF13602.12   3.5e-24   84.5   0.8   1.3e-23   82.6   0.1   2.0   2   1   0   2   2   2   1 -
+ABNP31.RS22900__NZCP157874_4438_5131065_5132076_neg -          ADH_zinc_N_2         PF13602.12   7.9e-23   80.1   0.3   2.9e-22   78.2   0.1   2.0   2   0   0   2   2   2   1 -
+ABNP31.RS12865__NZCP157874_2480_2857966_2858974_neg -          ADH_zinc_N_2         PF13602.12   6.1e-21   74.0   0.1   9.4e-21   73.4   0.1   1.3   1   0   0   1   1   1   1 -
+ABNP31.RS12480__NZCP157874_2404_2780215_2781196_pos -          ADH_zinc_N_2         PF13602.12   1.7e-20   72.5   0.0     3e-20   71.7   0.0   1.4   1   0   0   1   1   1   1 -
+ABNP31.RS15095__NZCP157874_2920_3384817_3385792_neg -          ADH_zinc_N_2         PF13602.12   1.9e-17   62.7   0.2   3.6e-17   61.7   0.2   1.5   1   0   0   1   1   1   1 -
+ABNP31.RS00135__NZCP157874_26_29623_30601_neg       -          ADH_zinc_N_2         PF13602.12   2.4e-17   62.3   0.0   4.2e-17   61.5   0.0   1.4   1   0   0   1   1   1   1 -
+ABNP31.RS11820__NZCP157874_2273_2629695_2630718_pos -          ADH_zinc_N_2         PF13602.12   1.4e-15   56.6   0.0   2.8e-15   55.6   0.0   1.5   1   0   0   1   1   1   1 -
+ABNP31.RS06370__NZCP157874_1225_1386291_1387254_pos -          ADH_zinc_N_2         PF13602.12   3.4e-13   48.9   0.0     7e-13   47.9   0.0   1.6   1   0   0   1   1   1   1 -
+ABNP31.RS06825__NZCP157874_1315_1496847_1497849_neg -          ADH_zinc_N_2         PF13602.12   1.4e-12   46.8   0.2   2.8e-12   45.9   0.0   1.6   2   0   0   2   2   1   1 -
+ABNP31.RS16315__NZCP157874_3161_3641691_3642702_pos -          ADH_zinc_N_2         PF13602.12   1.3e-11   43.7   0.5   2.4e-11   42.9   0.5   1.4   1   0   0   1   1   1   1 -
+ABNP31.RS09985__NZCP157874_1910_2201953_2202940_neg -          ADH_zinc_N_2         PF13602.12   2.9e-10   39.4   0.3   6.6e-10   38.2   0.1   1.6   2   0   0   2   2   1   1 -
+ABNP31.RS05885__NZCP157874_1133_1288703_1289816_pos -          ADH_zinc_N_2         PF13602.12   6.6e-07   28.5   0.0   1.3e-06   27.5   0.0   1.5   1   0   0   1   1   1   1 -
+ABNP31.RS16145__NZCP157874_3128_3613827_3614880_neg -          ADH_zinc_N_2         PF13602.12   2.8e-05   23.3   0.0     5e-05   22.5   0.0   1.4   1   0   0   1   1   1   1 -
+ABNP31.RS02850__NZCP157874_545_624469_625534_neg    -          ADH_zinc_N_2         PF13602.12   0.00022   20.4   0.0   0.00054   19.1   0.0   1.6   1   1   0   1   1   1   1 -
+ABNP31.RS11110__NZCP157874_2135_2467663_2468884_neg -          ADH_zinc_N_2         PF13602.12     0.001   18.2   0.7     0.009   15.1   0.5   2.3   2   1   0   2   2   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_040214835.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_040214835.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_040214835.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:31:02 2025
+# [ok]

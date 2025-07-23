@@ -1,0 +1,29 @@
+#                                                                                            --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                     accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                             ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+HV91.RS21585__NZCP026680_4119_4461803_4462790_pos -          ADH_zinc_N_2         PF13602.12   3.6e-26   91.1   0.6   6.5e-26   90.3   0.2   1.6   2   0   0   2   2   2   1 -
+HV91.RS29835__NZCP026680_5696_6203974_6204952_pos -          ADH_zinc_N_2         PF13602.12   6.5e-25   87.1   0.0   1.2e-24   86.2   0.0   1.4   1   0   0   1   1   1   1 -
+HV91.RS00115__NZCP026680_21_24567_25545_neg       -          ADH_zinc_N_2         PF13602.12   3.5e-19   68.5   0.0   5.5e-19   67.9   0.0   1.3   1   0   0   1   1   1   1 -
+HV91.RS07740__NZCP026680_1477_1589670_1590684_neg -          ADH_zinc_N_2         PF13602.12   4.3e-19   68.2   0.3   7.9e-19   67.4   0.3   1.5   1   0   0   1   1   1   1 -
+HV91.RS14005__NZCP026680_2673_2850797_2851817_pos -          ADH_zinc_N_2         PF13602.12     6e-17   61.3   0.0   9.4e-17   60.7   0.0   1.3   1   0   0   1   1   1   1 -
+HV91.RS12700__NZCP026680_2429_2589282_2590257_neg -          ADH_zinc_N_2         PF13602.12   2.5e-15   56.0   0.1   3.9e-15   55.4   0.1   1.3   1   0   0   1   1   1   1 -
+HV91.RS09605__NZCP026680_1842_1972160_1973123_pos -          ADH_zinc_N_2         PF13602.12   1.6e-14   53.4   0.1   3.1e-14   52.5   0.1   1.5   1   0   0   1   1   1   1 -
+HV91.RS18960__NZCP026680_3610_3907877_3908882_pos -          ADH_zinc_N_2         PF13602.12   8.6e-14   51.1   0.0     2e-13   49.9   0.0   1.6   2   0   0   2   2   2   1 -
+HV91.RS15755__NZCP026680_3000_3283860_3284898_neg -          ADH_zinc_N_2         PF13602.12   3.5e-12   45.9   0.0   5.6e-12   45.2   0.0   1.3   1   0   0   1   1   1   1 -
+HV91.RS07400__NZCP026680_1415_1523817_1524930_pos -          ADH_zinc_N_2         PF13602.12   6.5e-08   32.0   0.0   1.2e-07   31.2   0.0   1.4   1   0   0   1   1   1   1 -
+HV91.RS04495__NZCP026680_854_941166_942225_neg    -          ADH_zinc_N_2         PF13602.12     5e-05   22.7   0.1   8.5e-05   22.0   0.1   1.3   1   0   0   1   1   1   1 -
+HV91.RS04200__NZCP026680_796_873936_874998_neg    -          ADH_zinc_N_2         PF13602.12   0.00022   20.6   0.0    0.0004   19.8   0.0   1.4   1   0   0   1   1   1   1 -
+HV91.RS30995__NZCP026680_5917_6455341_6456370_pos -          ADH_zinc_N_2         PF13602.12   0.00062   19.2   0.1    0.0011   18.4   0.1   1.4   1   0   0   1   1   1   1 -
+HV91.RS15805__NZCP026680_3009_3292427_3293594_pos -          ADH_zinc_N_2         PF13602.12    0.0034   16.8   0.4     0.021   14.2   0.4   2.1   1   1   0   1   1   1   1 -
+HV91.RS06545__NZCP026680_1245_1334174_1335125_neg -          ADH_zinc_N_2         PF13602.12     0.026   13.9   0.0       1.8    8.0   0.0   2.3   2   0   0   2   2   2   0 -
+HV91.RS09405__NZCP026680_1805_1930845_1933494_pos -          ADH_zinc_N_2         PF13602.12      0.06   12.7   0.6       0.3   10.5   0.2   2.3   2   0   0   2   2   2   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_002946935.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_002946935.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_002946935.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:22:29 2025
+# [ok]

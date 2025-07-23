@@ -1,0 +1,23 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+D9D06.14235__CP033084_2124_2996362_2996656_pos -          ABM                  PF03992.22   1.3e-25   87.4   0.2   1.5e-25   87.2   0.2   1.1   1   0   0   1   1   1   1 -
+D9D06.06510__CP033084_966_1357825_1358170_pos  -          ABM                  PF03992.22     3e-24   83.0   0.3   4.1e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+D9D06.13405__CP033084_1995_2814909_2815212_neg -          ABM                  PF03992.22   4.9e-23   79.2   0.0   6.6e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+D9D06.28770__CP033084_4302_6080025_6080322_pos -          ABM                  PF03992.22   4.4e-18   63.3   0.1     5e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+D9D06.05745__CP033084_846_1196469_1196766_pos  -          ABM                  PF03992.22   2.9e-17   60.6   0.1   3.7e-17   60.3   0.1   1.1   1   0   0   1   1   1   1 -
+D9D06.20225__CP033084_3056_4234002_4234287_neg -          ABM                  PF03992.22   5.7e-15   53.3   0.0   8.6e-15   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+D9D06.06985__CP033084_1028_1466623_1467694_pos -          ABM                  PF03992.22     6e-11   40.4   0.2   1.2e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+D9D06.13650__CP033084_2033_2863707_2864265_pos -          ABM                  PF03992.22     2e-05   22.8   0.1   2.7e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+D9D06.07015__CP033084_1034_1472497_1472875_pos -          ABM                  PF03992.22   9.5e-05   20.6   0.1   0.00013   20.1   0.1   1.3   1   0   0   1   1   1   1 -
+D9D06.13805__CP033084_2056_2895359_2897075_pos -          ABM                  PF03992.22     0.026   12.7   0.0     0.047   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_003691345.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_003691345.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_003691345.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:19:58 2025
+# [ok]

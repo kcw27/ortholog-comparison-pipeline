@@ -1,0 +1,25 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACGBUL.15315__CP180124_2935_3204160_3205159_neg -          ADH_zinc_N_2         PF13602.12   1.3e-24   85.4   0.1   2.7e-24   84.4   0.0   1.5   2   0   0   2   2   1   1 -
+ACGBUL.10220__CP180124_1949_2130969_2131956_pos -          ADH_zinc_N_2         PF13602.12   1.8e-23   81.7   1.1     4e-23   80.5   0.3   1.9   2   1   0   2   2   2   1 -
+ACGBUL.02165__CP180124_395_456225_457236_neg    -          ADH_zinc_N_2         PF13602.12   1.3e-15   56.3   0.0   2.1e-15   55.6   0.0   1.4   1   0   0   1   1   1   1 -
+ACGBUL.13360__CP180124_2556_2780352_2781354_pos -          ADH_zinc_N_2         PF13602.12   8.2e-15   53.6   0.0   1.6e-14   52.7   0.0   1.5   1   0   0   1   1   1   1 -
+ACGBUL.18600__CP180124_3549_3873357_3874386_pos -          ADH_zinc_N_2         PF13602.12   1.8e-12   46.1   0.0   3.1e-12   45.3   0.0   1.4   1   0   0   1   1   1   1 -
+ACGBUL.17850__CP180124_3404_3709067_3710045_neg -          ADH_zinc_N_2         PF13602.12   3.7e-07   28.9   0.1   7.4e-07   27.9   0.1   1.5   1   0   0   1   1   1   1 -
+ACGBUL.09665__CP180124_1841_2013769_2014879_pos -          ADH_zinc_N_2         PF13602.12   5.6e-06   25.1   0.0   1.3e-05   23.8   0.0   1.6   1   0   0   1   1   1   1 -
+ACGBUL.09315__CP180124_1773_1938596_1939655_pos -          ADH_zinc_N_2         PF13602.12   1.9e-05   23.3   0.0     4e-05   22.3   0.0   1.5   1   0   0   1   1   1   1 -
+ACGBUL.07085__CP180124_1337_1472429_1473593_pos -          ADH_zinc_N_2         PF13602.12   5.2e-05   21.9   0.3    0.0003   19.5   0.3   2.1   1   1   0   1   1   1   1 -
+ACGBUL.09815__CP180124_1868_2046017_2047070_neg -          ADH_zinc_N_2         PF13602.12   0.00011   20.9   0.0   0.00019   20.1   0.0   1.4   1   0   0   1   1   1   1 -
+ACGBUL.03380__CP180124_625_715451_716627_pos    -          ADH_zinc_N_2         PF13602.12    0.0056   15.3   0.0     0.014   14.1   0.0   1.6   2   0   0   2   2   1   1 -
+ACGBUL.14145__CP180124_2711_2950479_2951094_pos -          ADH_zinc_N_2         PF13602.12     0.013   14.1   0.0     0.026   13.2   0.0   1.6   1   1   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_042945515.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_042945515.2/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_042945515.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:36 2025
+# [ok]

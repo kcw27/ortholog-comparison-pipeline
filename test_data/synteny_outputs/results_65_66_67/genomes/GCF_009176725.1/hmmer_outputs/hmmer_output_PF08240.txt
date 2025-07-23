@@ -1,0 +1,32 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+KUIN1.RS12710__NZAP020337_2301_2736867_2737944_neg -          ADH_N                PF08240.17   5.6e-26   89.0   2.1   9.9e-26   88.2   2.1   1.4   1   0   0   1   1   1   1 -
+KUIN1.RS18140__NZAP020337_3315_4076661_4077897_pos -          ADH_N                PF08240.17   2.8e-25   86.8   0.8   7.2e-25   85.4   0.8   1.7   1   1   0   1   1   1   1 -
+KUIN1.RS10425__NZAP020337_1869_2242523_2243576_neg -          ADH_N                PF08240.17   2.2e-24   83.9   1.9   2.2e-24   83.9   1.9   1.7   2   0   0   2   2   1   1 -
+KUIN1.RS24835__NZAP020337_4509_5477231_5478431_pos -          ADH_N                PF08240.17   6.4e-24   82.4   1.0   6.4e-24   82.4   1.0   1.7   2   0   0   2   2   1   1 -
+KUIN1.RS14965__NZAP020337_2727_3384405_3385515_pos -          ADH_N                PF08240.17     2e-23   80.8   5.4     2e-23   80.8   5.4   2.7   2   1   1   3   3   3   1 -
+KUIN1.RS12580__NZAP020337_2279_2715070_2716210_pos -          ADH_N                PF08240.17   5.4e-23   79.4   0.2   1.2e-22   78.3   0.2   1.6   1   0   0   1   1   1   1 -
+KUIN1.RS13355__NZAP020337_2423_2892616_2893732_neg -          ADH_N                PF08240.17   8.6e-23   78.8   0.3   1.7e-22   77.9   0.3   1.5   1   0   0   1   1   1   1 -
+KUIN1.RS07635__NZAP020337_1367_1600111_1601224_pos -          ADH_N                PF08240.17   2.5e-22   77.3   0.4   2.5e-22   77.3   0.4   2.6   3   0   0   3   3   3   1 -
+KUIN1.RS01670__NZAP020337_296_339288_340290_neg    -          ADH_N                PF08240.17   1.6e-19   68.2   0.0   4.3e-19   66.9   0.0   1.8   1   0   0   1   1   1   1 -
+KUIN1.RS18205__NZAP020337_3327_4090596_4091598_pos -          ADH_N                PF08240.17   4.5e-18   63.6   0.2   1.7e-17   61.7   0.1   2.0   2   0   0   2   2   2   1 -
+KUIN1.RS00120__NZAP020337_22_26527_27505_neg       -          ADH_N                PF08240.17   6.3e-18   63.1   0.6     2e-17   61.6   0.2   2.0   2   0   0   2   2   2   1 -
+KUIN1.RS08315__NZAP020337_1487_1729146_1730109_pos -          ADH_N                PF08240.17   2.5e-16   58.0   2.0   4.8e-16   57.1   0.6   2.1   2   0   0   2   2   2   1 -
+KUIN1.RS03575__NZAP020337_639_753994_755008_neg    -          ADH_N                PF08240.17   1.6e-13   49.0   0.2   2.7e-13   48.2   0.2   1.4   1   0   0   1   1   1   1 -
+KUIN1.RS14340__NZAP020337_2609_3249695_3250679_neg -          ADH_N                PF08240.17   1.2e-12   46.2   0.0   3.5e-12   44.7   0.0   1.8   1   0   0   1   1   1   1 -
+KUIN1.RS14760__NZAP020337_2687_3338333_3339356_neg -          ADH_N                PF08240.17   3.2e-12   44.8   0.1   9.8e-12   43.2   0.1   1.9   2   0   0   2   2   2   1 -
+KUIN1.RS06380__NZAP020337_1134_1327737_1328748_pos -          ADH_N                PF08240.17   3.2e-12   44.8   0.6   7.3e-12   43.7   0.1   1.9   2   0   0   2   2   2   1 -
+KUIN1.RS13525__NZAP020337_2455_2964723_2965080_pos -          ADH_N                PF08240.17   1.5e-07   29.8   0.1   1.9e-07   29.5   0.1   1.1   1   0   0   1   1   1   1 -
+KUIN1.RS09610__NZAP020337_1725_2050531_2051539_neg -          ADH_N                PF08240.17    0.0069   14.8   1.1       1.3    7.5   0.0   3.2   2   1   1   3   3   3   1 -
+KUIN1.RS04625__NZAP020337_813_967205_967697_pos    -          ADH_N                PF08240.17     0.029   12.8   0.0     0.054   11.9   0.0   1.5   1   1   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_009176725.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_009176725.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_009176725.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:23:22 2025
+# [ok]

@@ -1,0 +1,29 @@
+#                                                                                               --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                        accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                                ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PSAKL28.RS15060__NZCP009048_2944_3306564_3307647_neg -          ADH_N                PF08240.17   2.8e-27   93.2   2.0   5.8e-27   92.2   2.0   1.5   1   0   0   1   1   1   1 -
+PSAKL28.RS15790__NZCP009048_3088_3463303_3464413_neg -          ADH_N                PF08240.17   1.4e-25   87.7   1.8   1.2e-24   84.8   1.8   2.3   1   1   0   1   1   1   1 -
+PSAKL28.RS13460__NZCP009048_2624_2968404_2969529_pos -          ADH_N                PF08240.17   1.3e-23   81.4   0.2   2.4e-23   80.6   0.2   1.5   1   0   0   1   1   1   1 -
+PSAKL28.RS01845__NZCP009048_361_397464_398664_pos    -          ADH_N                PF08240.17   3.3e-23   80.2   1.2   3.3e-23   80.2   1.2   1.7   2   0   0   2   2   2   1 -
+PSAKL28.RS20515__NZCP009048_4002_4470904_4472017_neg -          ADH_N                PF08240.17   8.2e-23   78.9   1.9   8.2e-23   78.9   1.9   2.5   3   1   0   3   3   3   1 -
+PSAKL28.RS14060__NZCP009048_2745_3103669_3104743_pos -          ADH_N                PF08240.17   3.3e-22   77.0   2.3   1.1e-21   75.2   0.4   2.3   2   0   0   2   2   2   1 -
+PSAKL28.RS12785__NZCP009048_2491_2803379_2804453_pos -          ADH_N                PF08240.17     3e-20   70.7   1.4     3e-20   70.7   1.4   2.0   2   0   0   2   2   2   1 -
+PSAKL28.RS25370__NZCP009048_4968_5551586_5552564_pos -          ADH_N                PF08240.17   2.5e-19   67.7   0.0     7e-19   66.3   0.0   1.8   1   0   0   1   1   1   1 -
+PSAKL28.RS00290__NZCP009048_60_69306_70284_neg       -          ADH_N                PF08240.17   2.5e-18   64.5   0.3   3.2e-17   60.9   0.1   2.3   2   0   0   2   2   2   1 -
+PSAKL28.RS06775__NZCP009048_1312_1460087_1461050_pos -          ADH_N                PF08240.17   2.3e-16   58.2   1.1   9.8e-16   56.2   0.1   2.2   2   0   0   2   2   2   1 -
+PSAKL28.RS13255__NZCP009048_2582_2920388_2921369_neg -          ADH_N                PF08240.17   3.8e-15   54.3   0.7   1.3e-14   52.6   0.2   2.1   1   1   0   2   2   2   1 -
+PSAKL28.RS14185__NZCP009048_2769_3127016_3127991_pos -          ADH_N                PF08240.17     4e-15   54.2   0.2   1.2e-14   52.7   0.2   1.8   1   0   0   1   1   1   1 -
+PSAKL28.RS13015__NZCP009048_2536_2855303_2856383_neg -          ADH_N                PF08240.17   7.9e-14   50.0   1.9   8.6e-14   49.9   0.4   1.9   2   0   0   2   2   2   1 -
+PSAKL28.RS23465__NZCP009048_4590_5108061_5109075_pos -          ADH_N                PF08240.17     1e-13   49.7   0.1     2e-13   48.8   0.1   1.5   1   0   0   1   1   1   1 -
+PSAKL28.RS11735__NZCP009048_2282_2545410_2546433_pos -          ADH_N                PF08240.17   1.4e-13   49.3   0.1   2.8e-13   48.3   0.1   1.5   1   0   0   1   1   1   1 -
+PSAKL28.RS03560__NZCP009048_695_752715_753726_pos    -          ADH_N                PF08240.17     9e-13   46.6   0.2   3.1e-12   44.9   0.1   1.9   2   0   0   2   2   2   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000746525.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_000746525.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000746525.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:17 2025
+# [ok]

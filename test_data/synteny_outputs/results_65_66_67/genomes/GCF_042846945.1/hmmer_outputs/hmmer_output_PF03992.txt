@@ -1,0 +1,23 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACGJAX.RS09360__NZAP035776_1807_2006322_2006616_neg -          ABM                  PF03992.22   1.1e-22   78.4   0.3   1.6e-22   77.9   0.3   1.2   1   0   0   1   1   1   1 -
+ACGJAX.RS09580__NZAP035776_1846_2060503_2060818_neg -          ABM                  PF03992.22   2.8e-21   73.9   0.1   3.6e-21   73.6   0.1   1.1   1   0   0   1   1   1   1 -
+ACGJAX.RS23065__NZAP035776_4440_4910745_4911039_pos -          ABM                  PF03992.22     1e-15   56.1   0.0   1.2e-15   55.9   0.0   1.1   1   0   0   1   1   1   1 -
+ACGJAX.RS30155__NZAP035776_5814_6460274_6460598_pos -          ABM                  PF03992.22   1.5e-13   49.2   0.1   1.9e-13   48.8   0.1   1.2   1   0   0   1   1   1   1 -
+ACGJAX.RS00310__NZAP035776_59_61985_62339_neg       -          ABM                  PF03992.22   2.1e-13   48.7   0.0   3.6e-13   47.9   0.0   1.4   1   1   0   1   1   1   1 -
+ACGJAX.RS16535__NZAP035776_3177_3519355_3519682_neg -          ABM                  PF03992.22   2.6e-07   29.2   0.1     5e-07   28.2   0.1   1.5   1   1   0   1   1   1   1 -
+ACGJAX.RS16320__NZAP035776_3135_3475068_3475680_pos -          ABM                  PF03992.22   3.6e-07   28.7   0.0     5e-07   28.2   0.0   1.2   1   0   0   1   1   1   1 -
+ACGJAX.RS10550__NZAP035776_2034_2284864_2285434_neg -          ABM                  PF03992.22     9e-06   24.2   0.0   1.3e-05   23.7   0.0   1.3   1   0   0   1   1   1   1 -
+ACGJAX.RS18465__NZAP035776_3553_3901499_3901838_pos -          ABM                  PF03992.22     0.008   14.8   0.0     0.011   14.3   0.0   1.2   1   0   0   1   1   1   1 -
+ACGJAX.RS17620__NZAP035776_3389_3725441_3725732_neg -          ABM                  PF03992.22     0.052   12.2   0.0     0.061   12.0   0.0   1.2   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_042846945.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_042846945.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_042846945.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:31:38 2025
+# [ok]

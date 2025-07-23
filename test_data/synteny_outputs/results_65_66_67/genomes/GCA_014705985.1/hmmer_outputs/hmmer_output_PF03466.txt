@@ -1,0 +1,23 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+IEE82.04840__CP061541_289_1011149_1012079_neg  -          LysR_substrate       PF03466.25   1.7e-40  134.8   0.0   2.5e-40  134.3   0.0   1.2   1   0   0   1   1   1   1 -
+IEE82.12065__CP061541_738_2470947_2471853_pos  -          LysR_substrate       PF03466.25   3.1e-40  133.9   0.2   4.2e-40  133.5   0.2   1.1   1   0   0   1   1   1   1 -
+IEE82.11780__CP061541_718_2410902_2411838_pos  -          LysR_substrate       PF03466.25   5.7e-38  126.6   0.1   7.5e-38  126.2   0.1   1.2   1   0   0   1   1   1   1 -
+IEE82.00120__CP061541_9_29262_30162_pos        -          LysR_substrate       PF03466.25   2.5e-37  124.5   0.0   3.2e-37  124.1   0.0   1.2   1   0   0   1   1   1   1 -
+IEE82.01785__CP061541_112_369618_370485_neg    -          LysR_substrate       PF03466.25   2.6e-34  114.6   0.0   3.2e-34  114.3   0.0   1.1   1   0   0   1   1   1   1 -
+IEE82.09255__CP061541_560_1922461_1923397_pos  -          LysR_substrate       PF03466.25   5.8e-34  113.5   0.0   8.1e-34  113.0   0.0   1.1   1   0   0   1   1   1   1 -
+IEE82.18475__CP061541_1135_3808247_3809129_pos -          LysR_substrate       PF03466.25   4.5e-30  100.8   0.1   5.9e-30  100.4   0.1   1.2   1   0   0   1   1   1   1 -
+IEE82.15610__CP061541_962_3210871_3211819_pos  -          LysR_substrate       PF03466.25   1.6e-28   95.7   0.0   3.3e-28   94.7   0.0   1.5   1   1   0   1   1   1   1 -
+IEE82.05390__CP061541_324_1130605_1131535_pos  -          LysR_substrate       PF03466.25     8e-27   90.1   0.1   1.4e-26   89.3   0.0   1.4   2   0   0   2   2   2   1 -
+IEE82.16145__CP061541_995_3318215_3319109_neg  -          LysR_substrate       PF03466.25   2.1e-24   82.2   0.0   2.6e-24   81.9   0.0   1.1   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03466.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_014705985.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_014705985.1/hmmer_outputs/hmmer_output_PF03466.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03466.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_014705985.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:19:58 2025
+# [ok]

@@ -1,0 +1,21 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+HU734.013545__CP077096_2615_2956045_2957077_neg -          ADH_N                PF08240.17   1.8e-29  100.2   0.8   3.1e-29   99.4   0.8   1.4   1   0   0   1   1   1   1 -
+HU734.014995__CP077096_2900_3308999_3310052_neg -          ADH_N                PF08240.17   7.1e-25   85.3   0.7   1.3e-24   84.5   0.7   1.4   1   0   0   1   1   1   1 -
+HU734.006530__CP077096_1273_1498328_1499441_pos -          ADH_N                PF08240.17   7.8e-23   78.8   1.2   7.8e-23   78.8   1.2   2.4   3   1   0   3   3   3   1 -
+HU734.000115__CP077096_20_19774_20752_pos       -          ADH_N                PF08240.17   3.8e-19   66.9   0.1   1.1e-18   65.5   0.1   1.8   1   0   0   1   1   1   1 -
+HU734.000750__CP077096_145_150572_151550_pos    -          ADH_N                PF08240.17   3.3e-18   63.9   0.5     4e-17   60.5   0.2   2.4   2   0   0   2   2   2   1 -
+HU734.007385__CP077096_1438_1673524_1674487_pos -          ADH_N                PF08240.17   1.2e-16   58.9   1.7   1.8e-16   58.3   0.1   2.0   2   0   0   2   2   2   1 -
+HU734.012970__CP077096_2504_2833574_2834588_neg -          ADH_N                PF08240.17   4.6e-14   50.6   0.1   8.1e-14   49.8   0.1   1.4   1   0   0   1   1   1   1 -
+HU734.012235__CP077096_2359_2661887_2662910_pos -          ADH_N                PF08240.17   1.9e-12   45.4   0.2   4.2e-12   44.3   0.2   1.6   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_014268975.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_014268975.2/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_014268975.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:19:59 2025
+# [ok]

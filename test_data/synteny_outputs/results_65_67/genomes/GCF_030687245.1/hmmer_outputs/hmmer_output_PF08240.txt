@@ -1,0 +1,29 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PSH91.RS11620__NZCP117465_2205_2551256_2552321_pos -          ADH_N                PF08240.17   7.1e-27   91.9   1.5   7.1e-27   91.9   1.5   1.9   2   0   0   2   2   2   1 -
+PSH91.RS18705__NZCP117465_3563_4187649_4188702_pos -          ADH_N                PF08240.17   1.5e-25   87.7   1.6   1.5e-25   87.7   1.6   2.0   3   0   0   3   3   3   1 -
+PSH91.RS15225__NZCP117465_2898_3373603_3374827_pos -          ADH_N                PF08240.17   1.2e-24   84.7   0.7   3.6e-24   83.2   0.7   1.8   1   1   0   1   1   1   1 -
+PSH91.RS24525__NZCP117465_4682_5471092_5472292_neg -          ADH_N                PF08240.17   1.4e-23   81.4   1.0   1.4e-23   81.4   1.0   1.6   2   0   0   2   2   1   1 -
+PSH91.RS16115__NZCP117465_3074_3610371_3611346_neg -          ADH_N                PF08240.17   6.5e-20   69.5   2.0   1.2e-19   68.7   0.2   2.1   2   0   0   2   2   2   1 -
+PSH91.RS01485__NZCP117465_274_336536_337514_neg    -          ADH_N                PF08240.17     7e-20   69.4   0.0   1.8e-19   68.1   0.0   1.7   1   0   0   1   1   1   1 -
+PSH91.RS00730__NZCP117465_130_152819_153821_pos    -          ADH_N                PF08240.17   1.6e-19   68.3   1.0   1.6e-19   68.3   1.0   1.9   2   0   0   2   2   2   1 -
+PSH91.RS10690__NZCP117465_2024_2339149_2340148_neg -          ADH_N                PF08240.17   2.4e-17   61.3   0.0   2.7e-16   57.9   0.0   2.3   2   1   0   2   2   2   1 -
+PSH91.RS00335__NZCP117465_61_72096_73074_pos       -          ADH_N                PF08240.17   7.7e-17   59.7   0.3   2.4e-16   58.1   0.1   2.0   2   0   0   2   2   2   1 -
+PSH91.RS19650__NZCP117465_3747_4376536_4377499_neg -          ADH_N                PF08240.17   5.2e-16   57.0   0.5   5.2e-16   57.0   0.5   2.0   2   0   0   2   2   2   1 -
+PSH91.RS14735__NZCP117465_2805_3275333_3276335_pos -          ADH_N                PF08240.17   5.4e-16   57.0   1.2   1.1e-15   56.0   0.4   1.9   2   0   0   2   2   2   1 -
+PSH91.RS03375__NZCP117465_638_768280_769294_neg    -          ADH_N                PF08240.17   3.9e-14   51.0   0.2   1.1e-13   49.5   0.1   1.8   2   0   0   2   2   2   1 -
+PSH91.RS13105__NZCP117465_2489_2898871_2899897_neg -          ADH_N                PF08240.17   3.1e-13   48.1   0.0   6.5e-13   47.1   0.0   1.6   1   0   0   1   1   1   1 -
+PSH91.RS13135__NZCP117465_2495_2906200_2907187_neg -          ADH_N                PF08240.17   5.3e-13   47.4   0.1   1.9e-12   45.6   0.0   2.0   2   0   0   2   2   2   1 -
+PSH91.RS14760__NZCP117465_2808_3278381_3279392_pos -          ADH_N                PF08240.17   9.7e-13   46.5   0.1   3.7e-12   44.7   0.0   1.9   2   0   0   2   2   2   1 -
+PSH91.RS04255__NZCP117465_801_958751_959132_neg    -          ADH_N                PF08240.17     0.021   13.3   0.0     0.024   13.1   0.0   1.2   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_030687245.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_030687245.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_030687245.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:28:48 2025
+# [ok]

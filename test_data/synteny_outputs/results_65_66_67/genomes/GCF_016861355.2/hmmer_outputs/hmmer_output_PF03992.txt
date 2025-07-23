@@ -1,0 +1,22 @@
+#                                                                                                --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                         accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                                 ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PRtIB026.RS25845__NZAP023348_5031_5762750_5763065_pos -          ABM                  PF03992.22   1.4e-23   81.1   0.2   1.7e-23   80.8   0.2   1.1   1   0   0   1   1   1   1 -
+PRtIB026.RS06670__NZAP023348_1300_1476962_1477265_neg -          ABM                  PF03992.22   5.9e-23   79.1   0.0   7.4e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+PRtIB026.RS18655__NZAP023348_3621_4205361_4205667_neg -          ABM                  PF03992.22   1.5e-17   61.8   0.2   1.9e-17   61.4   0.2   1.2   1   0   0   1   1   1   1 -
+PRtIB026.RS16245__NZAP023348_3148_3604735_3605062_pos -          ABM                  PF03992.22     7e-16   56.4   0.0   8.1e-16   56.2   0.0   1.1   1   0   0   1   1   1   1 -
+PRtIB026.RS08665__NZAP023348_1680_1915722_1916016_pos -          ABM                  PF03992.22   3.6e-13   47.7   0.0   4.3e-13   47.5   0.0   1.2   1   0   0   1   1   1   1 -
+PRtIB026.RS06690__NZAP023348_1304_1481725_1482079_neg -          ABM                  PF03992.22   2.6e-09   35.4   0.1   3.2e-09   35.1   0.1   1.1   1   0   0   1   1   1   1 -
+PRtIB026.RS03550__NZAP023348_685_779694_780261_pos    -          ABM                  PF03992.22   5.3e-09   34.4   0.1   7.1e-09   34.0   0.1   1.2   1   0   0   1   1   1   1 -
+PRtIB026.RS20310__NZAP023348_3941_4531904_4532285_neg -          ABM                  PF03992.22   6.3e-06   24.5   0.3   1.3e-05   23.6   0.1   1.6   2   0   0   2   2   2   1 -
+PRtIB026.RS25475__NZAP023348_4957_5679841_5680414_pos -          ABM                  PF03992.22   0.00012   20.4   0.1   0.00016   20.0   0.1   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_016861355.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_016861355.2/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_016861355.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:24:27 2025
+# [ok]

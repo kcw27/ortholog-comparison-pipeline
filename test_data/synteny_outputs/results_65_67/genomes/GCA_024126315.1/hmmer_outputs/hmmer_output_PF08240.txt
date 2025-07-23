@@ -1,0 +1,23 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+NHY68.18425__CP099793_2962_3864037_3865201_neg -          ADH_N                PF08240.17   4.6e-26   88.6   0.7   1.7e-25   86.8   0.7   1.9   1   1   0   1   1   1   1 -
+NHY68.06695__CP099793_1049_1425966_1426995_pos -          ADH_N                PF08240.17   4.9e-26   88.5   2.1   8.7e-26   87.7   2.1   1.4   1   0   0   1   1   1   1 -
+NHY68.15810__CP099793_2527_3316126_3317236_neg -          ADH_N                PF08240.17   1.3e-23   80.7   5.2   1.3e-23   80.7   5.2   2.9   3   1   0   3   3   3   1 -
+NHY68.01745__CP099793_266_377022_378120_pos    -          ADH_N                PF08240.17   3.4e-17   60.1   0.2   1.5e-15   54.8   0.2   2.4   1   1   0   1   1   1   1 -
+NHY68.03470__CP099793_537_772000_772348_neg    -          ADH_N                PF08240.17   1.3e-16   58.2   0.4   1.6e-16   57.9   0.4   1.1   1   0   0   1   1   1   1 -
+NHY68.05970__CP099793_928_1263533_1264511_neg  -          ADH_N                PF08240.17   3.5e-14   50.4   1.8   9.5e-14   49.0   0.4   2.4   2   1   1   3   3   3   1 -
+NHY68.09430__CP099793_1473_2000520_2001531_neg -          ADH_N                PF08240.17   7.8e-14   49.3   0.1   1.3e-13   48.5   0.1   1.3   1   0   0   1   1   1   1 -
+NHY68.10570__CP099793_1663_2233558_2234734_pos -          ADH_N                PF08240.17   3.3e-13   47.3   0.0   7.4e-13   46.1   0.0   1.6   1   0   0   1   1   1   1 -
+NHY68.03465__CP099793_536_771348_772113_neg    -          ADH_N                PF08240.17    0.0017   16.0   0.1    0.0035   15.0   0.1   1.6   1   0   0   1   1   1   1 -
+NHY68.11210__CP099793_1769_2381779_2382160_neg -          ADH_N                PF08240.17    0.0038   14.9   0.0    0.0056   14.4   0.0   1.3   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_024126315.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCA_024126315.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_024126315.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:17 2025
+# [ok]

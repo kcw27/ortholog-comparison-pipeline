@@ -1,0 +1,24 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+RDJ30.019160__CP133397_3735_4069669_4069963_pos -          ABM                  PF03992.22   1.4e-25   87.8   0.1   1.6e-25   87.6   0.1   1.1   1   0   0   1   1   1   1 -
+RDJ30.005550__CP133397_1078_1282090_1282435_neg -          ABM                  PF03992.22   3.7e-24   83.2   0.2     5e-24   82.8   0.2   1.2   1   0   0   1   1   1   1 -
+RDJ30.018335__CP133397_3570_3884494_3884797_neg -          ABM                  PF03992.22   1.7e-22   77.9   0.0   2.3e-22   77.5   0.0   1.1   1   0   0   1   1   1   1 -
+RDJ30.001505__CP133397_290_340411_340708_pos    -          ABM                  PF03992.22   6.2e-18   63.3   0.1   7.1e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+RDJ30.006270__CP133397_1219_1443749_1444046_neg -          ABM                  PF03992.22   4.1e-17   60.6   0.1   5.2e-17   60.3   0.1   1.1   1   0   0   1   1   1   1 -
+RDJ30.025055__CP133397_4902_5314663_5314948_neg -          ABM                  PF03992.22   3.6e-14   51.2   0.1   5.5e-14   50.6   0.0   1.3   1   1   0   1   1   1   1 -
+RDJ30.005045__CP133397_979_1154997_1156068_neg  -          ABM                  PF03992.22   8.4e-11   40.4   0.2   1.6e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+RDJ30.018575__CP133397_3618_3933388_3933946_pos -          ABM                  PF03992.22   1.4e-05   23.7   0.1     2e-05   23.2   0.1   1.2   1   0   0   1   1   1   1 -
+RDJ30.005015__CP133397_973_1149816_1150194_neg  -          ABM                  PF03992.22   8.5e-05   21.2   0.1   0.00011   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+RDJ30.018730__CP133397_3649_3964585_3966301_pos -          ABM                  PF03992.22     0.037   12.7   0.0     0.066   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+RDJ30.005385__CP133397_1046_1243288_1244713_pos -          ABM                  PF03992.22     0.043   12.5   0.4       4.5    6.1   0.0   3.2   3   0   0   3   3   3   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_030368495.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_030368495.2/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_030368495.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:22 2025
+# [ok]

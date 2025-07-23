@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+K1T36.RS03665__NZCP080512_711_827293_827587_neg    -          ABM                  PF03992.22   4.1e-21   73.5   0.5   5.4e-21   73.1   0.5   1.2   1   0   0   1   1   1   1 -
+K1T36.RS03930__NZCP080512_759_889773_890088_neg    -          ABM                  PF03992.22   2.5e-20   70.9   0.5   3.1e-20   70.6   0.5   1.1   1   0   0   1   1   1   1 -
+K1T36.RS25230__NZCP080512_4930_5577217_5577502_pos -          ABM                  PF03992.22   4.3e-18   63.8   0.1   5.1e-18   63.5   0.1   1.1   1   0   0   1   1   1   1 -
+K1T36.RS13465__NZCP080512_2613_2903286_2903634_neg -          ABM                  PF03992.22   2.7e-16   58.0   0.0   3.5e-16   57.6   0.0   1.1   1   0   0   1   1   1   1 -
+K1T36.RS24770__NZCP080512_4838_5483529_5483895_neg -          ABM                  PF03992.22   3.7e-14   51.2   0.1   7.8e-14   50.1   0.0   1.6   2   0   0   2   2   2   1 -
+K1T36.RS23875__NZCP080512_4661_5296378_5296702_pos -          ABM                  PF03992.22   7.8e-13   46.9   0.1   1.2e-12   46.3   0.1   1.3   1   0   0   1   1   1   1 -
+K1T36.RS13285__NZCP080512_2577_2868165_2868744_pos -          ABM                  PF03992.22   4.2e-08   31.8   0.0     6e-08   31.3   0.0   1.2   1   0   0   1   1   1   1 -
+K1T36.RS21870__NZCP080512_4270_4851871_4852237_neg -          ABM                  PF03992.22   5.1e-08   31.5   0.3   7.2e-08   31.0   0.3   1.3   1   0   0   1   1   1   1 -
+K1T36.RS04965__NZCP080512_960_1105227_1105797_neg  -          ABM                  PF03992.22   1.2e-05   23.9   0.0   1.7e-05   23.4   0.0   1.2   1   0   0   1   1   1   1 -
+K1T36.RS21625__NZCP080512_4226_4795202_4795547_neg -          ABM                  PF03992.22   9.1e-05   21.1   0.1   0.00011   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_019466035.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_019466035.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_019466035.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:24:55 2025
+# [ok]

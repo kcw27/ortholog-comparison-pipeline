@@ -17,6 +17,10 @@
 # Example run:
 # bash ortholog-comparison-pipeline/scripts/setup/download_databases.sh ~/data/testing/genome_ids_gb.txt ~/data/testing/genome_ids_ref.txt ~/data/testing/test_database_download2
 
+# I set up safeguards against passing ncbi-genome-download an empty file because if that happens, it'll try to download a large number of genomes.
+# To kill all NCBI jobs in that event, run the following: ps aux | grep ncbi | grep -v grep | awk '{print $2}' | xargs kill
+# (but first review which jobs are in that list using ps aux | grep ncbi | grep -v grep | awk '{print $2}'
+
 # I should later set this up so that the user can use flags rather than relying on the order of CLIs
 # Also set up an optional argument for the section to search, with bacteria being the default
 gb=$1
@@ -29,15 +33,26 @@ cd $dbdir # so that the databases are placed in the correct location
 
 # the commands below assume the user wants to download bacterial genomes
 # yet another thing that could be refactored into flags
-ncbi-genome-download --section genbank --assembly-accessions "${gb}" bacteria --parallel 12 --progress-bar &
-#ncbi-genome-download --section genbank --assembly-accessions "${gb}" bacteria --parallel 12 --progress-bar --dry-run # for testing
-pid1=$!
-echo "Downloading genbank with job id ${pid1}"
 
-ncbi-genome-download --section refseq --assembly-accessions "${ref}" bacteria --parallel 12 --progress-bar &
-#ncbi-genome-download --section refseq --assembly-accessions "${ref}" bacteria --parallel 12 --progress-bar --dry-run # for testing
-pid2=$!
-echo "Downloading refseq with job id ${pid2}"
+procs_to_use=$(( $(nproc) / 4 ))
+
+if [[ ! -z "$(cat ${gb})" ]]; then # check if the file is not empty
+  ncbi-genome-download --section genbank --assembly-accessions "${gb}" bacteria --parallel $procs_to_use --progress-bar &
+  #ncbi-genome-download --section genbank --assembly-accessions "${gb}" bacteria --parallel 12 --progress-bar --dry-run # for testing
+  pid1=$!
+  echo "Downloading genbank with job id ${pid1}"
+else
+  echo "${gb} is empty. Skipping GenBank download."
+fi
+
+if [[ ! -z "$(cat ${ref})" ]]; then # check if the file is not empty
+  ncbi-genome-download --section refseq --assembly-accessions "${ref}" bacteria --parallel $procs_to_use --progress-bar &
+  #ncbi-genome-download --section refseq --assembly-accessions "${ref}" bacteria --parallel 12 --progress-bar --dry-run # for testing
+  pid2=$!
+  echo "Downloading refseq with job id ${pid2}"
+else
+  echo "${ref} is empty. Skipping RefSeq download."
+fi
 
 wait $pid1 $pid2
 echo "Moving genomes to ${dbdir}..."

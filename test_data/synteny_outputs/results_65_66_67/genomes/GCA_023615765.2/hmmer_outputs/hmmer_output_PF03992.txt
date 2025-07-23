@@ -1,0 +1,24 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+NB053.27070__CP124674_5286_5617624_5617918_pos -          ABM                  PF03992.22   5.9e-26   89.2   0.2     7e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+NB053.17860__CP124674_3489_3693836_3694181_pos -          ABM                  PF03992.22   1.1e-23   81.9   0.2   1.5e-23   81.5   0.2   1.2   1   0   0   1   1   1   1 -
+NB053.26270__CP124674_5126_5439767_5440070_neg -          ABM                  PF03992.22     8e-23   79.2   0.0   1.1e-22   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+NB053.08980__CP124674_1747_1865043_1865340_pos -          ABM                  PF03992.22   7.2e-18   63.3   0.1   8.2e-18   63.1   0.1   1.0   1   0   0   1   1   1   1 -
+NB053.17130__CP124674_3345_3528903_3529200_pos -          ABM                  PF03992.22   1.7e-16   58.9   0.1   2.2e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+NB053.01380__CP124674_263_301390_301675_pos    -          ABM                  PF03992.22   9.3e-15   53.3   0.0   1.4e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+NB053.18800__CP124674_3676_3869095_3870166_pos -          ABM                  PF03992.22   9.7e-11   40.4   0.2   1.9e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+NB053.26510__CP124674_5174_5488549_5489107_pos -          ABM                  PF03992.22   3.2e-05   22.8   0.1   4.3e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+NB053.18830__CP124674_3682_3874969_3875347_pos -          ABM                  PF03992.22   9.8e-05   21.2   0.1   0.00013   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+NB053.26660__CP124674_5204_5519667_5521383_pos -          ABM                  PF03992.22     0.043   12.7   0.0     0.076   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+NB053.18025__CP124674_3522_3731560_3732985_neg -          ABM                  PF03992.22     0.048   12.6   0.4       5.2    6.1   0.0   3.2   3   0   0   3   3   3   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_023615765.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_023615765.2/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_023615765.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:12 2025
+# [ok]

@@ -1,0 +1,17 @@
+#                                                                                               --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                        accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                                ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+Pta6605.RS13375__NZAP024464_2604_3002430_3002739_pos -          ABM                  PF03992.22   3.5e-18   63.9   0.0     4e-18   63.7   0.0   1.1   1   0   0   1   1   1   1 -
+Pta6605.RS11090__NZAP024464_2163_2471746_2472073_pos -          ABM                  PF03992.22   1.2e-10   39.7   0.4   1.6e-10   39.3   0.4   1.2   1   0   0   1   1   1   1 -
+Pta6605.RS12065__NZAP024464_2350_2706965_2707328_pos -          ABM                  PF03992.22    0.0002   19.8   0.1   0.00049   18.5   0.1   1.6   1   1   1   2   2   2   1 -
+Pta6605.RS22965__NZAP024464_4464_5187524_5188091_pos -          ABM                  PF03992.22   0.00033   19.1   0.1   0.00047   18.6   0.1   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_018324325.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_018324325.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_018324325.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:24:38 2025
+# [ok]

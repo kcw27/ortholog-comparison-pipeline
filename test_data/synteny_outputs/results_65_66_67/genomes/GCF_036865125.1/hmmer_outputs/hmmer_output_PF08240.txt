@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+VRB78.RS18405__NZCP142164_3433_4136220_4137273_pos -          ADH_N                PF08240.17   7.6e-25   85.3   2.3   7.6e-25   85.3   2.3   2.0   3   0   0   3   3   3   1 -
+VRB78.RS14265__NZCP142164_2667_3233575_3234823_neg -          ADH_N                PF08240.17   1.5e-24   84.3   0.1   3.7e-24   83.1   0.1   1.6   1   0   0   1   1   1   1 -
+VRB78.RS22790__NZCP142164_4238_5060430_5061630_neg -          ADH_N                PF08240.17     4e-24   83.0   1.0   9.3e-24   81.8   1.0   1.6   1   0   0   1   1   1   1 -
+VRB78.RS05910__NZCP142164_1112_1336326_1337439_pos -          ADH_N                PF08240.17   3.7e-23   79.9   1.7   3.7e-23   79.9   1.7   2.4   2   1   0   2   2   2   1 -
+VRB78.RS23915__NZCP142164_4453_5295823_5296801_pos -          ADH_N                PF08240.17   4.2e-20   70.0   0.1   1.1e-19   68.7   0.1   1.8   1   0   0   1   1   1   1 -
+VRB78.RS14085__NZCP142164_2631_3200500_3201499_pos -          ADH_N                PF08240.17   4.7e-19   66.7   1.1   7.6e-19   66.0   0.2   1.9   2   0   0   2   2   2   1 -
+VRB78.RS00105__NZCP142164_19_22674_23652_neg       -          ADH_N                PF08240.17   2.1e-17   61.4   0.1   1.2e-16   58.9   0.0   2.2   2   0   0   2   2   2   1 -
+VRB78.RS16385__NZCP142164_3059_3688217_3689204_neg -          ADH_N                PF08240.17   1.8e-15   55.1   0.1   5.8e-15   53.5   0.0   1.9   2   0   0   2   2   2   1 -
+VRB78.RS02920__NZCP142164_547_695821_696835_neg    -          ADH_N                PF08240.17   5.4e-14   50.4   0.1   9.4e-14   49.7   0.1   1.4   1   0   0   1   1   1   1 -
+VRB78.RS12870__NZCP142164_2407_2946833_2947847_neg -          ADH_N                PF08240.17   1.3e-13   49.2   0.0   2.9e-13   48.1   0.0   1.6   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_036865125.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_036865125.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_036865125.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:29:41 2025
+# [ok]

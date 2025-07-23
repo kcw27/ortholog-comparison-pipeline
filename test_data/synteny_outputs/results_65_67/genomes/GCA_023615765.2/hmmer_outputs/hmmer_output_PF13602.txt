@@ -1,0 +1,31 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+NB053.12260__CP124674_2385_2494428_2495415_neg -          ADH_zinc_N_2         PF13602.12   4.3e-26   91.1   0.6   7.9e-26   90.3   0.2   1.6   2   0   0   2   2   2   1 -
+NB053.32285__CP124674_6304_6725590_6726568_pos -          ADH_zinc_N_2         PF13602.12     3e-25   88.4   0.0   5.5e-25   87.6   0.0   1.4   1   0   0   1   1   1   1 -
+NB053.00115__CP124674_21_24074_25052_neg       -          ADH_zinc_N_2         PF13602.12   2.6e-19   69.2   0.0   4.1e-19   68.6   0.0   1.3   1   0   0   1   1   1   1 -
+NB053.27075__CP124674_5287_5617939_5618953_pos -          ADH_zinc_N_2         PF13602.12   6.3e-19   67.9   0.3   1.2e-18   67.1   0.3   1.5   1   0   0   1   1   1   1 -
+NB053.19940__CP124674_3899_4168453_4169473_neg -          ADH_zinc_N_2         PF13602.12   7.2e-17   61.3   0.0   1.1e-16   60.7   0.0   1.3   1   0   0   1   1   1   1 -
+NB053.22120__CP124674_4325_4608248_4609223_pos -          ADH_zinc_N_2         PF13602.12     3e-15   56.0   0.1   4.7e-15   55.4   0.1   1.3   1   0   0   1   1   1   1 -
+NB053.25245__CP124674_4930_5239881_5240844_neg -          ADH_zinc_N_2         PF13602.12   1.4e-14   53.9   0.0   2.6e-14   53.0   0.0   1.5   1   0   0   1   1   1   1 -
+NB053.14805__CP124674_2887_3046249_3047254_neg -          ADH_zinc_N_2         PF13602.12     1e-13   51.1   0.0   2.4e-13   49.9   0.0   1.6   2   0   0   2   2   2   1 -
+NB053.27685__CP124674_5408_5749019_5750045_pos -          ADH_zinc_N_2         PF13602.12   8.1e-13   48.2   0.0   1.4e-12   47.4   0.0   1.4   1   0   0   1   1   1   1 -
+NB053.17855__CP124674_3488_3692802_3693840_pos -          ADH_zinc_N_2         PF13602.12   4.2e-12   45.9   0.0   6.8e-12   45.2   0.0   1.3   1   0   0   1   1   1   1 -
+NB053.28325__CP124674_5535_5889698_5890694_neg -          ADH_zinc_N_2         PF13602.12   6.7e-12   45.2   0.0   1.5e-11   44.1   0.0   1.6   1   0   0   1   1   1   1 -
+NB053.17460__CP124674_3411_3611523_3612624_neg -          ADH_zinc_N_2         PF13602.12   8.8e-11   41.6   0.0   1.4e-10   41.0   0.0   1.3   1   0   0   1   1   1   1 -
+NB053.27385__CP124674_5349_5683077_5684190_neg -          ADH_zinc_N_2         PF13602.12   7.8e-08   32.0   0.0   1.4e-07   31.2   0.0   1.4   1   0   0   1   1   1   1 -
+NB053.18835__CP124674_3683_3875371_3876433_neg -          ADH_zinc_N_2         PF13602.12   2.5e-06   27.2   0.0   4.8e-06   26.2   0.0   1.5   1   0   0   1   1   1   1 -
+NB053.28750__CP124674_5619_5965852_5966911_pos -          ADH_zinc_N_2         PF13602.12     6e-05   22.7   0.1    0.0001   22.0   0.1   1.3   1   0   0   1   1   1   1 -
+NB053.04120__CP124674_798_872910_873972_neg    -          ADH_zinc_N_2         PF13602.12   0.00023   20.8   0.0   0.00048   19.8   0.0   1.5   1   0   0   1   1   1   1 -
+NB053.33295__CP124674_6501_6944103_6945132_pos -          ADH_zinc_N_2         PF13602.12   0.00074   19.2   0.1    0.0013   18.4   0.1   1.4   1   0   0   1   1   1   1 -
+NB053.05935__CP124674_1158_1229626_1230577_neg -          ADH_zinc_N_2         PF13602.12     0.031   13.9   0.0       2.1    8.0   0.0   2.3   2   0   0   2   2   2   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_023615765.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCA_023615765.2/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_023615765.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:19 2025
+# [ok]

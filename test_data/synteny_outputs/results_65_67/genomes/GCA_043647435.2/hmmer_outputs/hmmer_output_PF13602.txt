@@ -1,0 +1,25 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACHOX4.15150__CP180044_2905_3182931_3183930_neg -          ADH_zinc_N_2         PF13602.12   1.2e-24   85.5   0.0   2.6e-24   84.4   0.0   1.6   2   0   0   2   2   2   1 -
+ACHOX4.10225__CP180044_1956_2120312_2121299_pos -          ADH_zinc_N_2         PF13602.12     2e-23   81.5   1.2     4e-23   80.5   0.3   1.9   2   1   0   2   2   2   1 -
+ACHOX4.13425__CP180044_2572_2782299_2783397_pos -          ADH_zinc_N_2         PF13602.12   4.7e-19   67.4   0.0   9.4e-19   66.4   0.0   1.5   1   0   0   1   1   1   1 -
+ACHOX4.02255__CP180044_417_476651_477662_neg    -          ADH_zinc_N_2         PF13602.12   8.8e-17   60.0   0.0   1.5e-16   59.3   0.0   1.4   1   0   0   1   1   1   1 -
+ACHOX4.18350__CP180044_3506_3833819_3834848_pos -          ADH_zinc_N_2         PF13602.12   1.3e-12   46.6   0.0   2.2e-12   45.8   0.0   1.4   1   0   0   1   1   1   1 -
+ACHOX4.17635__CP180044_3363_3672645_3673623_neg -          ADH_zinc_N_2         PF13602.12   3.1e-07   29.1   0.1     6e-07   28.2   0.1   1.5   1   0   0   1   1   1   1 -
+ACHOX4.09635__CP180044_1844_1992236_1993346_pos -          ADH_zinc_N_2         PF13602.12   7.9e-06   24.5   0.0   1.9e-05   23.3   0.0   1.6   1   0   0   1   1   1   1 -
+ACHOX4.09290__CP180044_1776_1917037_1918096_pos -          ADH_zinc_N_2         PF13602.12   1.9e-05   23.3   0.0     4e-05   22.3   0.0   1.5   1   0   0   1   1   1   1 -
+ACHOX4.07010__CP180044_1325_1441929_1443093_pos -          ADH_zinc_N_2         PF13602.12   3.3e-05   22.5   0.2   0.00023   19.8   0.2   2.2   1   1   0   1   1   1   1 -
+ACHOX4.09920__CP180044_1896_2045093_2046146_neg -          ADH_zinc_N_2         PF13602.12    0.0001   20.9   0.0   0.00019   20.1   0.0   1.4   1   0   0   1   1   1   1 -
+ACHOX4.03425__CP180044_635_715882_717058_pos    -          ADH_zinc_N_2         PF13602.12    0.0055   15.3   0.0     0.014   14.1   0.0   1.6   2   0   0   2   2   1   1 -
+ACHOX4.14295__CP180044_2742_2971163_2971778_pos -          ADH_zinc_N_2         PF13602.12     0.013   14.1   0.0     0.025   13.2   0.0   1.6   1   1   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_043647435.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCA_043647435.2/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_043647435.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:44 2025
+# [ok]

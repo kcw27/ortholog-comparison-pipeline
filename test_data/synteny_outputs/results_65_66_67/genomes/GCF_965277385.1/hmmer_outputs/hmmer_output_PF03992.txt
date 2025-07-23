@@ -1,0 +1,23 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACQY47.RS11340__NZOZ255725_2199_2477308_2477602_pos -          ABM                  PF03992.22     5e-20   69.9   0.1   6.2e-20   69.6   0.1   1.1   1   0   0   1   1   1   1 -
+ACQY47.RS09035__NZOZ255725_1762_1988755_1989040_pos -          ABM                  PF03992.22   2.4e-18   64.5   0.0   2.9e-18   64.2   0.0   1.1   1   0   0   1   1   1   1 -
+ACQY47.RS03530__NZOZ255725_696_856074_856374_neg    -          ABM                  PF03992.22   1.9e-17   61.6   0.0   2.2e-17   61.4   0.0   1.1   1   0   0   1   1   1   1 -
+ACQY47.RS27065__NZOZ255725_5251_5929599_5929896_pos -          ABM                  PF03992.22   4.1e-17   60.5   0.0   4.9e-17   60.3   0.0   1.1   1   0   0   1   1   1   1 -
+ACQY47.RS20435__NZOZ255725_3967_4500609_4500951_pos -          ABM                  PF03992.22   4.3e-13   47.7   0.0   6.4e-13   47.1   0.0   1.3   1   0   0   1   1   1   1 -
+ACQY47.RS21345__NZOZ255725_4143_4683680_4684001_neg -          ABM                  PF03992.22   1.4e-10   39.6   0.1   1.7e-10   39.3   0.1   1.1   1   0   0   1   1   1   1 -
+ACQY47.RS03130__NZOZ255725_616_758824_759415_neg    -          ABM                  PF03992.22   9.1e-09   33.8   0.0   1.2e-08   33.4   0.0   1.2   1   0   0   1   1   1   1 -
+ACQY47.RS02910__NZOZ255725_573_711254_711623_pos    -          ABM                  PF03992.22   3.1e-08   32.1   0.0   3.7e-08   31.8   0.0   1.1   1   0   0   1   1   1   1 -
+ACQY47.RS04935__NZOZ255725_963_1152337_1152703_neg  -          ABM                  PF03992.22   8.7e-06   24.2   0.1   1.4e-05   23.6   0.1   1.3   1   0   0   1   1   1   1 -
+ACQY47.RS19530__NZOZ255725_3792_4299774_4300332_neg -          ABM                  PF03992.22   1.9e-05   23.1   0.0   2.6e-05   22.7   0.0   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_965277385.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_965277385.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_965277385.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:34:10 2025
+# [ok]

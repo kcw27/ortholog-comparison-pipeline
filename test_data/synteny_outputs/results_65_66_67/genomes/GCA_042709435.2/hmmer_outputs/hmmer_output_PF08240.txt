@@ -1,0 +1,25 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACF1FH.08660__CP180119_1649_1844249_1845302_pos -          ADH_N                PF08240.17   1.4e-27   93.7   2.6   3.8e-27   92.3   1.6   2.1   2   0   0   2   2   2   1 -
+ACF1FH.11580__CP180119_2222_2447302_2448466_neg -          ADH_N                PF08240.17   5.6e-26   88.6   0.7     2e-25   86.8   0.7   1.9   1   1   0   1   1   1   1 -
+ACF1FH.00225__CP180119_38_53369_54398_neg       -          ADH_N                PF08240.17   7.8e-26   88.1   2.3   1.4e-25   87.3   2.3   1.4   1   0   0   1   1   1   1 -
+ACF1FH.08945__CP180119_1701_1897049_1898159_neg -          ADH_N                PF08240.17   1.6e-23   80.7   5.2   1.6e-23   80.7   5.2   2.9   3   1   0   3   3   3   1 -
+ACF1FH.09295__CP180119_1770_1972299_1973358_neg -          ADH_N                PF08240.17   2.7e-20   70.3   0.4   6.8e-20   69.0   0.4   1.7   1   0   0   1   1   1   1 -
+ACF1FH.03420__CP180119_638_703098_704097_pos    -          ADH_N                PF08240.17   5.4e-20   69.3   1.5   1.1e-19   68.3   1.5   1.6   1   0   0   1   1   1   1 -
+ACF1FH.08355__CP180119_1589_1769096_1770083_neg -          ADH_N                PF08240.17   1.1e-17   61.9   2.1     2e-17   61.1   0.8   2.0   2   0   0   2   2   2   1 -
+ACF1FH.05150__CP180119_972_1107148_1108246_neg  -          ADH_N                PF08240.17   4.2e-17   60.1   0.2   1.9e-15   54.8   0.2   2.4   1   1   0   1   1   1   1 -
+ACF1FH.00940__CP180119_181_214594_215572_pos    -          ADH_N                PF08240.17   5.6e-14   50.0   1.6   1.7e-13   48.4   0.3   2.4   2   1   1   3   3   3   1 -
+ACF1FH.16340__CP180119_3127_3413614_3414625_pos -          ADH_N                PF08240.17   9.4e-14   49.3   0.1   1.6e-13   48.5   0.1   1.3   1   0   0   1   1   1   1 -
+ACF1FH.15160__CP180119_2910_3172962_3174138_neg -          ADH_N                PF08240.17     4e-13   47.3   0.0   8.9e-13   46.1   0.0   1.6   1   0   0   1   1   1   1 -
+ACF1FH.14515__CP180119_2784_3025840_3026221_pos -          ADH_N                PF08240.17    0.0046   14.9   0.0    0.0068   14.4   0.0   1.3   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_042709435.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_042709435.2/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_042709435.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:36 2025
+# [ok]

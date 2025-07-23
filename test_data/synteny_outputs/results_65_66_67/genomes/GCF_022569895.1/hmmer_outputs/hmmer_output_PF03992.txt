@@ -1,0 +1,24 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+MMZ77.RS07210__NZCP093014_1418_1549514_1549808_neg -          ABM                  PF03992.22   4.6e-26   89.2   0.2   5.5e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+MMZ77.RS14490__NZCP093014_2846_3168254_3168599_neg -          ABM                  PF03992.22   3.9e-24   83.0   0.3   5.3e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+MMZ77.RS08015__NZCP093014_1579_1727700_1728003_pos -          ABM                  PF03992.22   1.5e-22   77.9   0.0   2.1e-22   77.5   0.0   1.1   1   0   0   1   1   1   1 -
+MMZ77.RS22165__NZCP093014_4361_4804598_4804895_neg -          ABM                  PF03992.22   1.1e-17   62.3   0.1   1.3e-17   62.1   0.1   1.0   1   0   0   1   1   1   1 -
+MMZ77.RS15240__NZCP093014_2995_3338898_3339195_neg -          ABM                  PF03992.22   3.6e-17   60.7   0.1   4.5e-17   60.4   0.1   1.1   1   0   0   1   1   1   1 -
+MMZ77.RS01440__NZCP093014_280_318188_318473_pos    -          ABM                  PF03992.22   7.3e-15   53.3   0.0   1.1e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+MMZ77.RS14025__NZCP093014_2754_3057639_3058710_neg -          ABM                  PF03992.22   7.7e-11   40.4   0.2   1.5e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+MMZ77.RS07775__NZCP093014_1531_1678360_1678918_neg -          ABM                  PF03992.22   2.5e-05   22.8   0.1   3.4e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+MMZ77.RS13995__NZCP093014_2748_3052458_3052836_neg -          ABM                  PF03992.22   7.7e-05   21.2   0.1    0.0001   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+MMZ77.RS14325__NZCP093014_2813_3129467_3130892_pos -          ABM                  PF03992.22     0.031   12.8   0.5       4.1    6.1   0.0   3.3   3   0   0   3   3   3   0 -
+MMZ77.RS07625__NZCP093014_1501_1646021_1647737_neg -          ABM                  PF03992.22     0.034   12.7   0.0      0.06   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_022569895.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_022569895.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_022569895.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:25:48 2025
+# [ok]

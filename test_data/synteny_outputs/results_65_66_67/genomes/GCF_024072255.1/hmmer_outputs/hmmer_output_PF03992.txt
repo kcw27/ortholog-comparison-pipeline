@@ -1,0 +1,21 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+NF675.RS03255__NZCP099596_639_779016_779310_neg    -          ABM                  PF03992.22   3.4e-25   86.3   0.1     4e-25   86.1   0.1   1.1   1   0   0   1   1   1   1 -
+NF675.RS03465__NZCP099596_676_832988_833303_neg    -          ABM                  PF03992.22   1.3e-24   84.4   0.3   1.6e-24   84.1   0.3   1.1   1   0   0   1   1   1   1 -
+NF675.RS14345__NZCP099596_2797_3282540_3282834_pos -          ABM                  PF03992.22   4.8e-15   53.8   0.0   5.5e-15   53.6   0.0   1.1   1   0   0   1   1   1   1 -
+NF675.RS20410__NZCP099596_3975_4677424_4677778_neg -          ABM                  PF03992.22   1.5e-14   52.2   0.0   2.3e-14   51.6   0.0   1.3   1   1   0   1   1   1   1 -
+NF675.RS10955__NZCP099596_2135_2489761_2490103_pos -          ABM                  PF03992.22   5.7e-10   37.5   0.1   7.2e-10   37.2   0.1   1.1   1   0   0   1   1   1   1 -
+NF675.RS17760__NZCP099596_3457_4081134_4081497_neg -          ABM                  PF03992.22   5.3e-09   34.4   0.4   6.8e-09   34.0   0.4   1.3   1   0   0   1   1   1   1 -
+NF675.RS10000__NZCP099596_1945_2284119_2284746_pos -          ABM                  PF03992.22   1.2e-07   30.0   0.0     2e-07   29.3   0.0   1.4   1   0   0   1   1   1   1 -
+NF675.RS04325__NZCP099596_841_1023911_1024481_neg  -          ABM                  PF03992.22   7.5e-05   21.1   0.0    0.0001   20.6   0.0   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_024072255.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_024072255.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_024072255.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:26:27 2025
+# [ok]

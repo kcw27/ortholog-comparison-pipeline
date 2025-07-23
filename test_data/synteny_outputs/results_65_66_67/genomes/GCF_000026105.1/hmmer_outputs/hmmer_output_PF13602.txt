@@ -1,0 +1,24 @@
+#                                                                                           --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                    accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                            ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PSEEN.RS24630__NC008027_4865_5646660_5647638_pos -          ADH_zinc_N_2         PF13602.12   1.6e-25   88.8   0.1   3.2e-25   87.8   0.1   1.5   1   0   0   1   1   1   1 -
+PSEEN.RS13270__NC008027_2598_3014281_3015274_pos -          ADH_zinc_N_2         PF13602.12   2.9e-24   84.7   0.7   6.9e-24   83.5   0.3   1.8   2   0   0   2   2   2   1 -
+PSEEN.RS03380__NC008027_653_748792_749803_pos    -          ADH_zinc_N_2         PF13602.12   1.4e-21   76.1   0.3   4.6e-21   74.4   0.1   2.0   2   0   0   2   2   2   1 -
+PSEEN.RS12665__NC008027_2479_2875124_2876132_pos -          ADH_zinc_N_2         PF13602.12   1.6e-19   69.3   0.1   2.7e-19   68.6   0.1   1.4   1   0   0   1   1   1   1 -
+PSEEN.RS00130__NC008027_25_29476_30454_neg       -          ADH_zinc_N_2         PF13602.12   2.5e-19   68.8   0.0   4.7e-19   67.9   0.0   1.5   1   0   0   1   1   1   1 -
+PSEEN.RS07010__NC008027_1374_1586250_1587252_neg -          ADH_zinc_N_2         PF13602.12   1.2e-14   53.6   0.1   3.3e-14   52.2   0.0   1.8   2   0   0   2   2   2   1 -
+PSEEN.RS12205__NC008027_2387_2746719_2747742_pos -          ADH_zinc_N_2         PF13602.12   2.2e-14   52.8   0.0   3.8e-14   52.0   0.0   1.4   1   0   0   1   1   1   1 -
+PSEEN.RS06645__NC008027_1300_1501216_1502179_pos -          ADH_zinc_N_2         PF13602.12   1.6e-13   50.0   0.0   3.4e-13   48.9   0.0   1.5   1   0   0   1   1   1   1 -
+PSEEN.RS19385__NC008027_3817_4475241_4476354_neg -          ADH_zinc_N_2         PF13602.12   3.5e-07   29.4   0.0   6.8e-07   28.5   0.0   1.5   1   0   0   1   1   1   1 -
+PSEEN.RS12450__NC008027_2436_2809356_2810376_neg -          ADH_zinc_N_2         PF13602.12   9.2e-07   28.1   0.0   1.4e-06   27.5   0.0   1.3   1   0   0   1   1   1   1 -
+PSEEN.RS12125__NC008027_2376_2727134_2728244_pos -          ADH_zinc_N_2         PF13602.12   0.00014   21.0   0.0   0.00028   20.0   0.0   1.5   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000026105.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_000026105.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000026105.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:57 2025
+# [ok]

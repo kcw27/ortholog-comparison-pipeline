@@ -1,0 +1,26 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+JUNP586.0977__AP031586_930_1008126_1009125_pos  -          ADH_zinc_N_2         PF13602.12   2.2e-24   84.7   0.0   4.9e-24   83.6   0.0   1.6   2   0   0   2   2   2   1 -
+JUNP586.2153__AP031586_2091_2210989_2211976_neg -          ADH_zinc_N_2         PF13602.12   2.2e-23   81.5   1.0   5.3e-23   80.3   0.3   1.9   2   1   0   2   2   2   1 -
+JUNP586.2188__AP031586_2126_2242563_2243553_neg -          ADH_zinc_N_2         PF13602.12   2.3e-21   75.0   0.0   9.9e-21   72.9   0.0   1.9   2   0   0   2   2   2   1 -
+JUNP586.3809__AP031586_3726_3927058_3928069_pos -          ADH_zinc_N_2         PF13602.12   2.7e-16   58.6   0.0   4.5e-16   57.9   0.0   1.4   1   0   0   1   1   1   1 -
+JUNP586.0309__AP031586_291_326657_327686_neg    -          ADH_zinc_N_2         PF13602.12   1.4e-12   46.6   0.0   2.4e-12   45.8   0.0   1.4   1   0   0   1   1   1   1 -
+JUNP586.0481__AP031586_463_515890_516868_pos    -          ADH_zinc_N_2         PF13602.12   3.4e-07   29.1   0.1   6.7e-07   28.2   0.1   1.5   1   0   0   1   1   1   1 -
+JUNP586.2296__AP031586_2234_2371236_2372346_neg -          ADH_zinc_N_2         PF13602.12   6.1e-06   25.1   0.0   1.4e-05   23.8   0.0   1.6   1   0   0   1   1   1   1 -
+JUNP586.3875__AP031587_58_48616_49729_neg       -          ADH_zinc_N_2         PF13602.12   6.4e-06   25.0   0.0   1.6e-05   23.7   0.0   1.7   1   1   0   1   1   1   1 -
+JUNP586.2377__AP031586_2315_2449134_2450193_neg -          ADH_zinc_N_2         PF13602.12   2.1e-05   23.3   0.0   4.4e-05   22.3   0.0   1.5   1   0   0   1   1   1   1 -
+JUNP586.2856__AP031586_2793_2954091_2955255_neg -          ADH_zinc_N_2         PF13602.12   3.7e-05   22.5   0.2   0.00026   19.8   0.2   2.2   1   1   0   1   1   1   1 -
+JUNP586.2225__AP031586_2163_2280763_2281816_pos -          ADH_zinc_N_2         PF13602.12   0.00011   20.9   0.0   0.00021   20.1   0.0   1.4   1   0   0   1   1   1   1 -
+JUNP586.3496__AP031586_3422_3620380_3621556_neg -          ADH_zinc_N_2         PF13602.12    0.0061   15.3   0.0     0.015   14.1   0.0   1.6   2   0   0   2   2   1   1 -
+JUNP586.1156__AP031586_1104_1214212_1214827_neg -          ADH_zinc_N_2         PF13602.12     0.026   13.3   0.0     0.044   12.6   0.0   1.6   1   1   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_041154865.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCA_041154865.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_041154865.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:39 2025
+# [ok]

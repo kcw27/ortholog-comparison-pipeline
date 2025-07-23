@@ -1,0 +1,29 @@
+#                                                                                            --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                     accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                             ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+HV98.RS22030__NZCP008869_4216_4652353_4653340_pos -          ADH_zinc_N_2         PF13602.12   3.6e-26   91.1   0.6   6.6e-26   90.3   0.2   1.6   2   0   0   2   2   2   1 -
+HV98.RS30160__NZCP008869_5768_6365438_6366416_pos -          ADH_zinc_N_2         PF13602.12   2.5e-25   88.4   0.0   4.6e-25   87.6   0.0   1.4   1   0   0   1   1   1   1 -
+HV98.RS00115__NZCP008869_21_24555_25533_neg       -          ADH_zinc_N_2         PF13602.12   3.4e-19   68.6   0.0   5.6e-19   67.9   0.0   1.3   1   0   0   1   1   1   1 -
+HV98.RS07880__NZCP008869_1504_1598595_1599609_neg -          ADH_zinc_N_2         PF13602.12   4.3e-19   68.2   0.3   8.1e-19   67.4   0.3   1.5   1   0   0   1   1   1   1 -
+HV98.RS13415__NZCP008869_2564_2749626_2750601_neg -          ADH_zinc_N_2         PF13602.12   2.6e-15   56.0   0.1     4e-15   55.4   0.1   1.3   1   0   0   1   1   1   1 -
+HV98.RS09550__NZCP008869_1827_1957268_1958231_pos -          ADH_zinc_N_2         PF13602.12   1.7e-14   53.4   0.1   3.2e-14   52.5   0.1   1.5   1   0   0   1   1   1   1 -
+HV98.RS19415__NZCP008869_3717_4101944_4102949_pos -          ADH_zinc_N_2         PF13602.12   9.7e-14   50.9   0.0   2.3e-13   49.7   0.0   1.6   2   0   0   2   2   2   1 -
+HV98.RS16470__NZCP008869_3163_3487658_3488696_neg -          ADH_zinc_N_2         PF13602.12   3.5e-12   45.9   0.0   5.7e-12   45.2   0.0   1.3   1   0   0   1   1   1   1 -
+HV98.RS16905__NZCP008869_3246_3573015_3574116_pos -          ADH_zinc_N_2         PF13602.12   7.5e-11   41.6   0.0   1.1e-10   41.0   0.0   1.3   1   0   0   1   1   1   1 -
+HV98.RS07230__NZCP008869_1381_1491312_1492425_pos -          ADH_zinc_N_2         PF13602.12   6.6e-08   32.0   0.0   1.2e-07   31.2   0.0   1.4   1   0   0   1   1   1   1 -
+HV98.RS15585__NZCP008869_2983_3285801_3286863_pos -          ADH_zinc_N_2         PF13602.12   2.1e-06   27.2   0.0   4.1e-06   26.2   0.0   1.5   1   0   0   1   1   1   1 -
+HV98.RS04795__NZCP008869_907_974231_975290_neg    -          ADH_zinc_N_2         PF13602.12   5.1e-05   22.7   0.1   8.6e-05   22.0   0.1   1.3   1   0   0   1   1   1   1 -
+HV98.RS04185__NZCP008869_788_866186_867248_neg    -          ADH_zinc_N_2         PF13602.12    0.0002   20.8   0.0   0.00041   19.8   0.0   1.5   1   0   0   1   1   1   1 -
+HV98.RS31600__NZCP008869_6042_6651551_6652580_pos -          ADH_zinc_N_2         PF13602.12   0.00063   19.2   0.1    0.0011   18.4   0.1   1.4   1   0   0   1   1   1   1 -
+HV98.RS16520__NZCP008869_3172_3496224_3497391_pos -          ADH_zinc_N_2         PF13602.12    0.0034   16.8   0.4     0.022   14.2   0.4   2.1   1   1   0   1   1   1   1 -
+HV98.RS06380__NZCP008869_1212_1301659_1302610_neg -          ADH_zinc_N_2         PF13602.12     0.026   13.9   0.0       1.8    8.0   0.0   2.3   2   0   0   2   2   2   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_001516165.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_001516165.2/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_001516165.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:32 2025
+# [ok]

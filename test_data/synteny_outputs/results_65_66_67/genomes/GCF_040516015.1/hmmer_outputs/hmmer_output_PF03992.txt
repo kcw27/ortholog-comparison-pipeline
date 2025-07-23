@@ -1,0 +1,22 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ABWK13.RS25060__NZCP159468_4813_5443629_5443944_pos -          ABM                  PF03992.22   1.2e-22   78.3   0.1   1.3e-22   78.1   0.1   1.1   1   0   0   1   1   1   1 -
+ABWK13.RS25320__NZCP159468_4860_5507446_5507749_pos -          ABM                  PF03992.22   1.3e-21   75.0   0.0   1.6e-21   74.6   0.0   1.1   1   0   0   1   1   1   1 -
+ABWK13.RS21000__NZCP159468_4038_4557500_4557788_pos -          ABM                  PF03992.22   3.5e-20   70.3   0.0   4.1e-20   70.1   0.0   1.1   1   0   0   1   1   1   1 -
+ABWK13.RS16565__NZCP159468_3185_3559527_3559914_neg -          ABM                  PF03992.22   3.5e-18   63.9   0.0   4.3e-18   63.6   0.0   1.1   1   0   0   1   1   1   1 -
+ABWK13.RS24080__NZCP159468_4619_5230142_5230436_neg -          ABM                  PF03992.22   8.7e-15   53.0   0.0     1e-14   52.8   0.0   1.1   1   0   0   1   1   1   1 -
+ABWK13.RS19415__NZCP159468_3734_4204551_4204932_neg -          ABM                  PF03992.22   2.7e-06   25.8   0.7   7.3e-06   24.5   0.2   1.8   2   0   0   2   2   2   1 -
+ABWK13.RS14605__NZCP159468_2803_3139421_3139775_neg -          ABM                  PF03992.22     4e-06   25.3   0.0   5.8e-06   24.8   0.0   1.2   1   0   0   1   1   1   1 -
+ABWK13.RS24900__NZCP159468_4781_5408889_5409450_pos -          ABM                  PF03992.22   4.6e-05   21.9   0.0   6.3e-05   21.4   0.0   1.2   1   0   0   1   1   1   1 -
+ABWK13.RS28185__NZCP159468_5420_6158613_6160212_pos -          ABM                  PF03992.22   0.00034   19.1   0.1   0.00061   18.3   0.1   1.4   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_040516015.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_040516015.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_040516015.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:31:04 2025
+# [ok]

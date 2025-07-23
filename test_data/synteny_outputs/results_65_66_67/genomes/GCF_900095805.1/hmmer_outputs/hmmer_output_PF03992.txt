@@ -1,0 +1,24 @@
+#                                                                                                    --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                             accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                                     ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PHAGEPCYII10.RS07295__NZLT608330_1442_1560006_1560300_neg -          ABM                  PF03992.22   4.8e-26   89.2   0.2   5.6e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+PHAGEPCYII10.RS14765__NZLT608330_2923_3234336_3234681_neg -          ABM                  PF03992.22   3.4e-24   83.2   0.2   4.7e-24   82.8   0.2   1.2   1   0   0   1   1   1   1 -
+PHAGEPCYII10.RS08105__NZLT608330_1607_1745148_1745451_pos -          ABM                  PF03992.22   8.5e-22   75.6   0.0   1.1e-21   75.2   0.0   1.1   1   0   0   1   1   1   1 -
+PHAGEPCYII10.RS22500__NZLT608330_4446_4901025_4901322_neg -          ABM                  PF03992.22   5.8e-18   63.3   0.1   6.6e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+PHAGEPCYII10.RS15465__NZLT608330_3060_3395250_3395547_neg -          ABM                  PF03992.22   3.9e-17   60.6   0.1   4.9e-17   60.3   0.1   1.1   1   0   0   1   1   1   1 -
+PHAGEPCYII10.RS01450__NZLT608330_287_320769_321054_pos    -          ABM                  PF03992.22   7.5e-15   53.3   0.0   1.1e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+PHAGEPCYII10.RS14320__NZLT608330_2833_3133758_3134829_neg -          ABM                  PF03992.22   7.9e-11   40.4   0.2   1.5e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+PHAGEPCYII10.RS07865__NZLT608330_1559_1696098_1696656_neg -          ABM                  PF03992.22   2.5e-05   22.8   0.1   3.5e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+PHAGEPCYII10.RS14290__NZLT608330_2827_3128577_3128955_neg -          ABM                  PF03992.22   7.9e-05   21.2   0.1    0.0001   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+PHAGEPCYII10.RS07715__NZLT608330_1528_1663719_1665435_neg -          ABM                  PF03992.22     0.034   12.7   0.0     0.062   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+PHAGEPCYII10.RS14595__NZLT608330_2890_3195535_3196960_pos -          ABM                  PF03992.22     0.039   12.6   0.5       4.2    6.1   0.0   3.2   3   0   0   3   3   3   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_900095805.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_900095805.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_900095805.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:33:54 2025
+# [ok]

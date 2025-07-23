@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+EJN52.RS07225__NZLR130535_1391_1506591_1506885_neg -          ABM                  PF03992.22   4.7e-26   89.2   0.2   5.6e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+EJN52.RS14510__NZLR130535_2792_3097570_3097915_neg -          ABM                  PF03992.22   3.9e-24   83.0   0.3   5.4e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+EJN52.RS08040__NZLR130535_1552_1684780_1685083_pos -          ABM                  PF03992.22   3.7e-22   76.7   0.0     5e-22   76.3   0.0   1.1   1   0   0   1   1   1   1 -
+EJN52.RS22515__NZLR130535_4328_4759282_4759579_neg -          ABM                  PF03992.22   5.7e-18   63.3   0.1   6.5e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+EJN52.RS15350__NZLR130535_2948_3273346_3273643_neg -          ABM                  PF03992.22   1.4e-16   58.9   0.1   1.7e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+EJN52.RS01475__NZLR130535_279_309363_309648_pos    -          ABM                  PF03992.22   7.4e-15   53.3   0.0   1.1e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+EJN52.RS14180__NZLR130535_2727_3022255_3023326_neg -          ABM                  PF03992.22   1.7e-10   39.4   0.2   3.3e-10   38.4   0.2   1.5   1   0   0   1   1   1   1 -
+EJN52.RS07800__NZLR130535_1504_1635731_1636289_neg -          ABM                  PF03992.22   2.3e-05   22.9   0.1   3.1e-05   22.5   0.1   1.2   1   0   0   1   1   1   1 -
+EJN52.RS14150__NZLR130535_2721_3017074_3017452_neg -          ABM                  PF03992.22   7.8e-05   21.2   0.1    0.0001   20.8   0.1   1.3   1   0   0   1   1   1   1 -
+EJN52.RS07645__NZLR130535_1473_1603111_1604827_neg -          ABM                  PF03992.22     0.034   12.7   0.0     0.061   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_900618325.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_900618325.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_900618325.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:34:03 2025
+# [ok]

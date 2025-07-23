@@ -72,8 +72,9 @@ while getopts "g:i:h:d:m:" opt; do
   esac
 done
 
-scriptsdir="$HOME" # change to whichever directory contains the scripts
-log="synteny_wrapper_log.txt"
+wrapperdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) # get location of current script
+scriptsdir="${wrapperdir}/synteny_search" # this is where I put the scripts
+log="${wrapperdir}/synteny_wrapper_log.txt"
 echo "CLIs: ${genome_db}, ${input_file}, ${hmms}, ${hmms_dir}, ${hmms_metadata}" > $log
 
 start_time="$(date -u +%s)"

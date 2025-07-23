@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+EGY27.RS27400__NZCP033835_5208_5565274_5565568_pos -          ABM                  PF03992.22   5.1e-26   89.3   0.2     6e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+EGY27.RS19215__NZCP033835_3639_3800952_3801297_pos -          ABM                  PF03992.22   4.5e-24   83.0   0.3   6.2e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+EGY27.RS26450__NZCP033835_5021_5358767_5359070_neg -          ABM                  PF03992.22   7.4e-23   79.2   0.0   9.9e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+EGY27.RS09070__NZCP033835_1695_1832317_1832614_pos -          ABM                  PF03992.22   6.6e-18   63.3   0.1   7.5e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+EGY27.RS18385__NZCP033835_3485_3627523_3627820_pos -          ABM                  PF03992.22   4.4e-17   60.6   0.1   5.5e-17   60.3   0.1   1.1   1   0   0   1   1   1   1 -
+EGY27.RS33805__NZCP033835_6440_6858266_6858551_neg -          ABM                  PF03992.22   8.5e-15   53.3   0.0   1.3e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+EGY27.RS19760__NZCP033835_3741_3913294_3914365_pos -          ABM                  PF03992.22     9e-11   40.4   0.2   1.7e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+EGY27.RS26720__NZCP033835_5074_5411994_5412552_pos -          ABM                  PF03992.22   2.9e-05   22.8   0.1     4e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+EGY27.RS19790__NZCP033835_3747_3919168_3919546_pos -          ABM                  PF03992.22     9e-05   21.2   0.1   0.00012   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+EGY27.RS26875__NZCP033835_5105_5443645_5445361_pos -          ABM                  PF03992.22     0.039   12.7   0.0      0.07   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_003813025.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_003813025.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_003813025.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:22:42 2025
+# [ok]

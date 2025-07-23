@@ -1,0 +1,29 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+R5019.RS10145__NZCP137490_1975_2175086_2176145_neg -          ADH_N                PF08240.17   2.7e-31  106.4   0.2   4.7e-31  105.6   0.2   1.4   1   0   0   1   1   1   1 -
+R5019.RS05160__NZCP137490_1001_1104521_1105550_pos -          ADH_N                PF08240.17     3e-31  106.2   1.2     3e-31  106.2   1.2   2.0   2   0   0   2   2   2   1 -
+R5019.RS09860__NZCP137490_1918_2107861_2108923_neg -          ADH_N                PF08240.17   1.3e-29  101.0   0.3   3.4e-29   99.7   0.3   1.7   1   0   0   1   1   1   1 -
+R5019.RS12550__NZCP137490_2452_2691431_2692544_pos -          ADH_N                PF08240.17   4.6e-26   89.6   1.2   1.6e-25   87.9   1.2   1.9   1   0   0   1   1   1   1 -
+R5019.RS20355__NZCP137490_3969_4370390_4371452_pos -          ADH_N                PF08240.17     5e-26   89.5   0.3   9.4e-26   88.6   0.3   1.5   1   0   0   1   1   1   1 -
+R5019.RS21630__NZCP137490_4210_4628385_4629633_pos -          ADH_N                PF08240.17   3.4e-24   83.6   0.6   8.4e-24   82.3   0.6   1.7   1   0   0   1   1   1   1 -
+R5019.RS05130__NZCP137490_995_1099294_1100494_pos  -          ADH_N                PF08240.17   5.1e-24   83.0   2.4   9.8e-24   82.1   2.4   1.5   1   0   0   1   1   1   1 -
+R5019.RS04155__NZCP137490_805_888966_889944_pos    -          ADH_N                PF08240.17   2.4e-18   64.8   0.1   5.8e-18   63.6   0.1   1.7   1   0   0   1   1   1   1 -
+R5019.RS05995__NZCP137490_1166_1286560_1287538_neg -          ADH_N                PF08240.17   1.4e-17   62.3   0.1   4.7e-17   60.6   0.0   1.9   2   0   0   2   2   2   1 -
+R5019.RS26930__NZCP137490_5255_5786606_5787593_pos -          ADH_N                PF08240.17   6.7e-17   60.1   0.2   1.9e-16   58.7   0.2   1.8   1   0   0   1   1   1   1 -
+R5019.RS23255__NZCP137490_4533_5002570_5003563_neg -          ADH_N                PF08240.17   5.5e-16   57.2   1.1   3.8e-15   54.5   0.1   2.3   2   0   0   2   2   2   1 -
+R5019.RS14550__NZCP137490_2847_3126216_3127179_pos -          ADH_N                PF08240.17   1.1e-15   56.3   0.4   1.1e-15   56.3   0.4   1.9   2   0   0   2   2   2   1 -
+R5019.RS17610__NZCP137490_3437_3735323_3736298_neg -          ADH_N                PF08240.17   4.5e-14   51.1   0.1   1.6e-13   49.3   0.0   2.0   2   0   0   2   2   2   1 -
+R5019.RS12865__NZCP137490_2514_2759046_2760060_neg -          ADH_N                PF08240.17   7.7e-13   47.1   0.0   1.5e-12   46.1   0.0   1.5   1   0   0   1   1   1   1 -
+R5019.RS30860__NZCP137490_6019_6592398_6593358_neg -          ADH_N                PF08240.17     4e-11   41.6   0.0   1.4e-10   39.8   0.0   2.0   2   0   0   2   2   2   1 -
+R5019.RS19255__NZCP137490_3750_4075563_4076583_pos -          ADH_N                PF08240.17   6.4e-11   40.9   0.0   2.4e-10   39.1   0.0   2.0   2   0   0   2   2   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_033219075.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_033219075.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_033219075.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:29:14 2025
+# [ok]

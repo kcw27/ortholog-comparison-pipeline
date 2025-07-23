@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PSH86.RS03785__NZCP117440_738_890055_890370_neg    -          ABM                  PF03992.22   6.3e-23   79.2   0.1   7.8e-23   78.9   0.1   1.1   1   0   0   1   1   1   1 -
+PSH86.RS13715__NZCP117440_2686_3064614_3064908_neg -          ABM                  PF03992.22   8.9e-16   56.3   0.0     1e-15   56.1   0.0   1.1   1   0   0   1   1   1   1 -
+PSH86.RS24230__NZCP117440_4730_5458455_5458809_neg -          ABM                  PF03992.22     1e-13   49.7   0.0     4e-13   47.8   0.0   1.8   1   1   1   2   2   2   1 -
+PSH86.RS23460__NZCP117440_4578_5301548_5301863_pos -          ABM                  PF03992.22   9.7e-12   43.4   0.1   1.2e-11   43.1   0.1   1.1   1   0   0   1   1   1   1 -
+PSH86.RS19710__NZCP117440_3867_4487906_4488545_neg -          ABM                  PF03992.22   6.1e-09   34.4   0.1   9.4e-09   33.8   0.1   1.3   1   0   0   1   1   1   1 -
+PSH86.RS12245__NZCP117440_2398_2726254_2726569_neg -          ABM                  PF03992.22   9.2e-09   33.8   0.0   1.2e-08   33.5   0.0   1.1   1   0   0   1   1   1   1 -
+PSH86.RS21305__NZCP117440_4162_4862164_4862530_neg -          ABM                  PF03992.22   3.5e-08   31.9   0.8   5.6e-08   31.3   0.4   1.4   1   1   0   1   1   1   1 -
+PSH86.RS25295__NZCP117440_4942_5701474_5702035_pos -          ABM                  PF03992.22   3.2e-06   25.7   0.0   4.3e-06   25.3   0.0   1.2   1   0   0   1   1   1   1 -
+PSH86.RS15420__NZCP117440_3025_3454209_3455265_neg -          ABM                  PF03992.22   3.8e-05   22.2   0.3   0.00089   17.8   0.1   2.5   2   0   0   2   2   2   1 -
+PSH86.RS14585__NZCP117440_2858_3264122_3264761_neg -          ABM                  PF03992.22     0.028   13.1   0.1     0.062   11.9   0.1   1.6   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_030687595.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_030687595.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_030687595.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:28:47 2025
+# [ok]

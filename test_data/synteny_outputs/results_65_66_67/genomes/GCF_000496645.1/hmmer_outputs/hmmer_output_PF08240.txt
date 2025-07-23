@@ -1,0 +1,29 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+PA1R.RS10325__NC022806_2048_2225532_2226591_pos -          ADH_N                PF08240.17   2.5e-31  106.4   0.2   4.4e-31  105.6   0.2   1.4   1   0   0   1   1   1   1 -
+PA1R.RS17270__NC022806_3399_3754828_3755857_pos -          ADH_N                PF08240.17   2.9e-31  106.2   1.2   2.9e-31  106.2   1.2   2.0   2   0   0   2   2   2   1 -
+PA1R.RS10615__NC022806_2106_2292759_2293821_pos -          ADH_N                PF08240.17   1.2e-29  101.0   0.3   3.2e-29   99.7   0.3   1.7   1   0   0   1   1   1   1 -
+PA1R.RS07410__NC022806_1458_1631321_1632434_neg -          ADH_N                PF08240.17   4.3e-26   89.6   1.2   1.5e-25   87.9   1.2   1.9   1   0   0   1   1   1   1 -
+PA1R.RS00395__NC022806_77_89886_90948_neg       -          ADH_N                PF08240.17   4.7e-26   89.5   0.3   8.9e-26   88.6   0.3   1.5   1   0   0   1   1   1   1 -
+PA1R.RS29045__NC022806_5727_6249826_6251074_neg -          ADH_N                PF08240.17   3.2e-24   83.6   0.6   7.9e-24   82.3   0.6   1.7   1   0   0   1   1   1   1 -
+PA1R.RS17240__NC022806_3393_3749601_3750801_pos -          ADH_N                PF08240.17   4.8e-24   83.0   2.4   9.2e-24   82.1   2.4   1.5   1   0   0   1   1   1   1 -
+PA1R.RS16270__NC022806_3205_3538423_3539401_pos -          ADH_N                PF08240.17   2.3e-18   64.8   0.1   5.4e-18   63.6   0.1   1.7   1   0   0   1   1   1   1 -
+PA1R.RS18150__NC022806_3571_3943826_3944804_neg -          ADH_N                PF08240.17   1.3e-17   62.3   0.1   4.4e-17   60.6   0.0   1.9   2   0   0   2   2   2   1 -
+PA1R.RS24500__NC022806_4834_5292501_5293488_neg -          ADH_N                PF08240.17   6.8e-17   60.0   0.2   1.8e-16   58.7   0.2   1.7   1   0   0   1   1   1   1 -
+PA1R.RS28115__NC022806_5544_6056869_6057862_pos -          ADH_N                PF08240.17   5.2e-16   57.2   1.1   3.5e-15   54.5   0.1   2.3   2   0   0   2   2   2   1 -
+PA1R.RS05570__NC022806_1093_1226410_1227373_neg -          ADH_N                PF08240.17   1.9e-15   55.4   0.4   1.9e-15   55.4   0.4   1.9   2   0   0   2   2   2   1 -
+PA1R.RS02455__NC022806_487_597747_598722_pos    -          ADH_N                PF08240.17   4.4e-14   51.0   0.2   1.7e-13   49.1   0.0   2.1   2   1   1   3   3   2   1 -
+PA1R.RS07095__NC022806_1396_1565574_1566588_pos -          ADH_N                PF08240.17   7.2e-13   47.1   0.0   1.4e-12   46.1   0.0   1.5   1   0   0   1   1   1   1 -
+PA1R.RS22575__NC022806_4443_4905047_4906007_neg -          ADH_N                PF08240.17   3.8e-11   41.6   0.0   1.3e-10   39.8   0.0   2.0   2   0   0   2   2   2   1 -
+PA1R.RS01450__NC022806_292_375201_376221_neg    -          ADH_N                PF08240.17   6.1e-11   40.9   0.0   2.2e-10   39.1   0.0   2.0   2   0   0   2   2   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000496645.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_000496645.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000496645.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:09 2025
+# [ok]

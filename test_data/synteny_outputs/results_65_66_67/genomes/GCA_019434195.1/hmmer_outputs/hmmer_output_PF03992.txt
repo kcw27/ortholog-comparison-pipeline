@@ -1,0 +1,23 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+KZ797.12880__CP080287_2369_2809334_2809628_pos -          ABM                  PF03992.22   1.8e-25   87.3   0.2   2.1e-25   87.1   0.2   1.1   1   0   0   1   1   1   1 -
+KZ797.05230__CP080287_968_1139802_1140147_pos  -          ABM                  PF03992.22   3.8e-24   83.0   0.3   5.1e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+KZ797.12075__CP080287_2220_2630748_2631051_neg -          ABM                  PF03992.22   6.1e-23   79.2   0.0   8.2e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+KZ797.26890__CP080287_4960_5854537_5854834_pos -          ABM                  PF03992.22   5.5e-18   63.3   0.1   6.3e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+KZ797.04525__CP080287_835_976285_976693_pos    -          ABM                  PF03992.22   7.9e-17   59.6   0.1   1.2e-16   59.0   0.1   1.3   1   0   0   1   1   1   1 -
+KZ797.22475__CP080287_4139_4902543_4902828_pos -          ABM                  PF03992.22   7.1e-15   53.3   0.0   1.1e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+KZ797.05675__CP080287_1048_1242854_1243925_pos -          ABM                  PF03992.22   7.4e-11   40.4   0.2   1.5e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+KZ797.12320__CP080287_2268_2679741_2680299_pos -          ABM                  PF03992.22   2.4e-05   22.8   0.1   3.3e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+KZ797.05705__CP080287_1054_1248728_1249106_pos -          ABM                  PF03992.22   9.2e-05   20.9   0.1   0.00012   20.5   0.1   1.2   1   0   0   1   1   1   1 -
+KZ797.12470__CP080287_2294_2711395_2713111_pos -          ABM                  PF03992.22     0.033   12.7   0.0     0.058   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_019434195.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_019434195.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_019434195.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:19:59 2025
+# [ok]

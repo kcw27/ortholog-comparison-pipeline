@@ -1,0 +1,18 @@
+#                                                                                        --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                 accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                         ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+IEE82.03645__CP061541_221_738997_739996_pos   -          ADH_zinc_N_2         PF13602.12     4e-25   85.5   0.0   8.8e-25   84.4   0.0   1.6   2   0   0   2   2   2   1 -
+IEE82.09605__CP061541_584_1996671_1997841_neg -          ADH_zinc_N_2         PF13602.12   2.1e-06   24.9   0.0   4.9e-06   23.7   0.0   1.6   1   0   0   1   1   1   1 -
+IEE82.12470__CP061541_759_2560372_2561536_neg -          ADH_zinc_N_2         PF13602.12   1.1e-05   22.5   0.2   7.9e-05   19.8   0.2   2.2   1   1   0   1   1   1   1 -
+IEE82.09280__CP061541_562_1928119_1929172_pos -          ADH_zinc_N_2         PF13602.12   3.5e-05   20.9   0.0   6.4e-05   20.1   0.0   1.4   1   0   0   1   1   1   1 -
+IEE82.15615__CP061541_963_3211911_3213087_neg -          ADH_zinc_N_2         PF13602.12    0.0019   15.3   0.0    0.0046   14.1   0.0   1.6   2   0   0   2   2   2   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_014705985.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_014705985.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_014705985.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:19:59 2025
+# [ok]

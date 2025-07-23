@@ -1,0 +1,25 @@
+#                                                                                       --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                        ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+TML.04133__LR813083_4005_4368763_4369741_pos -          ADH_zinc_N_2         PF13602.12   3.9e-26   90.8   0.1   9.2e-26   89.6   0.1   1.6   1   0   0   1   1   1   1 -
+TML.01189__LR813083_1137_1181164_1182166_pos -          ADH_zinc_N_2         PF13602.12   5.9e-23   80.6   0.5   1.2e-22   79.6   0.1   1.7   2   0   0   2   2   2   1 -
+TML.03608__LR813083_3492_3778565_3779576_neg -          ADH_zinc_N_2         PF13602.12   6.1e-22   77.3   0.4   1.6e-21   75.9   0.1   1.8   2   0   0   2   2   2   1 -
+TML.01383__LR813083_1329_1387751_1388732_pos -          ADH_zinc_N_2         PF13602.12   1.7e-20   72.6   0.0   3.2e-20   71.7   0.0   1.4   1   0   0   1   1   1   1 -
+TML.04447__LR813083_4315_4712048_4713026_neg -          ADH_zinc_N_2         PF13602.12   1.5e-17   63.1   0.0   2.5e-17   62.3   0.0   1.4   1   0   0   1   1   1   1 -
+TML.01279__LR813083_1226_1281309_1282332_pos -          ADH_zinc_N_2         PF13602.12     2e-15   56.2   0.0   3.7e-15   55.3   0.0   1.5   1   0   0   1   1   1   1 -
+TML.00097__LR813083_91_92576_93539_pos       -          ADH_zinc_N_2         PF13602.12   3.6e-13   48.9   0.0   7.4e-13   47.9   0.0   1.6   1   0   0   1   1   1   1 -
+TML.00188__LR813083_180_192476_193478_neg    -          ADH_zinc_N_2         PF13602.12   6.3e-13   48.1   0.2   1.2e-12   47.2   0.0   1.6   2   0   0   2   2   1   1 -
+TML.02100__LR813083_2037_2171572_2172583_pos -          ADH_zinc_N_2         PF13602.12   3.5e-11   42.4   0.5   5.8e-11   41.7   0.5   1.4   1   0   0   1   1   1   1 -
+TML.02066__LR813083_2004_2143790_2144843_neg -          ADH_zinc_N_2         PF13602.12   2.7e-05   23.4   0.0   4.8e-05   22.6   0.0   1.4   1   0   0   1   1   1   1 -
+TML.01175__LR813083_1123_1167959_1169159_neg -          ADH_zinc_N_2         PF13602.12   0.00087   18.5   0.7    0.0092   15.2   0.5   2.5   2   1   0   2   2   2   1 -
+TML.05028__LR813083_4861_5320677_5321766_neg -          ADH_zinc_N_2         PF13602.12    0.0045   16.2   0.0     0.011   15.0   0.0   1.6   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_903815245.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCA_903815245.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_903815245.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:57 2025
+# [ok]

@@ -1,0 +1,28 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+K9V45.RS00655__NZCP083442_116_149822_150137_pos    -          ABM                  PF03992.22   1.2e-23   81.5   0.1   1.5e-23   81.2   0.1   1.1   1   0   0   1   1   1   1 -
+K9V45.RS12240__NZCP083442_2349_2651765_2652080_pos -          ABM                  PF03992.22   5.8e-23   79.3   0.1   7.2e-23   79.0   0.1   1.1   1   0   0   1   1   1   1 -
+K9V45.RS12490__NZCP083442_2393_2712077_2712371_pos -          ABM                  PF03992.22   2.2e-21   74.3   0.4   2.8e-21   73.9   0.4   1.2   1   0   0   1   1   1   1 -
+K9V45.RS22575__NZCP083442_4334_4895802_4896087_neg -          ABM                  PF03992.22   6.7e-20   69.5   0.1   7.9e-20   69.3   0.1   1.1   1   0   0   1   1   1   1 -
+K9V45.RS04180__NZCP083442_804_953781_954129_pos    -          ABM                  PF03992.22   7.9e-18   62.9   0.1   1.1e-17   62.4   0.1   1.2   1   0   0   1   1   1   1 -
+K9V45.RS02265__NZCP083442_434_540063_540345_pos    -          ABM                  PF03992.22   1.4e-17   62.1   0.1   1.5e-17   61.9   0.1   1.1   1   0   0   1   1   1   1 -
+K9V45.RS23045__NZCP083442_4424_4993780_4994146_pos -          ABM                  PF03992.22   7.2e-13   47.0   0.0   1.1e-12   46.4   0.0   1.3   1   1   0   1   1   1   1 -
+K9V45.RS23980__NZCP083442_4603_5184600_5184924_neg -          ABM                  PF03992.22   2.1e-12   45.5   0.4   2.6e-12   45.2   0.4   1.1   1   0   0   1   1   1   1 -
+K9V45.RS02545__NZCP083442_489_606528_606897_neg    -          ABM                  PF03992.22   2.8e-12   45.1   0.1   3.8e-12   44.7   0.1   1.1   1   0   0   1   1   1   1 -
+K9V45.RS04325__NZCP083442_833_987623_988202_neg    -          ABM                  PF03992.22   1.1e-08   33.6   0.0   1.5e-08   33.2   0.0   1.2   1   0   0   1   1   1   1 -
+K9V45.RS29285__NZCP083442_5625_6387610_6388240_pos -          ABM                  PF03992.22   1.2e-07   30.3   0.0     2e-07   29.5   0.0   1.4   1   0   0   1   1   1   1 -
+K9V45.RS25950__NZCP083442_4983_5596342_5596708_pos -          ABM                  PF03992.22   3.9e-07   28.6   0.1   5.5e-07   28.1   0.1   1.3   1   0   0   1   1   1   1 -
+K9V45.RS11240__NZCP083442_2158_2431686_2432256_pos -          ABM                  PF03992.22   8.6e-06   24.3   0.0   1.2e-05   23.8   0.0   1.2   1   0   0   1   1   1   1 -
+K9V45.RS04515__NZCP083442_871_1030074_1030365_pos  -          ABM                  PF03992.22     0.036   12.7   0.0     0.044   12.4   0.0   1.2   1   0   0   1   1   1   0 -
+K9V45.RS29220__NZCP083442_5612_6372452_6374060_pos -          ABM                  PF03992.22     0.039   12.6   0.0     0.066   11.9   0.0   1.3   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_020424105.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_020424105.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_020424105.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:25:13 2025
+# [ok]

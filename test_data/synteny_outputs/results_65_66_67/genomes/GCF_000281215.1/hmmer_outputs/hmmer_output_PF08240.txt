@@ -1,0 +1,33 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+T1E.RS07575__NC018220_1401_1613413_1614424_neg -          ADH_N                PF08240.17   1.6e-27   94.1   4.9   1.6e-27   94.1   4.9   2.2   3   1   0   3   3   3   1 -
+T1E.RS07935__NC018220_1465_1698744_1699809_pos -          ADH_N                PF08240.17   5.6e-27   92.4   1.0   5.6e-27   92.4   1.0   2.2   2   1   0   2   2   2   1 -
+T1E.RS01595__NC018220_292_356892_358095_pos    -          ADH_N                PF08240.17   6.2e-25   85.8   0.2   1.7e-24   84.4   0.2   1.7   1   0   0   1   1   1   1 -
+T1E.RS26890__NC018220_5015_5713640_5714693_neg -          ADH_N                PF08240.17   6.3e-25   85.8   1.6   1.1e-24   85.0   1.6   1.4   1   0   0   1   1   1   1 -
+T1E.RS28015__NC018220_5226_5971895_5973020_neg -          ADH_N                PF08240.17   2.2e-24   84.0   0.3   4.6e-24   83.0   0.3   1.6   1   0   0   1   1   1   1 -
+T1E.RS01705__NC018220_316_374370_375510_neg    -          ADH_N                PF08240.17   2.5e-24   83.9   0.5   5.6e-24   82.7   0.5   1.6   1   0   0   1   1   1   1 -
+T1E.RS28210__NC018220_5264_6011810_6012920_pos -          ADH_N                PF08240.17   1.1e-23   81.7   5.3   1.1e-23   81.7   5.3   2.6   2   1   0   2   2   2   1 -
+T1E.RS28180__NC018220_5258_6004732_6005866_pos -          ADH_N                PF08240.17     2e-23   80.9   4.4     2e-23   80.9   4.4   2.4   2   1   0   2   2   2   1 -
+T1E.RS18035__NC018220_3386_3887866_3889066_neg -          ADH_N                PF08240.17   7.2e-23   79.2   1.5   1.3e-22   78.3   1.5   1.4   1   0   0   1   1   1   1 -
+T1E.RS25375__NC018220_4743_5418477_5419590_pos -          ADH_N                PF08240.17   1.8e-22   77.9   1.7   1.8e-22   77.9   1.7   2.4   2   1   0   2   2   2   1 -
+T1E.RS19560__NC018220_3680_4227510_4228512_pos -          ADH_N                PF08240.17   5.8e-19   66.6   2.4   9.6e-19   65.9   0.8   2.0   2   0   0   2   2   2   1 -
+T1E.RS04660__NC018220_850_1021375_1022353_neg  -          ADH_N                PF08240.17   2.1e-18   64.8   0.2   1.7e-17   61.9   0.0   2.3   2   1   0   2   2   2   1 -
+T1E.RS22415__NC018220_4210_4806507_4807485_neg -          ADH_N                PF08240.17     6e-18   63.3   0.0   1.6e-17   62.0   0.0   1.7   1   0   0   1   1   1   1 -
+T1E.RS19600__NC018220_3685_4232499_4233498_pos -          ADH_N                PF08240.17   1.6e-17   61.9   0.0   5.6e-17   60.2   0.0   1.9   2   0   0   2   2   2   1 -
+T1E.RS05215__NC018220_952_1129361_1130285_pos  -          ADH_N                PF08240.17   5.2e-17   60.3   1.9   7.4e-17   59.8   0.7   1.9   2   0   0   2   2   2   1 -
+T1E.RS19510__NC018220_3671_4218187_4219195_pos -          ADH_N                PF08240.17   4.2e-16   57.4   0.1   1.3e-15   55.8   0.1   1.8   2   0   0   2   2   1   1 -
+T1E.RS11430__NC018220_2104_2441764_2442727_pos -          ADH_N                PF08240.17   5.9e-16   56.9   2.7   8.1e-16   56.5   0.2   2.2   2   0   0   2   2   2   1 -
+T1E.RS11395__NC018220_2098_2435371_2436352_neg -          ADH_N                PF08240.17   1.6e-15   55.5   0.8   1.2e-14   52.7   0.3   2.4   2   1   0   2   2   2   1 -
+T1E.RS03520__NC018220_651_785538_786549_neg    -          ADH_N                PF08240.17   4.5e-14   50.9   0.1   1.9e-13   48.9   0.1   2.0   2   0   0   2   2   2   1 -
+T1E.RS21755__NC018220_4085_4664721_4665744_pos -          ADH_N                PF08240.17   1.5e-13   49.2   0.2   3.9e-13   47.9   0.2   1.7   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000281215.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_000281215.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000281215.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:01 2025
+# [ok]

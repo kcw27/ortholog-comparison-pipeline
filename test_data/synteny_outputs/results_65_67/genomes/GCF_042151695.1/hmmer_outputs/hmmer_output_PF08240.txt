@@ -1,0 +1,24 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ABUS28.RS08775__NZCP169866_1632_1810613_1811666_pos -          ADH_N                PF08240.17   1.3e-27   93.7   2.6   3.6e-27   92.3   1.6   2.1   2   0   0   2   2   2   1 -
+ABUS28.RS07515__NZCP169866_1391_1550396_1551560_pos -          ADH_N                PF08240.17   2.1e-26   89.9   0.8     6e-26   88.4   0.8   1.8   1   1   0   1   1   1   1 -
+ABUS28.RS11720__NZCP169866_2201_2432586_2433750_neg -          ADH_N                PF08240.17     3e-26   89.4   0.8   1.1e-25   87.6   0.8   1.9   1   1   0   1   1   1   1 -
+ABUS28.RS00230__NZCP169866_39_54000_55029_neg       -          ADH_N                PF08240.17   8.2e-26   88.0   2.2   1.4e-25   87.2   2.2   1.4   1   0   0   1   1   1   1 -
+ABUS28.RS09130__NZCP169866_1696_1896608_1897718_neg -          ADH_N                PF08240.17   1.6e-23   80.7   5.2   1.6e-23   80.7   5.2   2.9   3   1   0   3   3   3   1 -
+ABUS28.RS09495__NZCP169866_1769_1973352_1974411_neg -          ADH_N                PF08240.17     3e-20   70.1   0.4   6.5e-20   69.0   0.4   1.6   1   0   0   1   1   1   1 -
+ABUS28.RS03570__NZCP169866_657_729321_730320_pos    -          ADH_N                PF08240.17     4e-20   69.7   1.2   8.1e-20   68.7   1.2   1.5   1   0   0   1   1   1   1 -
+ABUS28.RS00985__NZCP169866_186_217524_218502_pos    -          ADH_N                PF08240.17   4.4e-14   50.3   2.0   1.1e-13   49.0   0.4   2.4   2   1   1   3   3   3   1 -
+ABUS28.RS15555__NZCP169866_2917_3226721_3227732_pos -          ADH_N                PF08240.17   9.7e-14   49.2   0.2   1.7e-13   48.4   0.2   1.3   1   0   0   1   1   1   1 -
+ABUS28.RS14390__NZCP169866_2700_2986520_2987696_neg -          ADH_N                PF08240.17   5.7e-13   46.7   0.0   1.3e-12   45.6   0.0   1.6   1   0   0   1   1   1   1 -
+ABUS28.RS13920__NZCP169866_2609_2889258_2889639_pos -          ADH_N                PF08240.17    0.0044   14.9   0.0    0.0065   14.4   0.0   1.3   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_042151695.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_042151695.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_042151695.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:31:43 2025
+# [ok]

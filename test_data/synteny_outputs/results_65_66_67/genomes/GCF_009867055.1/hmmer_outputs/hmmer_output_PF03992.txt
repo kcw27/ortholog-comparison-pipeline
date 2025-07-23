@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+C7T90.RS06990__NZCP028132_1371_1495556_1495850_neg -          ABM                  PF03992.22   1.7e-25   87.4   0.2     2e-25   87.2   0.2   1.1   1   0   0   1   1   1   1 -
+C7T90.RS14220__NZCP028132_2789_3098080_3098425_neg -          ABM                  PF03992.22   3.8e-24   83.0   0.3   5.2e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+C7T90.RS07800__NZCP028132_1532_1676884_1677187_pos -          ABM                  PF03992.22   6.3e-23   79.2   0.0   8.4e-23   78.8   0.0   1.1   1   0   0   1   1   1   1 -
+C7T90.RS22095__NZCP028132_4340_4757512_4757809_neg -          ABM                  PF03992.22   5.6e-18   63.3   0.1   6.4e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+C7T90.RS14970__NZCP028132_2938_3264800_3265097_neg -          ABM                  PF03992.22   1.4e-16   58.9   0.1   1.7e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+C7T90.RS01365__NZCP028132_267_302290_302575_pos    -          ABM                  PF03992.22   7.2e-15   53.3   0.0   1.1e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+C7T90.RS13765__NZCP028132_2698_2988686_2989757_neg -          ABM                  PF03992.22   7.6e-11   40.4   0.2   1.5e-10   39.5   0.2   1.5   1   0   0   1   1   1   1 -
+C7T90.RS07560__NZCP028132_1484_1627442_1628000_neg -          ABM                  PF03992.22   2.5e-05   22.8   0.1   3.4e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+C7T90.RS13735__NZCP028132_2692_2983505_2983883_neg -          ABM                  PF03992.22   7.7e-05   21.2   0.1    0.0001   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+C7T90.RS07410__NZCP028132_1454_1595092_1596808_neg -          ABM                  PF03992.22     0.033   12.7   0.0     0.059   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_009867055.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_009867055.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_009867055.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:23:31 2025
+# [ok]

@@ -2,7 +2,7 @@
 # (long format- one record per row)
 
 # CLI:
-# (expected to have 6 columns)
+# $1: Condensed blast file (expected to have 6 columns, e.g. -outfmt "6 sallgi sallseqid sseq evalue salltitles" and then run add_organism_column.sh)
 
 # Example run:
 # bash expand_blast_output.sh "${HOME}/data/testing/out/PA3565_nr_small_orgs.txt"
@@ -13,7 +13,7 @@
 # bash expand_blast_output.sh "${HOME}/data/blast_outputs/fha1_nr_orgs.txt"
 
 blast=$1
-outfile="${blast/.*}_long.txt"
+outfile="${blast/.*}_long.blast"
 
 #> $outfile # create the output file
 

@@ -1,0 +1,28 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+YSA.RS23805__NC017986_4351_4963161_4964172_neg -          ADH_N                PF08240.17     2e-27   93.8   4.6     2e-27   93.8   4.6   2.2   3   1   0   3   3   3   1 -
+YSA.RS16025__NC017986_2884_3312467_3313532_neg -          ADH_N                PF08240.17   5.7e-27   92.4   1.0   5.7e-27   92.4   1.0   2.2   2   1   0   2   2   2   1 -
+YSA.RS28345__NC017986_5215_5896405_5897608_pos -          ADH_N                PF08240.17   3.5e-25   86.6   0.4   9.6e-25   85.2   0.4   1.7   1   1   0   1   1   1   1 -
+YSA.RS02925__NC017986_435_490293_491346_neg    -          ADH_N                PF08240.17   6.3e-25   85.8   1.6   1.1e-24   85.0   1.6   1.4   1   0   0   1   1   1   1 -
+YSA.RS00080__NC005244_14_13945_15079_neg       -          ADH_N                PF08240.17     2e-23   80.9   4.4     2e-23   80.9   4.4   2.4   2   1   0   2   2   2   1 -
+YSA.RS14800__NC017986_2656_3061850_3063050_pos -          ADH_N                PF08240.17   7.3e-23   79.2   1.5   1.3e-22   78.3   1.5   1.4   1   0   0   1   1   1   1 -
+YSA.RS06960__NC017986_1173_1368523_1369636_neg -          ADH_N                PF08240.17   1.8e-22   77.9   1.7   1.8e-22   77.9   1.7   2.4   2   1   0   2   2   2   1 -
+YSA.RS26275__NC017986_4825_5470064_5471066_pos -          ADH_N                PF08240.17   6.7e-19   66.4   2.1   1.3e-18   65.5   0.7   2.1   2   0   0   2   2   2   1 -
+YSA.RS13380__NC017986_2391_2758594_2759572_neg -          ADH_N                PF08240.17   2.1e-18   64.8   0.2   1.7e-17   61.9   0.0   2.3   2   1   0   2   2   2   1 -
+YSA.RS04945__NC017986_817_946498_947422_neg    -          ADH_N                PF08240.17   2.1e-17   61.6   2.0   3.5e-17   60.9   1.0   1.9   2   0   0   2   2   2   1 -
+YSA.RS06405__NC017986_1072_1260247_1261210_neg -          ADH_N                PF08240.17   1.4e-16   58.9   2.4   2.4e-16   58.2   0.2   2.2   2   0   0   2   2   2   1 -
+YSA.RS26225__NC017986_4815_5460903_5461911_pos -          ADH_N                PF08240.17   4.3e-16   57.4   0.1   1.3e-15   55.8   0.1   1.8   2   0   0   2   2   1   1 -
+YSA.RS26425__NC017986_4850_5491766_5492747_pos -          ADH_N                PF08240.17   1.8e-15   55.4   0.8   1.3e-14   52.7   0.3   2.4   2   1   0   2   2   2   1 -
+YSA.RS09620__NC017986_1671_1945446_1946457_neg -          ADH_N                PF08240.17   4.1e-14   51.1   0.1   1.8e-13   49.0   0.1   2.0   2   0   0   2   2   2   1 -
+YSA.RS25470__NC017986_4670_5304261_5305284_pos -          ADH_N                PF08240.17   1.5e-13   49.2   0.2     4e-13   47.9   0.2   1.7   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000264665.3/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_000264665.3/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000264665.3/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:05 2025
+# [ok]

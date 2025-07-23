@@ -1,0 +1,17 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+EXN22.RS04905__NZCP035952_949_1088789_1089104_neg  -          ABM                  PF03992.22   1.1e-22   78.2   0.1   1.3e-22   78.0   0.1   1.1   1   0   0   1   1   1   1 -
+EXN22.RS22135__NZCP035952_4295_4842544_4842853_neg -          ABM                  PF03992.22   3.6e-16   57.3   0.0   4.4e-16   57.0   0.0   1.2   1   0   0   1   1   1   1 -
+EXN22.RS05720__NZCP035952_1105_1261455_1262025_neg -          ABM                  PF03992.22   4.3e-06   25.0   0.0   6.1e-06   24.5   0.0   1.2   1   0   0   1   1   1   1 -
+EXN22.RS02920__NZCP035952_567_625259_627479_neg    -          ABM                  PF03992.22     0.035   12.5   0.2      0.15   10.5   0.1   2.1   2   0   0   2   2   2   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_004214895.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_004214895.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_004214895.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:23:04 2025
+# [ok]

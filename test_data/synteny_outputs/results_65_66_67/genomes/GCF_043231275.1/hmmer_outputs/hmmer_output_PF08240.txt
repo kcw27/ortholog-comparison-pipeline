@@ -1,0 +1,30 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACFVPM.RS04375__NZCP171271_856_930432_931491_neg    -          ADH_N                PF08240.17   2.6e-31  106.4   0.2   4.5e-31  105.6   0.2   1.4   1   0   0   1   1   1   1 -
+ACFVPM.RS29720__NZCP171271_5831_6368420_6369449_pos -          ADH_N                PF08240.17     3e-31  106.2   1.2     3e-31  106.2   1.2   2.0   2   0   0   2   2   2   1 -
+ACFVPM.RS04085__NZCP171271_798_863202_864264_neg    -          ADH_N                PF08240.17   1.2e-29  101.0   0.3   3.3e-29   99.7   0.3   1.7   1   0   0   1   1   1   1 -
+ACFVPM.RS06780__NZCP171271_1334_1443891_1445004_pos -          ADH_N                PF08240.17   4.5e-26   89.6   1.2   1.5e-25   87.9   1.2   1.9   1   0   0   1   1   1   1 -
+ACFVPM.RS14815__NZCP171271_2912_3129093_3130155_pos -          ADH_N                PF08240.17   4.9e-26   89.5   0.3   9.2e-26   88.6   0.3   1.5   1   0   0   1   1   1   1 -
+ACFVPM.RS15470__NZCP171271_3043_3278274_3279522_pos -          ADH_N                PF08240.17   3.4e-24   83.6   0.6   8.2e-24   82.3   0.6   1.7   1   0   0   1   1   1   1 -
+ACFVPM.RS29690__NZCP171271_5825_6363193_6364393_pos -          ADH_N                PF08240.17     5e-24   83.0   2.4   9.5e-24   82.1   2.4   1.5   1   0   0   1   1   1   1 -
+ACFVPM.RS15685__NZCP171271_3085_3324947_3326048_pos -          ADH_N                PF08240.17   7.5e-21   72.8   0.3   7.5e-20   69.6   0.2   2.4   2   0   0   2   2   2   1 -
+ACFVPM.RS28715__NZCP171271_5635_6151988_6152966_pos -          ADH_N                PF08240.17   2.3e-18   64.8   0.1   5.6e-18   63.6   0.1   1.7   1   0   0   1   1   1   1 -
+ACFVPM.RS00115__NZCP171271_21_24073_25051_neg       -          ADH_N                PF08240.17   1.4e-17   62.3   0.1   4.6e-17   60.6   0.0   1.9   2   0   0   2   2   2   1 -
+ACFVPM.RS20600__NZCP171271_4057_4398158_4399145_pos -          ADH_N                PF08240.17   7.1e-17   60.0   0.2   1.8e-16   58.7   0.2   1.7   1   0   0   1   1   1   1 -
+ACFVPM.RS17120__NZCP171271_3370_3656448_3657441_neg -          ADH_N                PF08240.17   5.4e-16   57.2   1.1   3.7e-15   54.5   0.1   2.3   2   0   0   2   2   2   1 -
+ACFVPM.RS08960__NZCP171271_1766_1892030_1892993_pos -          ADH_N                PF08240.17   1.9e-15   55.4   0.4   1.9e-15   55.4   0.4   1.9   2   0   0   2   2   2   1 -
+ACFVPM.RS12045__NZCP171271_2366_2516467_2517442_neg -          ADH_N                PF08240.17   4.5e-14   51.0   0.2   1.7e-13   49.1   0.0   2.1   2   1   1   3   3   2   1 -
+ACFVPM.RS07090__NZCP171271_1396_1509737_1510751_neg -          ADH_N                PF08240.17   7.5e-13   47.1   0.0   1.5e-12   46.1   0.0   1.5   1   0   0   1   1   1   1 -
+ACFVPM.RS22545__NZCP171271_4436_4782380_4783340_pos -          ADH_N                PF08240.17   3.9e-11   41.6   0.0   1.4e-10   39.8   0.0   2.0   2   0   0   2   2   2   1 -
+ACFVPM.RS13730__NZCP171271_2696_2842308_2843328_pos -          ADH_N                PF08240.17   2.8e-09   35.6   0.0     1e-08   33.8   0.0   2.0   2   0   0   2   2   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_043231275.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_043231275.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_043231275.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:31:47 2025
+# [ok]

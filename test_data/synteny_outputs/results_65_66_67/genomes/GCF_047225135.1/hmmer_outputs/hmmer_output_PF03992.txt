@@ -1,0 +1,19 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACL0K2.RS12895__NZCP178378_2484_2807555_2807870_pos -          ABM                  PF03992.22   7.1e-21   72.2   0.6     9e-21   71.9   0.6   1.1   1   0   0   1   1   1   1 -
+ACL0K2.RS08325__NZCP178378_1606_1862749_1863052_pos -          ABM                  PF03992.22   6.4e-16   56.3   0.0     9e-16   55.9   0.0   1.2   1   0   0   1   1   1   1 -
+ACL0K2.RS00910__NZCP178378_178_193633_194197_neg    -          ABM                  PF03992.22   6.8e-08   30.6   0.1   9.3e-08   30.2   0.1   1.2   1   0   0   1   1   1   1 -
+ACL0K2.RS03985__NZCP178378_771_925554_925890_pos    -          ABM                  PF03992.22     1e-07   30.1   0.1   1.3e-07   29.7   0.1   1.2   1   0   0   1   1   1   1 -
+ACL0K2.RS11950__NZCP178378_2299_2617550_2618126_pos -          ABM                  PF03992.22   1.2e-06   26.6   0.0     2e-06   25.9   0.0   1.4   1   0   0   1   1   1   1 -
+ACL0K2.RS03440__NZCP178378_664_806479_806779_pos    -          ABM                  PF03992.22     0.023   12.9   0.1     0.066   11.4   0.0   1.7   2   0   0   2   2   2   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_047225135.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_047225135.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_047225135.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:32:23 2025
+# [ok]

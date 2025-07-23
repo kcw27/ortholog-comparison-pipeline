@@ -1,0 +1,23 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+FDF35.05210__CP040053_899_1077747_1078800_pos  -          ADH_N                PF08240.17   3.8e-27   92.4   2.8     1e-26   91.0   1.8   2.1   2   0   0   2   2   2   1 -
+FDF35.03980__CP040053_675_821495_822659_pos    -          ADH_N                PF08240.17   2.3e-26   89.9   0.8   6.4e-26   88.4   0.8   1.8   1   1   0   1   1   1   1 -
+FDF35.08495__CP040053_1488_1744958_1746122_neg -          ADH_N                PF08240.17   3.2e-26   89.4   0.8   1.2e-25   87.6   0.8   1.9   1   1   0   1   1   1   1 -
+FDF35.16220__CP040053_2862_3341505_3342534_neg -          ADH_N                PF08240.17   8.1e-26   88.1   2.3   1.4e-25   87.3   2.3   1.4   1   0   0   1   1   1   1 -
+FDF35.20680__CP040054_117_127971_129084_pos    -          ADH_N                PF08240.17   5.4e-24   82.2   5.2   5.4e-24   82.2   5.2   2.9   3   1   0   3   3   3   1 -
+FDF35.05780__CP040053_1000_1203970_1205029_neg -          ADH_N                PF08240.17   2.8e-20   70.3   0.4     7e-20   69.0   0.4   1.7   1   0   0   1   1   1   1 -
+FDF35.16975__CP040053_2997_3506363_3507341_pos -          ADH_N                PF08240.17   4.4e-14   50.4   1.8   1.2e-13   49.0   0.4   2.4   2   1   1   3   3   3   1 -
+FDF35.13575__CP040053_2402_2778634_2779645_pos -          ADH_N                PF08240.17   9.9e-14   49.3   0.1   1.7e-13   48.5   0.1   1.3   1   0   0   1   1   1   1 -
+FDF35.12520__CP040053_2215_2561319_2562495_neg -          ADH_N                PF08240.17   5.2e-13   46.9   0.0   1.2e-12   45.8   0.0   1.6   1   0   0   1   1   1   1 -
+FDF35.11945__CP040053_2105_2436627_2437008_pos -          ADH_N                PF08240.17    0.0048   14.9   0.0     0.007   14.4   0.0   1.3   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_005280395.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_005280395.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF08240.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_005280395.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:19:58 2025
+# [ok]

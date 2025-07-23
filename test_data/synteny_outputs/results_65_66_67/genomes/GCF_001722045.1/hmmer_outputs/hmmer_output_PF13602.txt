@@ -1,0 +1,29 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+A7329.RS05525__NZCP012582_1088_1180145_1181138_neg -          ADH_zinc_N_2         PF13602.12   2.2e-27   95.1   0.3   6.1e-27   93.6   0.0   1.9   2   0   0   2   2   2   1 -
+A7329.RS20630__NZCP012582_4085_4478671_4479658_pos -          ADH_zinc_N_2         PF13602.12     1e-26   92.9   0.8   1.8e-26   92.1   0.4   1.6   2   0   0   2   2   2   1 -
+A7329.RS28780__NZCP012582_5687_6265462_6266440_pos -          ADH_zinc_N_2         PF13602.12   6.5e-25   87.1   0.0   1.2e-24   86.2   0.0   1.4   1   0   0   1   1   1   1 -
+A7329.RS00115__NZCP012582_21_24566_25544_neg       -          ADH_zinc_N_2         PF13602.12   3.3e-19   68.6   0.0   5.4e-19   67.9   0.0   1.3   1   0   0   1   1   1   1 -
+A7329.RS07480__NZCP012582_1475_1579803_1580817_neg -          ADH_zinc_N_2         PF13602.12   4.2e-19   68.3   0.3   7.9e-19   67.4   0.3   1.5   1   0   0   1   1   1   1 -
+A7329.RS13465__NZCP012582_2663_2827048_2828068_pos -          ADH_zinc_N_2         PF13602.12   5.9e-17   61.3   0.0   9.3e-17   60.7   0.0   1.3   1   0   0   1   1   1   1 -
+A7329.RS12465__NZCP012582_2467_2603273_2604248_neg -          ADH_zinc_N_2         PF13602.12   2.4e-15   56.1   0.1   3.7e-15   55.5   0.1   1.3   1   0   0   1   1   1   1 -
+A7329.RS09095__NZCP012582_1799_1931860_1932823_pos -          ADH_zinc_N_2         PF13602.12   1.3e-14   53.7   0.0   2.5e-14   52.8   0.0   1.5   1   0   0   1   1   1   1 -
+A7329.RS17885__NZCP012582_3535_3875659_3876664_pos -          ADH_zinc_N_2         PF13602.12   2.1e-13   49.8   0.0   4.3e-13   48.8   0.0   1.5   1   0   0   1   1   1   1 -
+A7329.RS15105__NZCP012582_2988_3261980_3263018_neg -          ADH_zinc_N_2         PF13602.12   3.4e-12   45.9   0.0   5.4e-12   45.2   0.0   1.3   1   0   0   1   1   1   1 -
+A7329.RS06900__NZCP012582_1363_1472738_1473851_pos -          ADH_zinc_N_2         PF13602.12   6.5e-08   32.0   0.0   1.2e-07   31.2   0.0   1.4   1   0   0   1   1   1   1 -
+A7329.RS14540__NZCP012582_2880_3134370_3135432_pos -          ADH_zinc_N_2         PF13602.12   2.1e-06   27.1   0.0     4e-06   26.2   0.0   1.5   1   0   0   1   1   1   1 -
+A7329.RS04225__NZCP012582_829_906145_907204_neg    -          ADH_zinc_N_2         PF13602.12   4.9e-05   22.7   0.1   8.4e-05   22.0   0.1   1.3   1   0   0   1   1   1   1 -
+A7329.RS03965__NZCP012582_777_843482_844544_neg    -          ADH_zinc_N_2         PF13602.12   0.00022   20.6   0.0    0.0004   19.8   0.0   1.4   1   0   0   1   1   1   1 -
+A7329.RS29780__NZCP012582_5882_6481599_6482628_pos -          ADH_zinc_N_2         PF13602.12   0.00069   19.0   0.1    0.0012   18.2   0.1   1.4   1   0   0   1   1   1   1 -
+A7329.RS06060__NZCP012582_1193_1283137_1284088_neg -          ADH_zinc_N_2         PF13602.12     0.025   13.9   0.0       1.7    8.0   0.0   2.3   2   0   0   2   2   2   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_001722045.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCF_001722045.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_001722045.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:49 2025
+# [ok]

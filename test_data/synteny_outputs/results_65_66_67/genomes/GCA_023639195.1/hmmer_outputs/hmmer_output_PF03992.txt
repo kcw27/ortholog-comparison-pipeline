@@ -1,0 +1,23 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+NAG77.31525__CP097898_6165_6963098_6963392_neg -          ABM                  PF03992.22   4.1e-21   73.5   0.5   5.4e-21   73.1   0.5   1.2   1   0   0   1   1   1   1 -
+NAG77.00175__CP097898_28_40837_41152_neg       -          ABM                  PF03992.22   2.4e-20   71.0   0.5   3.1e-20   70.6   0.5   1.1   1   0   0   1   1   1   1 -
+NAG77.21170__CP097898_4143_4722106_4722391_pos -          ABM                  PF03992.22   4.3e-18   63.8   0.1     5e-18   63.5   0.1   1.1   1   0   0   1   1   1   1 -
+NAG77.09225__CP097898_1794_1986514_1986862_neg -          ABM                  PF03992.22   7.5e-16   56.6   0.0   9.7e-16   56.2   0.0   1.1   1   0   0   1   1   1   1 -
+NAG77.20710__CP097898_4051_4628458_4628824_neg -          ABM                  PF03992.22   3.7e-14   51.2   0.1   7.8e-14   50.1   0.0   1.6   2   0   0   2   2   2   1 -
+NAG77.19810__CP097898_3873_4441332_4441656_pos -          ABM                  PF03992.22   7.8e-13   46.9   0.1   1.2e-12   46.3   0.1   1.3   1   0   0   1   1   1   1 -
+NAG77.09055__CP097898_1761_1953520_1954099_pos -          ABM                  PF03992.22   4.2e-08   31.8   0.0     6e-08   31.3   0.0   1.2   1   0   0   1   1   1   1 -
+NAG77.17865__CP097898_3494_4014461_4014827_neg -          ABM                  PF03992.22   5.1e-08   31.5   0.3   7.1e-08   31.0   0.3   1.3   1   0   0   1   1   1   1 -
+NAG77.01175__CP097898_223_254829_255399_neg    -          ABM                  PF03992.22   1.2e-05   23.9   0.0   1.7e-05   23.4   0.0   1.2   1   0   0   1   1   1   1 -
+NAG77.17610__CP097898_3450_3956137_3956482_neg -          ABM                  PF03992.22     9e-05   21.1   0.1   0.00011   20.8   0.1   1.2   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_023639195.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_66_67/genomes/GCA_023639195.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF03992.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_023639195.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:11 2025
+# [ok]

@@ -1,0 +1,29 @@
+#                                                                                         --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                  accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                          ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+OI910.12495__CP109685_2428_2675673_2676660_pos -          ADH_zinc_N_2         PF13602.12   3.9e-26   91.1   0.6   7.1e-26   90.3   0.2   1.6   2   0   0   2   2   2   1 -
+OI910.20825__CP109685_4029_4477069_4478047_pos -          ADH_zinc_N_2         PF13602.12   7.1e-25   87.1   0.0   1.3e-24   86.2   0.0   1.4   1   0   0   1   1   1   1 -
+OI910.23195__CP109685_4481_4978662_4979640_neg -          ADH_zinc_N_2         PF13602.12   3.7e-19   68.6   0.0     6e-19   67.9   0.0   1.3   1   0   0   1   1   1   1 -
+OI910.31160__CP109685_6038_6700166_6701180_neg -          ADH_zinc_N_2         PF13602.12   4.6e-19   68.2   0.3   8.6e-19   67.4   0.3   1.5   1   0   0   1   1   1   1 -
+OI910.05530__CP109685_1065_1121436_1122456_pos -          ADH_zinc_N_2         PF13602.12   6.5e-17   61.3   0.0     1e-16   60.7   0.0   1.3   1   0   0   1   1   1   1 -
+OI910.03830__CP109685_736_768269_769244_neg    -          ADH_zinc_N_2         PF13602.12   2.8e-15   56.0   0.1   4.3e-15   55.4   0.1   1.3   1   0   0   1   1   1   1 -
+OI910.32715__CP109685_6342_7039480_7040443_pos -          ADH_zinc_N_2         PF13602.12   1.4e-14   53.8   0.1   2.6e-14   52.9   0.1   1.5   1   0   0   1   1   1   1 -
+OI910.09900__CP109685_1915_2112925_2113930_pos -          ADH_zinc_N_2         PF13602.12   9.3e-14   51.1   0.0   2.2e-13   49.9   0.0   1.6   2   0   0   2   2   2   1 -
+OI910.29765__CP109685_5764_6398705_6399701_pos -          ADH_zinc_N_2         PF13602.12   4.2e-12   45.7   0.0   9.5e-12   44.6   0.0   1.6   1   0   0   1   1   1   1 -
+OI910.07490__CP109685_1447_1584594_1585695_pos -          ADH_zinc_N_2         PF13602.12     8e-11   41.6   0.0   1.2e-10   41.0   0.0   1.3   1   0   0   1   1   1   1 -
+OI910.30720__CP109685_5953_6606506_6607619_pos -          ADH_zinc_N_2         PF13602.12   7.1e-08   32.0   0.0   1.3e-07   31.2   0.0   1.4   1   0   0   1   1   1   1 -
+OI910.06650__CP109685_1285_1427686_1428748_pos -          ADH_zinc_N_2         PF13602.12   5.7e-06   25.9   0.0   1.1e-05   25.0   0.0   1.5   1   0   0   1   1   1   1 -
+OI910.27660__CP109685_5352_5958880_5959939_neg -          ADH_zinc_N_2         PF13602.12   5.5e-05   22.7   0.1   9.2e-05   22.0   0.1   1.3   1   0   0   1   1   1   1 -
+OI910.22315__CP109685_4309_4784400_4785429_pos -          ADH_zinc_N_2         PF13602.12   0.00067   19.2   0.1    0.0011   18.4   0.1   1.4   1   0   0   1   1   1   1 -
+OI910.29535__CP109685_5718_6345436_6346387_neg -          ADH_zinc_N_2         PF13602.12     0.028   13.9   0.0       1.9    8.0   0.0   2.3   2   0   0   2   2   2   0 -
+OI910.32520__CP109685_6306_6998174_7000823_pos -          ADH_zinc_N_2         PF13602.12     0.058   12.9   0.6      0.32   10.5   0.2   2.4   2   0   0   2   2   2   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_030179765.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCA_030179765.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCA_030179765.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:20:30 2025
+# [ok]

@@ -1,0 +1,23 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+BJAB0715.RS15795__NC021733_3035_3295239_3296238_neg -          ADH_zinc_N_2         PF13602.12   1.5e-24   85.2   0.0     3e-24   84.2   0.0   1.5   1   0   0   1   1   1   1 -
+BJAB0715.RS02450__NC021733_449_524629_525640_neg    -          ADH_zinc_N_2         PF13602.12     3e-16   58.3   0.0     5e-16   57.6   0.0   1.4   1   0   0   1   1   1   1 -
+BJAB0715.RS19100__NC021733_3663_3970686_3971715_pos -          ADH_zinc_N_2         PF13602.12   1.3e-12   46.6   0.0   2.3e-12   45.8   0.0   1.4   1   0   0   1   1   1   1 -
+BJAB0715.RS18360__NC021733_3519_3809490_3810468_neg -          ADH_zinc_N_2         PF13602.12   3.2e-07   29.1   0.1   6.3e-07   28.2   0.1   1.5   1   0   0   1   1   1   1 -
+BJAB0715.RS09965__NC021733_1909_2087816_2088926_pos -          ADH_zinc_N_2         PF13602.12   4.7e-06   25.3   0.0   1.1e-05   24.1   0.0   1.6   1   0   0   1   1   1   1 -
+BJAB0715.RS09615__NC021733_1840_2012651_2013710_pos -          ADH_zinc_N_2         PF13602.12   1.7e-05   23.5   0.0   4.1e-05   22.3   0.0   1.6   1   0   0   1   1   1   1 -
+BJAB0715.RS07295__NC021733_1388_1528253_1529417_pos -          ADH_zinc_N_2         PF13602.12   3.5e-05   22.5   0.2   0.00024   19.8   0.2   2.2   1   1   0   1   1   1   1 -
+BJAB0715.RS10220__NC021733_1956_2141503_2142556_neg -          ADH_zinc_N_2         PF13602.12   0.00011   20.9   0.0    0.0002   20.1   0.0   1.4   1   0   0   1   1   1   1 -
+BJAB0715.RS03620__NC021733_673_773061_774237_pos    -          ADH_zinc_N_2         PF13602.12    0.0058   15.3   0.0     0.014   14.1   0.0   1.6   2   0   0   2   2   2   1 -
+BJAB0715.RS14815__NC021733_2852_3077261_3077876_pos -          ADH_zinc_N_2         PF13602.12     0.014   14.1   0.0     0.024   13.3   0.0   1.6   1   1   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000419405.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_000419405.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_000419405.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:21:14 2025
+# [ok]

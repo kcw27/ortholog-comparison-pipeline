@@ -1,0 +1,23 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+GFM36.RS16765__NZCP045645_3156_3455484_3456483_neg -          ADH_zinc_N_2         PF13602.12   1.5e-24   85.2   0.0   3.1e-24   84.2   0.0   1.5   1   0   0   1   1   1   1 -
+GFM36.RS02240__NZCP045645_407_476077_477088_neg    -          ADH_zinc_N_2         PF13602.12   3.1e-16   58.3   0.0   5.1e-16   57.6   0.0   1.4   1   0   0   1   1   1   1 -
+GFM36.RS20090__NZCP045645_3784_4135626_4136655_pos -          ADH_zinc_N_2         PF13602.12   1.3e-12   46.6   0.0   2.3e-12   45.8   0.0   1.4   1   0   0   1   1   1   1 -
+GFM36.RS19355__NZCP045645_3640_3974431_3975409_neg -          ADH_zinc_N_2         PF13602.12   3.3e-07   29.1   0.1   6.5e-07   28.2   0.1   1.5   1   0   0   1   1   1   1 -
+GFM36.RS10180__NZCP045645_1924_2114442_2115552_pos -          ADH_zinc_N_2         PF13602.12   4.8e-06   25.3   0.0   1.1e-05   24.1   0.0   1.6   1   0   0   1   1   1   1 -
+GFM36.RS09830__NZCP045645_1855_2039285_2040344_pos -          ADH_zinc_N_2         PF13602.12   1.8e-05   23.5   0.0   4.2e-05   22.3   0.0   1.6   1   0   0   1   1   1   1 -
+GFM36.RS07480__NZCP045645_1402_1551199_1552363_pos -          ADH_zinc_N_2         PF13602.12   3.6e-05   22.5   0.2   0.00025   19.8   0.2   2.2   1   1   0   1   1   1   1 -
+GFM36.RS10425__NZCP045645_1972_2167035_2168088_neg -          ADH_zinc_N_2         PF13602.12   0.00011   20.9   0.0   0.00021   20.1   0.0   1.4   1   0   0   1   1   1   1 -
+GFM36.RS03610__NZCP045645_666_762416_763592_pos    -          ADH_zinc_N_2         PF13602.12    0.0059   15.3   0.0     0.015   14.1   0.0   1.6   2   0   0   2   2   2   1 -
+GFM36.RS15715__NZCP045645_2963_3205902_3206517_pos -          ADH_zinc_N_2         PF13602.12     0.015   14.1   0.0     0.025   13.3   0.0   1.6   1   1   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_023981045.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/ortholog-comparison-pipeline/test_data/synteny_outputs/results_65_67/genomes/GCF_023981045.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/ortholog-comparison-pipeline/test_data/hmm_db/hmms/PF13602.HMM /home/kcw2/ortholog-comparison-pipeline/test_data/genomes/GCF_023981045.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Jul 22 18:26:31 2025
+# [ok]
