@@ -36,7 +36,7 @@ echo "Created temp file in ${scriptdir}"
 echo "Querying NCBI..."
 # iterate through each genus + species in the temp file, querying NCBI to get the corresponding AssemblyAccession
 
-IFS=$'\n' # temp.txt is newline-separated.
+IFS=$'\n' # the organism list, $1, is newline-separated.
 # Need to set up the loop this way, otherwise it only reads the first line
 for next in $(cat $1); do
   echo "Processing: ${next}"

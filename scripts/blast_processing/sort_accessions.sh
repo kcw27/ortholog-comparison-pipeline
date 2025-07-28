@@ -7,6 +7,7 @@
 
 # Outputs: one file containing RefSeq accessions and one file containing genbank accessions.
 # Files will be placed in $2, named after the basename from $1 with _refseq or _genbank added to their names.
+# Also note that this script filters to only the most recent version for each assembly accession.
 
 # example run:
 # bash sort_accessions.sh ~/data/PA3565_accessions_small.txt ~/data
@@ -15,7 +16,8 @@ name_root=$(basename "${1}" | cut -d "." -f 1)
 # basename to strip the filepath
 # assume the name of the file is the part that cones before the first period
 
-cat $1 | grep "GCF_" > "${2%/}/${name_root}_ref.txt" # if there's a "/" at the end of $2, strip it so there's no redundant slash; also add the suffix to the filename
-cat $1 | grep "GCA_" > "${2%/}/${name_root}_gb.txt"
+cat $1 | grep "GCF_" | awk -F. '!seen[$1]++ || $2 > ver[$1] { ver[$1] = $2; latest[$1] = $0 } END { for (id in latest) print latest[id] }' > "${2%/}/${name_root}_ref.txt" 
+# if there's a "/" at the end of $2, strip it so there's no redundant slash; also add the suffix to the filename
+cat $1 | grep "GCA_" | awk -F. '!seen[$1]++ || $2 > ver[$1] { ver[$1] = $2; latest[$1] = $0 } END { for (id in latest) print latest[id] }' > "${2%/}/${name_root}_gb.txt"
 
 echo "Wrote outputs to ${2%/}/${name_root}_refseq.txt and ${2%/}/${name_root}_genbank.txt."

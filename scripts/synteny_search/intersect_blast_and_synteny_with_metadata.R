@@ -94,7 +94,7 @@ head(synteny_df$V7)
 # Do an inner join to keep only information corresponding to protein IDs that intersect between the two datasets
 filtered_df <- intersect_inputs(blast_df, synteny_df)
 glue("Number of rows in filtered_df: {nrow(filtered_df)}")
-write.table(filtered_df, file="data/testing/out/PA3565_67_filteredIntermediateDF.tsv", sep='\t', row.names=FALSE, col.names=FALSE, quote=FALSE)
+#write.table(filtered_df, file="data/testing/out/PA3565_67_filteredIntermediateDF.tsv", sep='\t', row.names=FALSE, col.names=FALSE, quote=FALSE)
 colnames(filtered_df)
 head(filtered_df, n=1)
 

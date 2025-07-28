@@ -25,10 +25,12 @@ outdir="${4%/}" # all output files will go here; remove trailing slash if presen
 
 mkdir -p "$outdir" # must exist prior to running RAxML
 
+procs_to_use=$(( $(nproc) / 3 ))
+
 # sequential run in case parallel doesn't work
 #raxmlHPC -x 2421 -f a -m "$submodel" -n $outname -p 748 -s $seqname -w $outdir -N 100
 
-# Run RAxML with 100 bootstraps and 16 threads
+# Run RAxML with 100 bootstraps and $procs_to_use threads
 # The call below is supposed to be parallel, but is sequential?
 raxmlHPC-PTHREADS-SSE3 \
   -x 2421 \
@@ -37,6 +39,6 @@ raxmlHPC-PTHREADS-SSE3 \
   -m "$submodel" \
   -s "$seqname" \
   -n "$outname" \
-  -T 16 \
+  -T "$procs_to_use" \
   -N 100 \
   -w "$outdir"

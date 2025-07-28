@@ -67,3 +67,5 @@ done
 echo "Removing now-empty directories..."
 rm -rf "${dbdir}/genbank"
 rm -rf "${dbdir}/refseq"
+
+echo "Done!"
