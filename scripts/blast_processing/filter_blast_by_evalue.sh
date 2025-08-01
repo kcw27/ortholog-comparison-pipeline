@@ -2,7 +2,7 @@
 
 # Inputs:
 # -t (--threshold); optional with default value 1e-30
-# -f (--files): list of BLAST output files (-outfmt "6 sgi sseqid sseq evalue stitle") to filter
+# -f (--files): list of BLAST output files (evalue in column 4, e.g. -outfmt "6 sallgi sallseqid sseq evalue salltitles") to filter
 
 # Outputs: filters the input files to only include evalues (column 4) which are smaller than the provided threshold.
 # Saves them to output files named like so: "${file%.*}_evalueThreshold_${THRESHOLD}.txt"

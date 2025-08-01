@@ -10,6 +10,7 @@
 # Inner joins the data in blast_file_ and synteny_hits_file by protein ID, then filters to the top hit (i.e. lowest evalue) per genome ID.
 
 ### Example run:
+# Rscript $scriptsdir/synteny_search/intersect_blast_and_synteny_with_metadata.R $datadir/PA3565_with_orgs_long.blast $datadir/synteny_outputs/results_65_67/synteny_summary.tsv $datadir/PA3565_67_topHitsPerGenome.blast
 # Rscript intersect_blast_and_synteny_with_metadata.R "${HOME}/data/blast_outputs/PA3565_nr_orgs_long.txt" "${HOME}/data/results_65_67/synteny_summary.tsv" "${HOME}/data/blast_outputs/PA3565_67_topHitsPerGenome.tsv"
 
 # for testing:
@@ -35,27 +36,51 @@ intersect_inputs <- function(blast_df, synteny_df) {
   
   # Preprocess blast_df protein IDs to be consistent with synteny_df
   blast_df <- blast_df |>
-    mutate(V2 = sub(".*\\|(.*)\\|.*", "\\1", V2))
+    #mutate(V2 = sub(".*\\|(.*)\\|.*", "\\1", V2))
+    mutate(protein_id = sub(".*\\|(.*)\\|.*", "\\1", protein_id))
   
   # now join
-  filtered_df <- inner_join(blast_df, synteny_df, by=join_by(V2 == V7))
+  #filtered_df <- inner_join(blast_df, synteny_df, by=join_by(V2 == V7))
+  filtered_df <- inner_join(blast_df, synteny_df, by=join_by(protein_id))
 
   return(filtered_df)
 }
 
-take_top_hit_per_genome <- function(filtered_df, outname) {
+take_top_hit_per_genome <- function(filtered_df) {
   # Takes the output of intersect_inputs.
   # Filters it to just the top hit (i.e. lowest evalue, which is column V4.x) per genome
   # Writes it to outname
+#  top_df <- filtered_df |>
+#    group_by(V1.y) |> # group by genome_id (V1.y)
+#    arrange(V4.x) |> # sort by evalue (V4.x) in ascending order (default arrange() behavior)
+#    slice_head(n=1) |> # take only the first line per genome ID
+#    mutate(V2=paste(V1.y, V2, sep="-")) # diff proteins in diff genomes may have the same protein ID; concatenate genome ID and protein ID for more informative name
+    
   top_df <- filtered_df |>
-    group_by(V1.y) |> # group by genome_id (V1.y)
-    arrange(V4.x) |> # sort by evalue (V4.x) in ascending order (default arrange() behavior)
+    group_by(genome_id.y) |> # group by genome_id
+    arrange(evalue) |> # sort by evalue in ascending order (default arrange() behavior)
     slice_head(n=1) |> # take only the first line per genome ID
-    mutate(V2=paste(V1.y, V2, sep="-")) # diff proteins in diff genomes may have the same protein ID; concatenate genome ID and protein ID for more informative name
+    mutate(protein_id=paste(genome_id.y, protein_id, sep="-")) # diff proteins in diff genomes may have the same protein ID; concatenate genome ID and protein ID for more informative name
+    
+  return(top_df)
+}
 
-  # write to tsv file (no column names or row names)
-  write.table(top_df, file=outname, sep='\t', row.names=FALSE, col.names=FALSE, quote=FALSE)
-  print(glue("File written to {outname}"))
+postprocess <- function(top_df) {
+  # remove genome_id.x because it's all 0's, move genome_id.y to the front, and rename to genome_id
+  # Also overwrite sequence.x with sequence.y because they aren't necessarily the same; sequence.x is from BLAST and represents similar sequences that are clustered,
+  # while sequence.y corresponds to the specific sequence (the BLAST hit with the lowest evalue for that genome_id) that corresponds to the metadata 
+  # Additionally, overwrite organism.x with organism.y because organism.y is the specific organism that corresponds to sequence.y.
+#  top_df <- top_df |>
+#    subset(select = -genome_id.x) |>
+#    relocate(genome_id.y) |> # default behavior: move the col to the front
+#    rename(genome_id = genome_id.y) |> # new_name = old_name
+    
+  top_df <- top_df |>
+    mutate(genome_id.x = genome_id.y, sequence.x = sequence.y, organism.x = organism.y) |>
+    rename(genome_id = genome_id.x, sequence = sequence.x, organism = organism.x) |>
+    subset(select = -c(genome_id.y, sequence.y, organism.y))
+    # We mutate and rename, then drop, in order to ensure the new data is in the correct column positions to follow the BLAST file format
+    
   return(top_df)
 }
 
@@ -83,13 +108,17 @@ make_dir(dirname(outname))
 # read blast and synteny hit files as dfs
 print("Reading blast and synteny hit files as dataframes:")
 blast_df <- read.csv(blast_file, header=FALSE, sep="\t")
+colnames(blast_df) <- c("genome_id", "protein_id", "sequence", "evalue", "protein_title", "organism")
 synteny_df <- read.csv(synteny_hits_file, header=FALSE, sep="\t")
+colnames(synteny_df) <- c("genome_id", "contig", "organism", "isolation_source", "titles", "locus", "protein_id", "sequence", "sequencing_technology")[1:ncol(synteny_df)]
 
 glue("Number of rows in blast_df: {nrow(blast_df)}")
 glue("Number of rows in synteny_df: {nrow(synteny_df)}")
 
-head(blast_df$V2)
-head(synteny_df$V7)
+#head(blast_df$V2)
+#head(synteny_df$V7)
+head(blast_df$protein_id)
+head(synteny_df$protein_id)
 
 # Do an inner join to keep only information corresponding to protein IDs that intersect between the two datasets
 filtered_df <- intersect_inputs(blast_df, synteny_df)
@@ -99,5 +128,12 @@ colnames(filtered_df)
 head(filtered_df, n=1)
 
 # Take the top hit per genome in this intersected df; write to file
-top_df <- take_top_hit_per_genome(filtered_df, outname)
+top_df <- take_top_hit_per_genome(filtered_df)
 glue("Number of rows in top_df: {nrow(top_df)}")
+
+print("Postprocessing...")
+top_df <- postprocess(top_df)
+
+# write to tsv file (no row names; I've just modified it to include column names)
+write.table(top_df, file=outname, sep='\t', row.names=FALSE, col.names=TRUE, quote=FALSE)
+print(glue("File written to {outname}"))

@@ -5,6 +5,7 @@
 # I think that just entails changing the column names around in main
 
 # Example run: only run one at a time, otherwise it might have an issue with too many requests being made to NCBI
+# python $blastscripts/blast2gen.py $datadir/PA3565_with_orgs_long.blast $datadir/PA3565_with_orgs_long_annotatedByBlast2gen.blast
 # python blast2gen.py /home/kcw2/data/blast_outputs/fha1_nr_orgs_long_paOnly.txt /home/kcw2/data/blast_outputs/fha1_genome_info_paOnly.tsv &
 
 # python blast2gen.py /home/kcw2/data/blast_outputs/fha1_nr_orgs_long.txt /home/kcw2/data/blast_outputs/fha1_genome_info.tsv &
@@ -202,12 +203,12 @@ def main(input_blast, output_tsv):
     # adding metadata I'm interested in
     blast_df['isolation_source'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['isolation_source'])
     blast_df['sequencing_technology'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['sequencing_technology'])
-    blast_df['title'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['title'])
+    blast_df['titles'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['title'])
 
     # Columns: same set of columns as the original, with new info written at the end
     final_df = blast_df[['genome_id', 'subject', 'sequence', 'evalue', 'title_old', 'organism_old',
                          'nucleotide_accession', 'bioproject_accession', 'assembly_accession', 'organism',
-                         'isolation_source', 'sequencing_technology', 'title']]
+                         'isolation_source', 'sequencing_technology', 'titles']]
     # I'll take a look at the output first, and change the output df to write only the columns I need
 
     final_df.to_csv(output_tsv, sep='\t', index=False)

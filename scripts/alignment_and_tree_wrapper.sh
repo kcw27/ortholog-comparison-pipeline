@@ -10,6 +10,7 @@
 # _bipartition tree (in trees/ subdirectory)
 
 # Example run:
+# bash $scriptsdir/alignment_and_tree_wrapper.sh $datadir/PA3565_top_byGenomeID.fasta "protein" $datadir/PA3565_align_and_tree
 # bash alignment_and_tree_wrapper.sh "${HOME}/data/PA3565_orthologs_65_66_67_top_evalueThreshold_1e-50.fasta" "protein" "${HOME}/data/PA3565_align_and_tree/PA3565_66_67" &
 
 start_time="$(date -u +%s)"
@@ -47,7 +48,8 @@ mkdir -p $aligndir
 mkdir -p $treedir
 
 ### Run scripts
-scriptsdir="$HOME" # this is where I put the scripts
+wrapperdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) # get location of current script
+scriptsdir="${wrapperdir}/blast_processing" # this is where I put the scripts
 log="${outdir}/alignment_and_tree_wrapper_log.txt"
 echo "CLIs for alignment_and_tree_wrapper.sh: ${multifasta}, ${seqtype}, ${outdir}" > $log
 

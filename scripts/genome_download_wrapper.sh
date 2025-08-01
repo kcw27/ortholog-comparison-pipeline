@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Wrapper script to take a BLAST hits file with -outfmt "6 sgi sseqid sseq evalue stitle"
+# Wrapper script to take a long format BLAST hits file (i.e. only one organism per row)
+# (converted using expand_blast_output.sh from a condensed-format BLAST hits with -outfmt "6 sallgi sallseqid sseq evalue salltitles"),
 # and download relevant genome databases (.gbff files) that will be used for synteny search.
 
 ### CLIs:

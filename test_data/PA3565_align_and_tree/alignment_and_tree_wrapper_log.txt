@@ -1,0 +1,4 @@
+CLIs for alignment_and_tree_wrapper.sh: /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_top_byGenomeID.fasta, protein, /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_align_and_tree
+Run run_clustalw.sh with CLIs /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_top_byGenomeID.fasta PROTEIN FASTA /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_align_and_tree/alignment/aligned.fasta; Job ID 1824544, time 1753897064
+Run fasta_to_phylip.sh with CLIs /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_align_and_tree/alignment/aligned.fasta protein /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_align_and_tree/alignment; Job ID 1824634, time 1753897069
+Run run_raxml.sh with CLIs PA3565_top_byGenomeID /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_align_and_tree/alignment/aligned.phy PROTGAMMABLOSUM62 /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_align_and_tree/trees; Job ID 1824689, time 1753897070
