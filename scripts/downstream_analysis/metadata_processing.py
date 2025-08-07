@@ -345,9 +345,9 @@ def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 	subcat_kw = list(subcat_dict.keys())
 	subcat_pattern = re.compile(r'\b(' + '|'.join(map(re.escape, subcat_kw)) + r')') # all strings are converted to lowercase for consistency anyway, so no need to ignore case
 
-	# initialize category columns with empty strings; will be overwritten if regex finds a match
-	category = [""] * len(df.index)
-	subcategory = [""] * len(df.index)
+#	# initialize category columns with empty strings; will be overwritten if regex finds a match
+#	category = [""] * len(df.index)
+#	subcategory = [""] * len(df.index)
 
 	# the empty strings might have been causing issues, so use non-empty instead
 	category = ["no category"] * len(df.index)

@@ -124,6 +124,8 @@ def fetch_info(accessions):
             structured_comment = anno.get('structured_comment', {}) # default to empty dict to ensure that get() works on structured_comment
             genome_assembly = structured_comment.get('Genome-Assembly-Data', {}) # default to empty dict to ensure that get() works on genome_assembly
             sequencing_technology = genome_assembly.get('Sequencing Technology', 'NA')
+            assembly_method = genome_assembly.get('Assembly Method', 'NA')
+            genome_coverage = genome_assembly.get('Genome Coverage', 'NA')
             
             # Title:
             title = anno.get('references', 'NA')
@@ -173,10 +175,12 @@ def fetch_info(accessions):
             'organism': organism,
             'isolation_source': isolation_source,
             'sequencing_technology': sequencing_technology,
-            'title': title
+            'title': title,
+            'assembly_method': assembly_method,
+            'genome_coverage': genome_coverage
         }
 
-        print(f"Processed {acc}: Nuc={nucleotide_acc}, BioProj={bioproject_acc}, Asm={assembly_acc}, Org={organism}, Source={isolation_source}, Seqtech={sequencing_technology}, Title={title}")
+        print(f"Processed {acc}: Nuc={nucleotide_acc}, BioProj={bioproject_acc}, Asm={assembly_acc}, Org={organism}, Source={isolation_source}, Seqtech={sequencing_technology}, Title={title}, Assembly method={assembly_method}, Coverage={genome_coverage}")
         time.sleep(1)  # Respect rate limit # started with 0.4; increase it so NCBI doesn't complain about too many requests
         
     end_time = time.time()
@@ -204,11 +208,14 @@ def main(input_blast, output_tsv):
     blast_df['isolation_source'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['isolation_source'])
     blast_df['sequencing_technology'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['sequencing_technology'])
     blast_df['titles'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['title'])
+    blast_df['assembly_method'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['assembly_method'])
+    blast_df['genome_coverage'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['genome_coverage'])
 
     # Columns: same set of columns as the original, with new info written at the end
     final_df = blast_df[['genome_id', 'subject', 'sequence', 'evalue', 'title_old', 'organism_old',
                          'nucleotide_accession', 'bioproject_accession', 'assembly_accession', 'organism',
-                         'isolation_source', 'sequencing_technology', 'titles']]
+                         'isolation_source', 'sequencing_technology', 'titles', 'assembly_method',
+                         'genome_coverage']]
     # I'll take a look at the output first, and change the output df to write only the columns I need
 
     final_df.to_csv(output_tsv, sep='\t', index=False)
