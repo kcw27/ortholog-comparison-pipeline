@@ -50,12 +50,15 @@ awk -F'\t' '{
         title = titles[i]
         if (match(title, /\[[^][]+\]/)) {
             val = substr(title, RSTART + 1, RLENGTH - 2)
-            output = (output == "") ? val : output ";" val
+        } else {
+            val = "NA"
         }
+        output = (output == "") ? val : output ";" val
     }
 
     print $0 "\t" output
 }' "$blast" > "$outfile"
+# if a title doesn't contain square brackets, return NA as the organism name for that title
 
 
 

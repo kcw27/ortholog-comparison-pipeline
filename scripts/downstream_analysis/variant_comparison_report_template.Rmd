@@ -113,26 +113,33 @@ unaligned_df <- process_multifasta_and_metadata(multifasta_file, metadata_file, 
 ## Multiple sequence alignment
 Define a function to read in an alignment (either PHYLIP or FASTA), a name map (to associate long sequence names from the original FASTA alignment with the short sequence names from the PHYLIP format alignment that the FASTA was converted to in order to make a tree in RAxML), and a metadata file (which features long sequence names) and join the information into a single dataframe.
 ```{r}
-process_alignment_and_metadata <- function(alignment_file, alignment_type, name_map_file, metadata_file, sequence_name_col) {
+process_alignment_and_metadata <- function(alignment_file, alignment_type, metadata_file, sequence_name_col, name_map_file=NULL) {
   # Takes as input the filename of a multiple sequence alignment
   # and the alignment_type ("fasta" or "phylip")
   # as well as the name of the name map and metadata files
   # sequence_name_col is whichever column in the metadata serves as the long sequence names (e.g. protein_id, nucleotide_id)
-  
+  #print("debug 1")
   alignment <- read.alignment(alignment_file, format=alignment_type)
-  
+  #print("debug 1.1")
   seqs <- alignment[["seq"]] |>
     unlist() |> # convert from list to vector
     toupper() # originally in lowercase; convert to uppercase
-  
+  #print("debug 1.2")
   alignment_names = (alignment["nam"][[1]]) # need the [[1]] in order to get the actual list
   # join the name_map df
-  name_map <- read.csv(name_map_file, header=FALSE, sep="\t", col.names=c("short_names", "long_names")) 
+  #print("debug 1.3")
+  if (!is.null(name_map_file)) {
+    #print("debug 1.4")
+    name_map <- read.csv(name_map_file, header=FALSE, sep="\t", col.names=c("short_names", "long_names")) 
   # as created by fasta_to_phylip.sh: two tab-separated columns, no header, short names first
+  }
   
+  #print("debug 2")
   if (alignment_type == "fasta") {
     df <- data.frame(long_names = alignment_names, sequence = seqs)
-    df <- left_join(df, name_map, by="long_names")
+    if (!is.null(name_map_file)) {
+      df <- left_join(df, name_map, by="long_names")
+    }
     # added a column from name_map: "short_names"
   } else if (alignment_type == "phylip") {
     # if it's a phylip, need to trim whitespace in the alignment names.
@@ -140,22 +147,28 @@ process_alignment_and_metadata <- function(alignment_file, alignment_type, name_
     alignment_names <- trimws(alignment_names)
     
     df <- data.frame(short_names = alignment_names, sequence = seqs)
-    df <- left_join(df, name_map, by="short_names")
+    if (!is.null(name_map_file)) {
+      df <- left_join(df, name_map, by="short_names")
+    } else { # if there's no name map for a PHYLIP, then treat the "short names" from the PHYLIP as long names  
+      df <- df |>
+        rename(long_names = short_names)
+    }
     # added a column from name_map: "long_names"
   } else {
     print("alignment_type must be either fasta or phylip (lowercase)")
   }
-
+  #print("debug 3")
   metadata <- read.csv(metadata_file, header=TRUE, sep="\t") # metadata is written in a standardized format by metadata_processing.py
+  #print("debug 4")
+  df <- left_join(df, metadata, by=c("long_names"=sequence_name_col)) |>
+    rename(locus_tags = long_names)
   
-  df <- left_join(df, metadata, by=c("long_names"=sequence_name_col))
-  
-  # enforce a column order
-  df <- df |> 
-    select(long_names, short_names, sequence, organism, isolation_source, titles, rescued_source, category, subcategory) |> # leave out the id columns from the metadata; one of them was probably used to join the metadata, and we don't need them anymore because the analysis focuses on isolation source categories
-    rename_at('long_names', ~'locus_tags')
-  # alternative to select: relocate(long_names, short_names) to bring them to the front, then drop all three of the ID columns
-  # though there might be an error if one of them doesn't exist due to being the column by which the dfs were joined, i.e. sequence_name_col
+  # # enforce a column order
+  # df <- df |> 
+  #   select(long_names, short_names, sequence, organism, isolation_source, titles, rescued_source, category, subcategory) |> # leave out the id columns from the metadata; one of them was probably used to join the metadata, and we don't need them anymore because the analysis focuses on isolation source categories
+  #   rename_at('long_names', ~'locus_tags')
+  # # alternative to select: relocate(long_names, short_names) to bring them to the front, then drop all three of the ID columns
+  # # though there might be an error if one of them doesn't exist due to being the column by which the dfs were joined, i.e. sequence_name_col
   return(df)
 }
 ```
