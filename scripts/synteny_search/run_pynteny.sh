@@ -21,7 +21,7 @@
 # to the corresponding outdir from column 2 of input file, in a "genomes" subdir of the outdir.
 
 ### Example runs:
-# bash run_pynteny.sh -g "${HOME}/data/genome_db/" -d "${HOME}/data/synteny_input.tsv" -d "${HOME}/data/hmms/hmm_PGAP" -m "${HOME}/data/hmms/hmm_PGAP.tsv" &
+# bash run_pynteny.sh -g "${HOME}/data/genome_db/" -i "${HOME}/data/synteny_input.tsv" -d "${HOME}/data/hmms/hmm_PGAP" -m "${HOME}/data/hmms/hmm_PGAP.tsv" &
 # bash run_pynteny.sh -g "${HOME}/data/genbank_toy/bacteria/" -i "${HOME}/data/synteny_input_fha1.tsv" -d "${HOME}/data/hmms_fha1_search/hmms_fha1" -m "${HOME}/data/hmms_fha1_search/hmms_fha1.tsv"
 
 ### Old example runs:
@@ -61,18 +61,26 @@ genome_db=""
 input_file=""
 hmms_dir=""
 hmms_metadata=""
+skip_build="n"
 
 # Parse command-line flags
-while getopts "g:i:h:d:m:" opt; do
+while getopts "g:i:d:m:s" opt; do # no colon after s, so -s is treated as a boolean flag
   case $opt in
     g) genome_db="${OPTARG%/}/" ;;  # ensures the path to this dir ends with exactly one slash
     i) export input_file="$OPTARG" ;;
     d) export hmms_dir="$OPTARG" ;; # directory of HMMs for Pynteny to use in its synteny search
     m) export hmms_metadata="$OPTARG" ;; # metadata associated with aforementioned HMM directory
+    s) export skip_build="y" ;; # if the -s flag is provided, skip the building step (phase 1)
     \?) echo "Usage: $0 -g genome_db -i input_file -d hmms_dir -m hmms_metadata" >&2
         exit 1 ;;
   esac
 done
+
+# Validate required arguments
+if [[ -z "$genome_db" || -z "$input_file" || -z "$hmms_dir" || -z "$hmms_metadata" ]]; then
+  echo "Usage: $0 -g genome_db -i input_file -d hmms_dir -m hmms_metadata [-s]" >&2
+  exit 1
+fi
 
 # Input and output directories
 #genome_db="${1%/}/" # ensures the path to this dir ends with exactly one slash
@@ -120,11 +128,13 @@ build_database() {
 
 export -f build_database
 
-# -mindepth of 1 so it runs on $genome_db's subdirs but not itself
-echo "=== PHASE 1: Building peptide databases ==="
-find "$genome_db" -mindepth 1 -maxdepth 1 -type d -print0 | \
-    parallel -0 -j $(nproc) --eta --progress --joblog build_db.log \
-    'build_database {}'
+if [ "$skip_build" == "n" ]; then
+    # -mindepth of 1 so it runs on $genome_db's subdirs but not itself
+    echo "=== PHASE 1: Building peptide databases ==="
+    find "$genome_db" -mindepth 1 -maxdepth 1 -type d -print0 | \
+        parallel -0 -j $(nproc) --eta --progress --joblog build_db.log \
+        'build_database {}'
+fi
 
 
 ### Phase 2: Run analyses in parallel (only in subdirectories that don't yet have peptide databases)

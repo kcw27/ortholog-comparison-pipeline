@@ -37,7 +37,15 @@ intersect_inputs <- function(blast_df, synteny_df) {
   # Preprocess blast_df protein IDs to be consistent with synteny_df
   blast_df <- blast_df |>
     #mutate(V2 = sub(".*\\|(.*)\\|.*", "\\1", V2))
-    mutate(protein_id = sub(".*\\|(.*)\\|.*", "\\1", protein_id))
+    mutate(protein_id = sub(".*\\|(.*)\\|.*", "\\1", protein_id)) # I think this still works even if there are no | symbols
+    
+#  # would it help if I got rid of the version numbers on the protein IDs in both the blast and synteny hits files?
+#  # e.g. CAI2795589.1 becomes CAI2795589
+#  blast_df <- blast_df |>
+#    mutate(protein_id = sub("\\..*", "", protein_id))
+#    
+#  synteny_df <- synteny_df |>
+#    mutate(protein_id = sub("\\..*", "", protein_id))
   
   # now join
   #filtered_df <- inner_join(blast_df, synteny_df, by=join_by(V2 == V7))
