@@ -12,7 +12,7 @@
 # -- GCF_001647025.1
 # --- GCF_001647025.1_EnAtr_2.0_genomic.gbff.gz 
 
-## $2: name of output file (tsv) with the following columns: assembly_accession, organism, isolation_source, title
+## $2: name of output file (tsv) with the following columns: genome_id, organism, isolation_source, titles
 # title is included so that isolation source can be rescued using rescue_source() from metadata_processing.py
 
 ### Example run:
@@ -20,7 +20,7 @@
 
 genome_db=$1
 fname=$2
-> "$fname"  # Create a blank summary file
+echo "genome_id	organism	isolation_source	titles" > "$fname"  # Create a summary file with colnames
 export fname
 
 # Function to extract metadata
