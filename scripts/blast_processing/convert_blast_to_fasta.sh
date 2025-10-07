@@ -4,6 +4,7 @@
 # Mandatory: BLAST output file (-outfmt "6 sgi sseqid sseq evalue stitle")
 # Optional: header (true if there's a header in the BLAST file, which the program will skip; false otherwise)
 # Optional: extract (true if the sequence ID needs to be extracted from within | symbols, false otherwise)
+# Optional: concat_genome (true if you want to concatenate "genomeID-sequenceID"; false otherwise_
 
 # Output: FASTA file (with headers >ID|title|evalue)
 
@@ -23,6 +24,7 @@
 # set default values for optional arguments
 header=false
 extract=false
+concat_genome=false
 
 # Parse flags
 while [[ $# -gt 0 ]]; do
@@ -37,6 +39,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     -e|--extract)
       extract=true
+      shift
+      ;;
+    -g|--concat_genome)
+      concat_genome=true
       shift
       ;;
     -h|--help)
@@ -69,6 +75,18 @@ else
   tail_input=$(cat "$blast")
 fi
 
+if [[ "$concat_genome" = true ]]; then
+  echo "Concatenating genome to subject ID"
+  write_fasta() {
+    printf ">%s-%s %s|%s\n%s\n" "$1" "$2" "$3" "$4" "$5" >> "$output"
+  }
+else
+  echo "Not concatenating genome to subject ID"
+  write_fasta() {
+    printf ">%s %s|%s\n%s\n" "$2" "$3" "$4" "$5" >> "$output"
+  }
+fi
+
 while read -r next; do
   # Extract columns 2, 5, 4, 3 in one go
   #read id title evalue sequence < <(awk -F '\t' '{print $2, $5, $4, $3}' <<< "$next")
@@ -76,18 +94,28 @@ while read -r next; do
   IFS=$'\t' read -r col1 col2 col3 col4 col5 col_rest <<< "$next"
   # there may be more than 5 columns, so if there are, they get dumped into col_rest. (If there aren't, col_rest will just be empty.)
   
+  genome="$col1"
   id="$col2"
   title="$col5"
   evalue="$col4"
   sequence="$col3"
 
   if [[ "$extract" = true ]]; then
-    id=$(cut -d "|" -f 2 <<< "$id")
+    id="${id#*|}"
+    id="${id%%|*}"
   fi
 
 #  echo "&&&"
 #  printf ">%s %s|%s\n%s\n" "$id" "$title" "$evalue" "$sequence"
-  printf ">%s %s|%s\n%s\n" "$id" "$title" "$evalue" "$sequence" >> "$output"
+
+#  if [[ "$concat_genome" = true ]]; then
+#    printf ">%s-%s %s|%s\n%s\n" "$genome" "$id" "$title" "$evalue" "$sequence" >> "$output"
+#  else
+#    printf ">%s %s|%s\n%s\n" "$id" "$title" "$evalue" "$sequence" >> "$output"
+#  fi
+  
+write_fasta "$genome" "$id" "$title" "$evalue" "$sequence"
+
   
 #  echo "***"
 #  echo $id $title $evalue
