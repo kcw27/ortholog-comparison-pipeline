@@ -4,7 +4,8 @@
 # Mandatory: BLAST output file (-outfmt "6 sgi sseqid sseq evalue stitle")
 # Optional: header (true if there's a header in the BLAST file, which the program will skip; false otherwise)
 # Optional: extract (true if the sequence ID needs to be extracted from within | symbols, false otherwise)
-# Optional: concat_genome (true if you want to concatenate "genomeID-sequenceID"; false otherwise_
+# Optional: concat_genome (true if you want to concatenate "genomeID-sequenceID"; false otherwise)
+# Optional: output filename (by default, "${blast%.*}.fasta")
 
 # Output: FASTA file (with headers >ID|title|evalue)
 
@@ -25,6 +26,7 @@
 header=false
 extract=false
 concat_genome=false
+output="${blast%.*}.fasta"
 
 # Parse flags
 while [[ $# -gt 0 ]]; do
@@ -45,6 +47,10 @@ while [[ $# -gt 0 ]]; do
       concat_genome=true
       shift
       ;;
+    -o|--output)
+      output="$2"
+      shift 2
+      ;;
     -h|--help)
       echo "I will add a help string later"
       exit 1
@@ -61,7 +67,7 @@ if [[ -z "$blast" ]]; then
   exit 1
 fi
 
-output="${blast%.*}.fasta"
+
 > "$output"
 
 echo "Writing results to ${output}..."
