@@ -75,7 +75,7 @@ cd ~
 makeblastdb -in "$tempSyntenyFasta" -input_type fasta -dbtype prot -title temp_db -out /home/kcw2/temp_db/temp_db &
 pid3=$!
 wait $pid3
-# yes | rm -f $tempSyntenyFasta
+yes | rm -f $tempSyntenyFasta
 
 ### Run local blast
 conda deactivate # currently, local blast is in the base conda environment away from blast_env
@@ -85,32 +85,17 @@ conda deactivate # currently, local blast is in the base conda environment away 
 
 # NOTE: for now, I'm not using $outname. I'll incorporate it once I decide on a value of -max_target_seqs.
 # I'll also calculate the number of processors to use for -num_threads instead of hard-coding it.
-max=1
-blastp -query "$tempBlastFasta" -db /home/kcw2/temp_db/temp_db -max_target_seqs "$max" -num_threads 9 -outfmt "6 qseqid qseq sallseqid sseq pident evalue bitscore" -out "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_intersectBlastSynteny_maxTargetSeqs${max}.blast" &
-pid4=$!
 
 max=10
-blastp -query "$tempBlastFasta" -db /home/kcw2/temp_db/temp_db -max_target_seqs "$max" -num_threads 9 -outfmt "6 qseqid qseq sallseqid sseq pident evalue bitscore" -out "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_intersectBlastSynteny_maxTargetSeqs${max}.blast" &
-pid5=$!
+blastp -query "$tempBlastFasta" -db /home/kcw2/temp_db/temp_db -max_target_seqs "$max" -num_threads 9 -outfmt "6 qseqid qseq sallseqid sseq pident evalue bitscore" -out "$outname" &
+pid4=$!
 
-max=100
-blastp -query "$tempBlastFasta" -db /home/kcw2/temp_db/temp_db -max_target_seqs "$max" -num_threads 9 -outfmt "6 qseqid qseq sallseqid sseq pident evalue bitscore" -out "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_intersectBlastSynteny_maxTargetSeqs${max}.blast" &
-pid6=$!
-
-max=1000
-blastp -query "$tempBlastFasta" -db /home/kcw2/temp_db/temp_db -max_target_seqs "$max" -num_threads 9 -outfmt "6 qseqid qseq sallseqid sseq pident evalue bitscore" -out "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_intersectBlastSynteny_maxTargetSeqs${max}.blast" &
-pid7=$!
-
-max=10000
-blastp -query "$tempBlastFasta" -db /home/kcw2/temp_db/temp_db -max_target_seqs "$max" -num_threads 9 -outfmt "6 qseqid qseq sallseqid sseq pident evalue bitscore" -out "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_intersectBlastSynteny_maxTargetSeqs${max}.blast" &
-pid8=$!
-
-wait $pid4 $pid5 $pid6 $pid7 $pid8
-# yes | rm -f $tempBlastFasta
+wait $pid4
+yes | rm -f $tempBlastFasta
 #cd .. # out of temp_db directory
 
 ### Delete the blast db that was created
 #cleanup-blastdb-volumes.py -db temp_db -dbtype prot
 rm /home/kcw2/temp_db/temp_db.*
 
-### TODO: filter the single output file to >=99 pident 
+### TODO: filter the single output file to >=99 pident or an otherwise appropriate threshold.
