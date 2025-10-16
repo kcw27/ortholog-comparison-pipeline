@@ -2,6 +2,7 @@
 ## args[1], multifasta_file: path to a multifasta (sequences not aligned).
 # Assume the sequence names are in the form "genomeID-proteinID".
 ## args[2], metadata_file: path to a metadata file
+## args[3], outdir: path to output directory
 
 ### Example runs:
 # Rscript /home/kcw2/ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/process_unaligned.R "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_ONLY_fha1_topPerGenome_completeSequences_concatGenomeProteinIDs.fasta" "/home/kcw2/data/blast_outputs/pa_fha1_top_complete_metadata.blast"
@@ -109,15 +110,19 @@ get_script_dir <- function() {
 args <- commandArgs(trailingOnly = TRUE) # only get the CLIs that come after the name of the script
 
 if (length(args) < 2) {
-  stop("Please provide two arguments: <multifasta_file> <metadata_file>")
+  stop("Please provide at least two arguments: <multifasta_file> <metadata_file>. <outdir> is an optional third argument.")
 }
 
 script_dir <- get_script_dir()
-cat("Script is located in:", script_dir, "\n")
+#cat("Script is located in:", script_dir, "\n")
 #setwd(script_dir)
 
 multifasta_file <- args[1]
 metadata_file <- args[2]
+outdir <- if (length(args) >= 3) args[3] else script_dir
+print(glue("Outdir: {outdir}"))
+# Ensure the directory exists
+dir.create(dirname(outdir), recursive = TRUE, showWarnings = FALSE)
 
 # guess the metadata type
 # Construct absolute path to metadata_processing.py
@@ -169,5 +174,11 @@ stats_dir <- glue("{script_dir}/hypothesis_testing")
 script_files <- list.files(stats_dir, pattern = "\\.R$", full.names = TRUE)
 for (f in script_files) source(f)
 
-test_type <- test_normality(df, "sequence_length", glue("{script_dir}/figures"))
+test_type <- test_normality(df, "sequence_length", glue("{outdir}/figures"))
 print(glue("Use this test type on the 'sequence_length' numerical variable: {test_type}"))
+
+df |>
+  pull(sequence_id) |>
+  write.table(glue("{outdir}/categorized_ids.txt"),
+    row.names = FALSE, col.names = FALSE, quote = FALSE)
+print(glue("IDs of categorized sequences saved to {outdir}/categorized_ids.txt"))    

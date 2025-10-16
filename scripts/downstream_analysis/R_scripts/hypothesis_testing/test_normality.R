@@ -3,6 +3,10 @@ library(glue)
 
 test_normality <- function(df, colname, fig_dir) {
   outfile = glue("{fig_dir}/qqplot_{colname}.pdf")
+  
+  # Ensure the directory exists
+  dir.create(dirname(outfile), recursive = TRUE, showWarnings = FALSE)
+
   pdf(outfile, width = 8, height = 6)
   qqnorm(df[[colname]], main = paste("QQ Plot of", colname))
   qqline(df[[colname]])
@@ -16,7 +20,7 @@ test_normality <- function(df, colname, fig_dir) {
     normality_test <- shapiro.test(df[[colname]])$p.val
   }
   
-  normality_test
+  print(normality_test)
   
   if (normality_test < 0.05) {
     print(glue("{colname} is probably not normal; p={signif(normality_test, 3)}"))
