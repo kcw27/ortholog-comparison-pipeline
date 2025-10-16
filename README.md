@@ -17,13 +17,14 @@ A variety of utilities are provided: you may filter your ortholog dataset in var
 
 ## Pipeline diagram
 <img width="750" height="863" alt="image" src="https://github.com/user-attachments/assets/3a4290eb-8557-43bd-bae3-5224f98338cc" />
+
 Refer to [this page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/scripts_info.md) for additional information.
 
 ## GUI
 (add screenshot)
 
 ## Dependencies
-I am working on getting everything into a single conda environment and setting up a YAML file to facilitate installation. For now, you can simply clone the repository. Note the following main dependencies:
+I am working on getting everything into a single conda environment and setting up a YAML file to facilitate installation. For now, you may simply clone the repository. Note the following main dependencies:
 * Command line:
   * [BLAST](https://anaconda.org/bioconda/blast); pipeline assumes the conda environment is called "blast_env"
   * [Pynteny](https://github.com/Robaina/Pynteny); pipeline assumes the conda environment is called "pynteny_env"
@@ -35,6 +36,7 @@ I am working on getting everything into a single conda environment and setting u
   * [ggseqlogo](https://github.com/omarwagih/ggseqlogo)
   * [rstatix](https://www.rdocumentation.org/packages/rstatix/versions/0.7.2)
 * Python
+* [iTOL](https://itol.embl.de/) (website): you can drag + drop the phylogenetic tree and annotation files to produce a phylogeny annotated by metadata.
 
 ## Example run
 Refer to [this page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/example_run.md).
