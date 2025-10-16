@@ -1,5 +1,16 @@
 #!/bin/bash
 
+##### TODO:
+### 0: Important!!!: update tempBlastFasta and tempSyntenyFasta to use mktemp; I don't want to overwrite these temp files
+# 1: reverse the direction of the blast: the blast DB should be built from $blast, and the query should be syntenyFasta
+# 2: --num-threads should be calculated based on num cores
+# 3: make a text file of list of IDs from the output of the pairwise BLAST for which pident ($5) >= 80
+### e.g., awk '$5 >= 80' /home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_intersectBlastSynteny_syntenyQuery_blastOutputSubject.blast | cut -f 1 | sort | uniq > /home/kcw2/data/blast_outputs/ids_from_pairwiseBlast_pidentThreshold80.txt 
+# 4: filter the syntenyFasta using seqtk subseq and that text file (#3 in TODO list)
+### So, don't delete syntenyFasta until the very end.
+# That filtered FASTA is the final output of this script. You can still left join the synteny metadata to the seq IDs in that filtered FASTA; it's a subset.
+
+
 # To find sequences that appear in both the blast dataset and synteny hit dataset without relying on consistent protein IDs,
 # perform a pairwise BLAST of the former against the latter, and filter the output to hits with >=99 pident.
 # We have to use the blast dataset as the query and the synteny hit dataset as the subject, because the blast dataset features

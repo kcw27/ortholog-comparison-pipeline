@@ -1,9 +1,7 @@
 library(ggplot2)
 library(glue)
-library(here) # finds the project root
-fig_dir <- here("scripts/downstream_analysis/R_scripts/figures")
 
-test_normality <- function(df, colname) {
+test_normality <- function(df, colname, fig_dir) {
   outfile = glue("{fig_dir}/qqplot_{colname}.pdf")
   pdf(outfile, width = 8, height = 6)
   qqnorm(df[[colname]], main = paste("QQ Plot of", colname))
@@ -17,6 +15,8 @@ test_normality <- function(df, colname) {
   } else {
     normality_test <- shapiro.test(df[[colname]])$p.val
   }
+  
+  normality_test
   
   if (normality_test < 0.05) {
     print(glue("{colname} is probably not normal; p={signif(normality_test, 3)}"))

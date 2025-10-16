@@ -97,8 +97,27 @@ write_metadata() {
   # synteny_matched.tsv does not exist for genomes that didn't contain one or more of the HMMs in the pynteny search query from run_pynteny.sh.
   if [[ -e "${output_genome}/synteny_matched.tsv" ]]; then
     # From synteny_matched.tsv, get the lists of contig_ids and locus_tags corresponding to any HMMs listed in $hmms
-    contig_ids=$(grep -E "$(cat $hmms | grep -v "^$" | paste -sd '|')" "${output_genome}/synteny_matched.tsv" | cut -f 1)
-    locus_tags=$(grep -E "$(cat $hmms | grep -v "^$" | paste -sd '|')" "${output_genome}/synteny_matched.tsv" | cut -f 2)
+    #contig_ids=$(grep -E "$(cat $hmms | grep -v "^$" | paste -sd '|')" "${output_genome}/synteny_matched.tsv" | cut -f 1)
+    #locus_tags=$(grep -E "$(cat $hmms | grep -v "^$" | paste -sd '|')" "${output_genome}/synteny_matched.tsv" | cut -f 2)
+    
+    # now require all items of $hmms to be observed on the same line in order to report a match
+    matches=$(awk '
+      BEGIN {
+        while ((getline < "'"$hmms"'") > 0) {
+          if ($0 != "") patterns[++n] = $0
+        }
+      }
+      {
+        for (i = 1; i <= n; i++) {
+          if (index($0, patterns[i]) == 0) next
+        }
+        print
+      }
+    ' "${output_genome}/synteny_matched.tsv")
+    
+    contig_ids=$(echo "$matches" | cut -f 1)
+    locus_tags=$(echo "$matches" | cut -f 2)
+
     
     # Only do the following if there were matches found, i.e. locus_tags (and therefore contig_ids as well) is not empty
     if [[ -n "${locus_tags}" ]]; then
@@ -172,7 +191,7 @@ write_metadata() {
 # Iterate over column 2 of the input file and parallelize metadata extraction
 cut -f2 "$input_file" | while read -r outdir; do
   outdir=${outdir%/}
-  > "${outdir}/synteny_summary.tsv"  # Create a blank summary file for this synteny structure
+  echo "genome_id	contig	organism	isolation_source	titles	locus	protein_id	sequence	seq_tech" > "${outdir}/synteny_summary.tsv"  # Create a blank summary file for this synteny structure
   
   export -f write_metadata
   

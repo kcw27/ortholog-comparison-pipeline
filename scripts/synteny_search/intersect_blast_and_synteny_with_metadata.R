@@ -117,8 +117,8 @@ make_dir(dirname(outname))
 print("Reading blast and synteny hit files as dataframes:")
 blast_df <- read.csv(blast_file, header=FALSE, sep="\t")
 colnames(blast_df) <- c("genome_id", "protein_id", "sequence", "evalue", "protein_title", "organism")
-synteny_df <- read.csv(synteny_hits_file, header=FALSE, sep="\t")
-colnames(synteny_df) <- c("genome_id", "contig", "organism", "isolation_source", "titles", "locus", "protein_id", "sequence", "sequencing_technology", "assembly_method")[1:ncol(synteny_df)]
+synteny_df <- read.csv(synteny_hits_file, header=TRUE, sep="\t")
+# colnames(synteny_df) <- c("genome_id", "contig", "organism", "isolation_source", "titles", "locus", "protein_id", "sequence", "sequencing_technology", "assembly_method")[1:ncol(synteny_df)]
 
 glue("Number of rows in blast_df: {nrow(blast_df)}")
 glue("Number of rows in synteny_df: {nrow(synteny_df)}")

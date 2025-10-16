@@ -473,85 +473,110 @@ def get_unique_records(metadata_file, locus_tag_col, outname):
 	# Save the filtered df
 	first_values.to_csv(outname, sep="\t", index=False)
 	print(f"Wrote unique values of {metadata_file} to {outname}")
+ 
+ 
+def determine_origin(metadata_file):
+	'''
+	Guess whether metadata_file was obtained through synteny summary or fetching
+	based on contents of titles column.
+	'''
+	df = pd.read_csv(metadata_file, sep="\t")
 
-# Main script
-if __name__ == "__main__":
-	'''
-	# Move from the scripts directory to the data directory to access input data
-	os.chdir("../data") # TODO: works on my local device, but change this to work on any device
-	
-	# run metadata_wrapper(), saving outputs in data/processed_metadata/
-	# for the two synteny-filtered datasets:
-	metadata_wrapper("locus_tags/locus_tags_65_66_67.txt", "processed_metadata/metadata_65_66_67.tsv",
-		"keywords/category_keywords.txt", "keywords/subcategory_keywords.txt",
-		raw_metadata_file="raw_metadata/synteny_summary_65_66_67.tsv")
+	if len(df["titles"]) == 0:
+		return "neither" # can't tell what it is if no titles column
 
-	metadata_wrapper("locus_tags/locus_tags_65_67.txt", "processed_metadata/metadata_65_67.tsv",
-		"keywords/category_keywords.txt", "keywords/subcategory_keywords.txt",
-		raw_metadata_file="raw_metadata/synteny_summary_65_67.tsv")
-	'''
-	'''
-	# for the synteny-unfiltered datset: I ran fetch_metadata() on the cepacia server,
-	# saving the output to "processed_metadata/metadata_unfiltered.tsv",
-	# and I'm currently running this part of the analysis on my local device.
-	# I just need to run rescue_source() and categorize().
-	rescue_source("processed_metadata/metadata_unfiltered.tsv", "fetched")
-	categorize("processed_metadata/metadata_unfiltered.tsv",
-		"keywords/category_keywords.txt", "keywords/subcategory_keywords.txt")
+	txt = df["titles"][0] # formatting is consistent throughout, so just check the 0th entry
 
-	# test the fetch version of metadata_wrapper() using a smaller dataset
-	metadata_wrapper("locus_tags/locus_tags_test.txt", "processed_metadata/metadata_unfiltered_test.tsv",
-		"keywords/category_keywords.txt", "keywords/subcategory_keywords.txt", db_to_search="protein", email="kcw2@andrew.cmu.edu")
-	'''
+	# define regex patterns
+	p_fetch = re.compile(r'\[Reference\(.*\]')
+	p_synteny = re.compile(r'TITLE')
 
-	'''
-	# run this pipeline on POG002101.fasta to produce an up-to-date metadata file
-	os.chdir("C:/Users/achro/OneDrive/Desktop/CMU/Spring 2025/Armbruster Lab research/ortholog_comparison_refactor/test_data")
-	fasta_file = "orthologs/POG002101.fasta"
-	locus_tags_file = "locus_tags.txt"
-	outname = "processed_metadata/metadata.tsv"
-	category_file = "keywords/category_keywords.txt"
-	subcategory_file = "keywords/subcategory_keywords.txt" # initially used category_keywords.txt on accident
+	if re.search(p_fetch, txt):
+		return "fetched"
+	elif re.search(p_synteny, txt):
+		return "synteny_summary"
+	else:
+		return "neither"
 
-	# get locus tags from POG002101.fasta, and save to file
-	get_locus_tags_from_fasta(fasta_file, locus_tags_file)
 
-	# call metadata_wrapper()
-	metadata_wrapper(locus_tags_file, outname, category_file, subcategory_file, db_to_search="nucleotide", email="kcw2@andrew.cmu.edu")
-	'''
-	'''
-	# filter POG002101 metadata to the first record for each locus tag (nucleotide_id)
-	os.chdir("C:/Users/achro/OneDrive/Desktop/CMU/Spring 2025/Armbruster Lab research/ortholog_comparison_refactor/test_data")
-	category_file = "keywords/category_keywords.txt"
-	subcategory_file = "keywords/subcategory_keywords.txt"
-	metadata_file = "processed_metadata/metadata.tsv"
-	locus_tag_col = "nucleotide_id"
-	outname = "processed_metadata/metadata_unique.tsv"
-
-	categorize(metadata_file, category_file, subcategory_file)
-	get_unique_records(metadata_file, locus_tag_col, outname)
-	'''
-	'''
-	# get unique records for the synteny unfiltered dataset, since at the time I retrieved the metadata, the pipeline didn't include get_unique_records()
-	get_unique_records("processed_metadata/metadata_unfiltered.tsv", "protein_id", "processed_metadata/metadata_unfiltered_unique.tsv")
-	# redo categorization because the initial categorization was done with an earlier version of the function
-	categorize("processed_metadata/metadata_unfiltered_unique.tsv", "keywords/category_keywords.txt", "keywords/subcategory_keywords.txt")
-	'''
-
-	'''
-	# Process raw metadata from Fha1 synteny search
-	# run metadata_wrapper(), saving outputs in data/processed_metadata/
-	metadata_wrapper("../data/locus_tags/locus_tags_Fha1_orthologs_synteny_filtered.txt", "../data/processed_metadata/metadata_Fha1.tsv",
-		"../data/keywords/category_keywords.txt", "../data/keywords/subcategory_keywords.txt",
-		raw_metadata_file="../data/raw_metadata/synteny_summary_Fha1.tsv")
-	'''
-
-	# categorizing the isolation sources in the fha1 Pa-only raw metadata output from my modified blast2gen.py
-	# (I forgot to retrieve titles so there's no source rescue here)
-	#metadata_file = "../data/raw_metadata/fha1_genome_info_paOnly.tsv"
-	metadata_file = "../data/raw_metadata/fha1_genome_info_paOnly_top.tsv"
-	category_file = "../data/keywords/category_keywords.txt"
-	subcategory_file = "../data/keywords/subcategory_keywords.txt"
-	#outname = "../data/processed_metadata/fha1_genome_info_paOnly_categorized.tsv"
-	outname = "../data/processed_metadata/fha1_genome_info_paOnly_categorized_top.tsv"
-	categorize(metadata_file, category_file, subcategory_file, outname)
+## Main script
+#if __name__ == "__main__":
+#	'''
+#	# Move from the scripts directory to the data directory to access input data
+#	os.chdir("../data") # TODO: works on my local device, but change this to work on any device
+#	
+#	# run metadata_wrapper(), saving outputs in data/processed_metadata/
+#	# for the two synteny-filtered datasets:
+#	metadata_wrapper("locus_tags/locus_tags_65_66_67.txt", "processed_metadata/metadata_65_66_67.tsv",
+#		"keywords/category_keywords.txt", "keywords/subcategory_keywords.txt",
+#		raw_metadata_file="raw_metadata/synteny_summary_65_66_67.tsv")
+#
+#	metadata_wrapper("locus_tags/locus_tags_65_67.txt", "processed_metadata/metadata_65_67.tsv",
+#		"keywords/category_keywords.txt", "keywords/subcategory_keywords.txt",
+#		raw_metadata_file="raw_metadata/synteny_summary_65_67.tsv")
+#	'''
+#	'''
+#	# for the synteny-unfiltered datset: I ran fetch_metadata() on the cepacia server,
+#	# saving the output to "processed_metadata/metadata_unfiltered.tsv",
+#	# and I'm currently running this part of the analysis on my local device.
+#	# I just need to run rescue_source() and categorize().
+#	rescue_source("processed_metadata/metadata_unfiltered.tsv", "fetched")
+#	categorize("processed_metadata/metadata_unfiltered.tsv",
+#		"keywords/category_keywords.txt", "keywords/subcategory_keywords.txt")
+#
+#	# test the fetch version of metadata_wrapper() using a smaller dataset
+#	metadata_wrapper("locus_tags/locus_tags_test.txt", "processed_metadata/metadata_unfiltered_test.tsv",
+#		"keywords/category_keywords.txt", "keywords/subcategory_keywords.txt", db_to_search="protein", email="kcw2@andrew.cmu.edu")
+#	'''
+#
+#	'''
+#	# run this pipeline on POG002101.fasta to produce an up-to-date metadata file
+#	os.chdir("C:/Users/achro/OneDrive/Desktop/CMU/Spring 2025/Armbruster Lab research/ortholog_comparison_refactor/test_data")
+#	fasta_file = "orthologs/POG002101.fasta"
+#	locus_tags_file = "locus_tags.txt"
+#	outname = "processed_metadata/metadata.tsv"
+#	category_file = "keywords/category_keywords.txt"
+#	subcategory_file = "keywords/subcategory_keywords.txt" # initially used category_keywords.txt on accident
+#
+#	# get locus tags from POG002101.fasta, and save to file
+#	get_locus_tags_from_fasta(fasta_file, locus_tags_file)
+#
+#	# call metadata_wrapper()
+#	metadata_wrapper(locus_tags_file, outname, category_file, subcategory_file, db_to_search="nucleotide", email="kcw2@andrew.cmu.edu")
+#	'''
+#	'''
+#	# filter POG002101 metadata to the first record for each locus tag (nucleotide_id)
+#	os.chdir("C:/Users/achro/OneDrive/Desktop/CMU/Spring 2025/Armbruster Lab research/ortholog_comparison_refactor/test_data")
+#	category_file = "keywords/category_keywords.txt"
+#	subcategory_file = "keywords/subcategory_keywords.txt"
+#	metadata_file = "processed_metadata/metadata.tsv"
+#	locus_tag_col = "nucleotide_id"
+#	outname = "processed_metadata/metadata_unique.tsv"
+#
+#	categorize(metadata_file, category_file, subcategory_file)
+#	get_unique_records(metadata_file, locus_tag_col, outname)
+#	'''
+#	'''
+#	# get unique records for the synteny unfiltered dataset, since at the time I retrieved the metadata, the pipeline didn't include get_unique_records()
+#	get_unique_records("processed_metadata/metadata_unfiltered.tsv", "protein_id", "processed_metadata/metadata_unfiltered_unique.tsv")
+#	# redo categorization because the initial categorization was done with an earlier version of the function
+#	categorize("processed_metadata/metadata_unfiltered_unique.tsv", "keywords/category_keywords.txt", "keywords/subcategory_keywords.txt")
+#	'''
+#
+#	'''
+#	# Process raw metadata from Fha1 synteny search
+#	# run metadata_wrapper(), saving outputs in data/processed_metadata/
+#	metadata_wrapper("../data/locus_tags/locus_tags_Fha1_orthologs_synteny_filtered.txt", "../data/processed_metadata/metadata_Fha1.tsv",
+#		"../data/keywords/category_keywords.txt", "../data/keywords/subcategory_keywords.txt",
+#		raw_metadata_file="../data/raw_metadata/synteny_summary_Fha1.tsv")
+#	'''
+#
+##	# categorizing the isolation sources in the fha1 Pa-only raw metadata output from my modified blast2gen.py
+##	# (I forgot to retrieve titles so there's no source rescue here)
+##	#metadata_file = "../data/raw_metadata/fha1_genome_info_paOnly.tsv"
+##	metadata_file = "../data/raw_metadata/fha1_genome_info_paOnly_top.tsv"
+##	category_file = "../data/keywords/category_keywords.txt"
+##	subcategory_file = "../data/keywords/subcategory_keywords.txt"
+##	#outname = "../data/processed_metadata/fha1_genome_info_paOnly_categorized.tsv"
+##	outname = "../data/processed_metadata/fha1_genome_info_paOnly_categorized_top.tsv"
+##	categorize(metadata_file, category_file, subcategory_file, outname)
