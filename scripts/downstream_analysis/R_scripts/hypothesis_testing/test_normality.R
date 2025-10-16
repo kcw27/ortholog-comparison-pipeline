@@ -11,22 +11,23 @@ test_normality <- function(df, colname, fig_dir) {
   qqnorm(df[[colname]], main = paste("QQ Plot of", colname))
   qqline(df[[colname]])
   dev.off()
+  print(glue("QQ plot saved to {outfile}"))
   
   set.seed(42)
   if (length(df[[colname]]) > 5000) { # shapiro.test() doesn't work on datasets larger than 5000 values
     subset <- sample(df[[colname]], size = 5000)
-    normality_test <- shapiro.test(subset)$p.val
+    normality_test <- shapiro.test(subset)
   } else {
-    normality_test <- shapiro.test(df[[colname]])$p.val
+    normality_test <- shapiro.test(df[[colname]])
   }
   
   print(normality_test)
   
-  if (normality_test < 0.05) {
-    print(glue("{colname} is probably not normal; p={signif(normality_test, 3)}"))
+  if (normality_test$p.val < 0.05) {
+    print(glue("{colname} is probably not normal; p={signif(normality_test$p.val, 3)}"))
     test_type = "non-parametric" 
   } else {
-    print(glue("{colname} is probably normal; p={signif(normality_test, 3)}"))
+    print(glue("{colname} is probably normal; p={signif(normality_test$p.val, 3)}"))
     test_type = "parametric"
   }
   return(test_type)

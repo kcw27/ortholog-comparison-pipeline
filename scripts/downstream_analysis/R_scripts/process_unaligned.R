@@ -6,7 +6,8 @@
 
 ### Example runs:
 # Rscript /home/kcw2/ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/process_unaligned.R "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_ONLY_fha1_topPerGenome_completeSequences_concatGenomeProteinIDs.fasta" "/home/kcw2/data/blast_outputs/pa_fha1_top_complete_metadata.blast"
-# include one for the synteny_summary metadata too
+# Rscript /home/kcw2/ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/process_unaligned.R "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_synteny_PairwiseBlastIntersected_pident99.fasta" "/home/kcw2/data/results_65_67/synteny_summary.tsv" /home/kcw2/ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/foo
+
 
 ### Import libraries
 library(tidyverse) # working with dataframes
