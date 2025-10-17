@@ -6,7 +6,7 @@
 
 ### Example runs:
 # Rscript /home/kcw2/ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/process_unaligned.R "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_ONLY_fha1_topPerGenome_completeSequences_concatGenomeProteinIDs.fasta" "/home/kcw2/data/blast_outputs/pa_fha1_top_complete_metadata.blast"
-# Rscript /home/kcw2/ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/process_unaligned.R "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_synteny_PairwiseBlastIntersected_pident99.fasta" "/home/kcw2/data/results_65_67/synteny_summary.tsv" /home/kcw2/ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/foo
+# Rscript /home/kcw2/ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/process_unaligned.R "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_synteny_PairwiseBlastIntersected_pident99.fasta" "/home/kcw2/data/results_65_67/synteny_summary.tsv" /home/kcw2/data/testing/foo
 
 
 ### Import libraries
@@ -24,6 +24,7 @@ process_data <- function(multifasta_file, metadata, metadata_type, sequence_name
   # repeats_file has three columns: locus tag, start of repeat, end of repeat
   # Optional argument name_map_file can be supplied to associate long sequence names from this multifasta
   # to the short sequence names from a PHYLIP alignment produced using alignment_and_tree_wrapper.sh.
+  stopifnot(is.character(multifasta_file), length(multifasta_file) == 1)
   
   data <- read.alignment(multifasta_file, format="fasta") # can still use read.alignment on non-aligned sequences
   
@@ -87,99 +88,152 @@ process_metadata <- function(metadata_file, metadata_type) {
     print(glue("Error: invalid metadata_type {metadata_type}; must be 'synteny_summary' or 'fetched'."))
   }
   
+  if ("organism" %in% colnames(metadata)) {
+    metadata <- metadata |>
+      mutate(genus = sapply(organism, function(x) strsplit(x, " ")[[1]][1])) |> # add genus column
+      mutate(genus = ifelse(is.na(genus), " ", genus)) |>
+      mutate(species = sapply(organism, function(x) strsplit(x, " ")[[1]][2])) |> # add species column
+      mutate(species = ifelse(is.na(species), " ", species))
+  }
+  
   return(metadata)
 }
 
 get_script_dir <- function() {
-  # Get command line arguments
   args <- commandArgs(trailingOnly = FALSE)
-  
-  # Find the --file argument
-  file_arg <- grep("^--file=", args, value = TRUE)
-  
-  # Extract the path and normalize
-  if (length(file_arg) > 0) {
-    script_path <- normalizePath(sub("^--file=", "", file_arg))
-    return(dirname(script_path))
-  } else {
-    stop("Cannot determine script directory: not run via Rscript or missing --file argument.")
+  file_arg <- "--file="
+  script_path <- sub(file_arg, "", args[grep(file_arg, args)])
+  if (length(script_path) == 0) {
+    stop("Cannot determine script path. Are you running via Rscript?")
   }
+  normalizePath(dirname(script_path))
 }
 
 
-### Take CLIs
-args <- commandArgs(trailingOnly = TRUE) # only get the CLIs that come after the name of the script
-
-if (length(args) < 2) {
-  stop("Please provide at least two arguments: <multifasta_file> <metadata_file>. <outdir> is an optional third argument.")
-}
-
-script_dir <- get_script_dir()
-#cat("Script is located in:", script_dir, "\n")
-#setwd(script_dir)
-
-multifasta_file <- args[1]
-metadata_file <- args[2]
-outdir <- if (length(args) >= 3) args[3] else script_dir
-print(glue("Outdir: {outdir}"))
-# Ensure the directory exists
-dir.create(dirname(outdir), recursive = TRUE, showWarnings = FALSE)
-
-# guess the metadata type
-# Construct absolute path to metadata_processing.py
-metadata_py <- normalizePath(file.path(script_dir, "..", "metadata_processing.py"))
-
-# Confirm the file exists
-if (!file.exists(metadata_py)) {
-  stop(glue("Python script not found at: {metadata_py}"))
-}
-
-# Source the Python script using absolute path
-metadata_module <- import_from_path("metadata_processing", path = dirname(metadata_py))
-metadata_type <- metadata_module$determine_origin(metadata_file)
-
-if (!metadata_type %in% c("synteny_summary", "fetched")) {
-  stop(glue("Error: metadata_type {metadata_type} not recognized"))
-}
-
-# print the arguments
-cat("Multifasta file provided:", multifasta_file, "\n")
-cat("Metadata file:", metadata_file, "\n")
-cat("Metadata type:", metadata_type, "\n")
-
-### Process data
-metadata <- process_metadata(metadata_file, metadata_type)
-
-sequence_name_col <- "sequence_id"
-df_raw <- process_data(multifasta_file, metadata, metadata_type, sequence_name_col)
-df <- df_raw |>
-  filter(!is.na(category)) |>
-  filter(category != "no category")
-
-print(glue("Benchmarking: {nrow(df_raw)} sequences in input BLAST file; {nrow(df)} were successfully categorized."))
-
-df_raw |>
-  group_by(category) |>
-  summarize(n=n())
+# Function for Shiny to call
+process_unaligned_shiny <- function(multifasta_file, metadata_file, outdir, log_fn = print) {
+  # Determine metadata type using the Python function
+  script_dir <- get_script_dir()
+  metadata_py <- normalizePath(file.path(script_dir, "..", "metadata_processing.py"))
   
-#df |>
-#  group_by(category) |>
-#  summarize(n=n())
+  if (!file.exists(metadata_py)) {
+    stop(glue("Python script not found at: {metadata_py}"))
+  }
+  metadata_module <- import_from_path("metadata_processing", path = dirname(metadata_py))
+  metadata_type <- metadata_module$determine_origin(metadata_file)
+  
+  if (!metadata_type %in% c("synteny_summary", "fetched")) {
+    stop(glue("Error: metadata_type {metadata_type} not recognized"))
+  }
 
+  # Process the data
+  metadata <- process_metadata(metadata_file, metadata_type)
+  sequence_name_col <- "sequence_id"
+  df_raw <- process_data(multifasta_file, metadata, metadata_type, sequence_name_col)
+  df <- df_raw |>
+    filter(!is.na(category)) |>
+    filter(category != "no category")
+  
+  log_fn(glue("Benchmarking: {nrow(df_raw)} sequences in input BLAST file; {nrow(df)} were successfully categorized."))
+  
+  print(df_raw |>
+    group_by(category) |>
+    summarize(n=n()))
+   
+  stats_dir <- glue("{script_dir}/hypothesis_testing")
+  script_files <- list.files(stats_dir, pattern = "\\.R$", full.names = TRUE)
+  for (f in script_files) source(f)
+  
+  test_output <- capture.output({
+    test_type <- test_normality(df, "sequence_length", glue("{outdir}/figures"))
+  })
+  lapply(test_output, log_fn)
+  log_fn(glue("Use this test type on the 'sequence_length' numerical variable: {test_type}"))
+  
+  # Save categorized IDs
+  ids_file <- file.path(outdir, "categorized_ids.txt")
+  write.table(df$sequence_id, ids_file,
+              row.names = FALSE, col.names = FALSE, quote = FALSE)
+  log_fn(glue("IDs of categorized sequences saved to {outdir}/categorized_ids.txt"))
+  
+  return(df)
+}
 
-### Call statistical tests on df
-# First, source the directory of hypothesis testing scripts
-#stats_dir <- here("scripts/downstream_analysis/R_scripts/hypothesis_testing") # here() finds the project root
-
-stats_dir <- glue("{script_dir}/hypothesis_testing")
-script_files <- list.files(stats_dir, pattern = "\\.R$", full.names = TRUE)
-for (f in script_files) source(f)
-
-test_type <- test_normality(df, "sequence_length", glue("{outdir}/figures"))
-print(glue("Use this test type on the 'sequence_length' numerical variable: {test_type}"))
-
-df |>
-  pull(sequence_id) |>
-  write.table(glue("{outdir}/categorized_ids.txt"),
-    row.names = FALSE, col.names = FALSE, quote = FALSE)
-print(glue("IDs of categorized sequences saved to {outdir}/categorized_ids.txt"))    
+# Only run as standalone script if called via Rscript with CLI arguments
+if (!interactive() && length(commandArgs(trailingOnly = TRUE)) >= 2) {
+  args <- commandArgs(trailingOnly = TRUE) # only get the CLIs that come after the name of the script
+  
+  if (length(args) < 2) {
+    stop("Please provide at least two arguments: <multifasta_file> <metadata_file>. <outdir> is an optional third argument.")
+  }
+  
+  script_dir <- get_script_dir()
+  #cat("Script is located in:", script_dir, "\n")
+  #setwd(script_dir)
+  
+  multifasta_file <- args[1]
+  metadata_file <- args[2]
+  outdir <- if (length(args) >= 3) args[3] else script_dir
+  print(glue("Outdir: {outdir}"))
+  # Ensure the directory exists
+  dir.create(dirname(outdir), recursive = TRUE, showWarnings = FALSE)
+  
+  # guess the metadata type
+  # Construct absolute path to metadata_processing.py
+  metadata_py <- normalizePath(file.path(script_dir, "..", "metadata_processing.py"))
+  
+  # Confirm the file exists
+  if (!file.exists(metadata_py)) {
+    stop(glue("Python script not found at: {metadata_py}"))
+  }
+  
+  # Source the Python script using absolute path
+  metadata_module <- import_from_path("metadata_processing", path = dirname(metadata_py))
+  metadata_type <- metadata_module$determine_origin(metadata_file)
+  
+  if (!metadata_type %in% c("synteny_summary", "fetched")) {
+    stop(glue("Error: metadata_type {metadata_type} not recognized"))
+  }
+  
+  # print the arguments
+  cat("Multifasta file provided:", multifasta_file, "\n")
+  cat("Metadata file:", metadata_file, "\n")
+  cat("Metadata type:", metadata_type, "\n")
+  
+  ### Process data
+  metadata <- process_metadata(metadata_file, metadata_type)
+  
+  sequence_name_col <- "sequence_id"
+  df_raw <- process_data(multifasta_file, metadata, metadata_type, sequence_name_col)
+  df <- df_raw |>
+    filter(!is.na(category)) |>
+    filter(category != "no category")
+  
+  print(glue("Benchmarking: {nrow(df_raw)} sequences in input BLAST file; {nrow(df)} were successfully categorized."))
+  
+  df_raw |>
+    group_by(category) |>
+    summarize(n=n())
+  
+  #df |>
+  #  group_by(category) |>
+  #  summarize(n=n())
+  
+  
+  ### Call statistical tests on df
+  # First, source the directory of hypothesis testing scripts
+  #stats_dir <- here("scripts/downstream_analysis/R_scripts/hypothesis_testing") # here() finds the project root
+  
+  stats_dir <- glue("{script_dir}/hypothesis_testing")
+  script_files <- list.files(stats_dir, pattern = "\\.R$", full.names = TRUE)
+  for (f in script_files) source(f)
+  
+  test_type <- test_normality(df, "sequence_length", glue("{outdir}/figures"))
+  print(glue("Use this test type on the 'sequence_length' numerical variable: {test_type}"))
+  
+  df |>
+    pull(sequence_id) |>
+    write.table(glue("{outdir}/categorized_ids.txt"),
+      row.names = FALSE, col.names = FALSE, quote = FALSE)
+  print(glue("IDs of categorized sequences saved to {outdir}/categorized_ids.txt"))
+}

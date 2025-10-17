@@ -33,12 +33,12 @@ benchmark <- function(metadata_file) {
 }
 
 
-### Take CLIs
-args <- commandArgs(trailingOnly = TRUE) # only get the CLIs that come after the name of the script
-
-if (length(args) < 1) {
-  stop("Please provide an argument: <metadata_file> ")
-}
-
-metadata_file <- args[1]
-benchmark(metadata_file)
+## Only run as standalone script if called via Rscript with CLI arguments
+#if (identical(environmentName(globalenv()), "R_GlobalEnv") && !interactive()) {
+#  args <- commandArgs(trailingOnly = TRUE)
+#  if (length(args) < 1) {
+#    stop("Please provide an argument: <metadata_file> ")
+#  }
+#  metadata_file <- args[1]
+#  benchmark(metadata_file)
+#}
