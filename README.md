@@ -21,7 +21,25 @@ A variety of utilities are provided: you may filter your ortholog dataset in var
 Refer to [this page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/scripts_info.md) for additional information.
 
 ## GUI
-(add screenshot)
+Data input screen
+<img width="1250" alt="image" src="https://github.com/user-attachments/assets/d82f7240-bc29-460d-a0f4-ea2ffc9118c2" />
+
+Statistical test screen
+<img width="1250" alt="image" src="https://github.com/user-attachments/assets/2d0e0d06-fda6-43dc-b08b-96a37329da40" />
+
+If running on a Unix server, take the following steps to view the GUI:
+1. Get your IP address.
+   ```bash
+   hostname -I
+   ```
+2. Launch the GUI.
+   ```bash
+   Rscript "/home/kcw2/test_scripts/r_shiny_test.R"
+   ```
+3. Replace \<server-ip\> with your IP address, and open the link in a web browser.
+   ```text
+   http://<server-ip>:3838
+   ```
 
 ## Dependencies
 I am working on getting everything into a single conda environment and setting up a YAML file to facilitate installation. For now, you may simply clone the repository. Note the following main dependencies:
@@ -35,6 +53,7 @@ I am working on getting everything into a single conda environment and setting u
   * [seqinr](https://www.rdocumentation.org/packages/seqinr/versions/4.2-36)
   * [ggseqlogo](https://github.com/omarwagih/ggseqlogo)
   * [rstatix](https://www.rdocumentation.org/packages/rstatix/versions/0.7.2)
+  * shiny
 * Python
 * [iTOL](https://itol.embl.de/) (website): you can drag + drop the phylogenetic tree and annotation files to produce a phylogeny annotated by metadata.
 
