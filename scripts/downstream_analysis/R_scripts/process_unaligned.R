@@ -99,21 +99,21 @@ process_metadata <- function(metadata_file, metadata_type) {
   return(metadata)
 }
 
-get_script_dir <- function() {
-  args <- commandArgs(trailingOnly = FALSE)
-  file_arg <- "--file="
-  script_path <- sub(file_arg, "", args[grep(file_arg, args)])
-  if (length(script_path) == 0) {
-    stop("Cannot determine script path. Are you running via Rscript?")
-  }
-  normalizePath(dirname(script_path))
-}
+#get_script_dir <- function() {
+#  args <- commandArgs(trailingOnly = FALSE)
+#  file_arg <- "--file="
+#  script_path <- sub(file_arg, "", args[grep(file_arg, args)])
+#  if (length(script_path) == 0) {
+#    stop("Cannot determine script path. Are you running via Rscript?")
+#  }
+#  normalizePath(dirname(script_path))
+#}
 
 
 # Function for Shiny to call
-process_unaligned_shiny <- function(multifasta_file, metadata_file, outdir, log_fn = print) {
+process_unaligned_shiny <- function(multifasta_file, metadata_file, outdir, script_dir, log_fn = print) {
   # Determine metadata type using the Python function
-  script_dir <- get_script_dir()
+  #script_dir <- get_script_dir()
   metadata_py <- normalizePath(file.path(script_dir, "..", "metadata_processing.py"))
   
   if (!file.exists(metadata_py)) {
@@ -136,27 +136,33 @@ process_unaligned_shiny <- function(multifasta_file, metadata_file, outdir, log_
   
   log_fn(glue("Benchmarking: {nrow(df_raw)} sequences in input BLAST file; {nrow(df)} were successfully categorized."))
   
-  print(df_raw |>
+  log_output <- df_raw |>
     group_by(category) |>
-    summarize(n=n()))
+    summarize(n = n()) |>
+    capture.output()
+  
+  lapply(log_output, log_fn)
+
    
   stats_dir <- glue("{script_dir}/hypothesis_testing")
   script_files <- list.files(stats_dir, pattern = "\\.R$", full.names = TRUE)
   for (f in script_files) source(f)
   
+  # Capture printed output only
   test_output <- capture.output({
-    test_type <- test_normality(df, "sequence_length", glue("{outdir}/figures"))
+    invisible(test_type <- test_normality(df, "sequence_length", glue("{outdir}/figures")))
   })
   lapply(test_output, log_fn)
+
   log_fn(glue("Use this test type on the 'sequence_length' numerical variable: {test_type}"))
-  
+
   # Save categorized IDs
   ids_file <- file.path(outdir, "categorized_ids.txt")
   write.table(df$sequence_id, ids_file,
               row.names = FALSE, col.names = FALSE, quote = FALSE)
   log_fn(glue("IDs of categorized sequences saved to {outdir}/categorized_ids.txt"))
   
-  return(df)
+  return(list(df = df, test_type = test_type))
 }
 
 # Only run as standalone script if called via Rscript with CLI arguments
