@@ -34,7 +34,7 @@ If running on a Unix server, take the following steps to view the GUI:
    ```
 2. Launch the GUI.
    ```bash
-   Rscript "/home/kcw2/test_scripts/r_shiny_test.R"
+   Rscript "/home/kcw2/ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/pipeline_gui.R"
    ```
 3. Replace \<server-ip\> with your IP address, and open the link in a web browser.
    ```text
