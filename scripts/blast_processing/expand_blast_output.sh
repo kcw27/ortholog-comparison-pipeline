@@ -1,66 +1,95 @@
 # Description:
 # (long format- one record per row)
 
-# CLI:
-# $1: Condensed blast file (expected to have 6 columns, e.g. -outfmt "6 sallgi sallseqid sseq evalue salltitles" and then run add_organism_column.sh)
+### Example runs:
+# with organisms column, default outname:
+# bash "/home/kcw2/ortholog-comparison-pipeline/scripts/blast_processing/expand_blast_output.sh" -b "${HOME}/data/testing/out/PA3565_nr_small_orgs.txt"
 
-# Example run:
-# bash expand_blast_output.sh "${HOME}/data/testing/out/PA3565_nr_small_orgs.txt"
-# bash expand_blast_output.sh "${HOME}/data/testing/out/PA3565_nr_orgs.txt"
-# bash expand_blast_output.sh "${HOME}/data/testing/out/fha1_nr_orgs.txt"
+# without organisms column, with a specified outname: 
+# bash "/home/kcw2/ortholog-comparison-pipeline/scripts/blast_processing/expand_blast_output.sh" -b "/home/kcw2/data/testing/PA3565_nr_small.txt" -o "/home/kcw2/data/testing/PA3565_nr_small_foo.txt"
 
-# bash expand_blast_output.sh "${HOME}/data/blast_outputs/PA3565_nr_orgs.txt"
-# bash expand_blast_output.sh "${HOME}/data/blast_outputs/fha1_nr_orgs.txt"
+# Parse flags
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -b|--blast)
+      blast="$2"
+      shift 2
+      ;;
+    -o|--outfile)
+      output="$2"
+      shift 2
+      ;;
+    -h|--help)
+      echo "Usage: $0 -b <blast_file> [-o <output_file>]"
+      echo "  -b, --blast     Mandatory input BLAST file."
+      echo "Expected to have 6 columns, e.g. -outfmt 6 with arguments sallgi sallseqid sseq evalue salltitles."
+      echo "May have organism column from add_organism_column.sh"
+      echo "  -o, --outfile   Optional output file (default: <blast>_long.blast)"
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      exit 1
+      ;;
+  esac
+done
 
-blast=$1
-outfile="${blast/.*}_long.blast"
+# Check mandatory argument
+if [[ -z "$blast" ]]; then
+  echo "Error: -b|--blast argument is required." >&2
+  exit 1
+fi
 
-#> $outfile # create the output file
+# Assign default outfile only if not set
+outfile="${output:-${blast/.*}_long.blast}"
+mkdir -p $(dirname $outfile) # make the outdir if it doesn't exist already
 
-awk -F'\t' '{
+echo "Saving to $outfile..."
+
+# handle file differently if organisms column is or isn't present
+awk -F'\t' '
+function process_with_organisms() {
     split($1, gis, /;/)
     split($2, seqids, /;/)
     split($5, titles, /<>/)
     split($6, organisms, /;/)
     n = length(gis)
-    # columns 3 (seq) and 4 (evalue) will always have only one value per row.
-    
-    # make sure that all of these really have the same length
-    if (length(gis) != length(seqids) || length(gis) != length(titles) || length(gis) != length(organisms)) {
-#      print "gis length: " length(gis)
-#      print "seqids length: " length(seqids)
-#      print "titles length: " length(titles)
-#      print "organisms length: " length(organisms)
 
-      print "ERROR: inconsistent field counts on line " NR > "/dev/stderr"
-      #print i ": " gis[i], seqids[i], titles[i], organisms[i] > "/dev/stderr"
-      next
+    if (length(seqids) != n || length(titles) != n || length(organisms) != n) {
+        print "ERROR: inconsistent field counts on line " NR > "/dev/stderr"
+        next
     }
-
 
     for (i = 1; i <= n; i++) {
         print gis[i] "\t" seqids[i] "\t" $3 "\t" $4 "\t" titles[i] "\t" organisms[i]
     }
-}' "$blast" > "$outfile"
+}
 
+function process_without_organisms() {
+    split($1, gis, /;/)
+    split($2, seqids, /;/)
+    split($5, titles, /<>/)
+    n = length(gis)
 
+    if (length(seqids) != n || length(titles) != n) {
+        print "ERROR: inconsistent field counts on line " NR > "/dev/stderr"
+        next
+    }
 
-#IFS=$'\n' # $blast is newline-separated.
-## Need to set up the loop this way, otherwise it only reads the first line
-#for next in $(cat $blast); do
-#  echo "Processing: ${next}"
-#  
-#  # parts of the line that may have multiple items
-#  gis=$(cut -f 1 $next)
-#  seqids=$(cut -f 2 $next)
-#  titles=$(cut -f 5 $next)
-#  organisms=$(cut -f 6 $next)
-#  
-#  # parts of the line that are guaranteed to have only one item
-#  seq=$(cut -f 3 $next)
-#  evalue=$(cut -f 4 $next)
-#  
-#  paste <(echo "$titles" | tr "<>" '\n') | while read title; do
-#    echo $title
-#  done
-#done
+    for (i = 1; i <= n; i++) {
+        print gis[i] "\t" seqids[i] "\t" $3 "\t" $4 "\t" titles[i]
+    }
+}
+
+{
+    if (NF >= 6) {
+        process_with_organisms()
+    } else if (NF == 5) {
+        process_without_organisms()
+    } else {
+        print "ERROR: unexpected number of columns on line " NR > "/dev/stderr"
+    }
+}
+' "$blast" > "$outfile"
+
+echo "Complete!"

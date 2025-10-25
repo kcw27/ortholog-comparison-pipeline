@@ -22,11 +22,13 @@
 # on blast2gen.py output which hasn't gone through further filtering (-hd and -e)
 # bash $blastscripts/convert_blast_to_fasta.sh -b $datadir/PA3565_with_orgs_long_annotatedByBlast2gen.blast -e -hd
 
+# with specified outname:
+# bash "/home/kcw2/ortholog-comparison-pipeline/scripts/blast_processing/convert_blast_to_fasta.sh" -b "/home/kcw2/data/testing/PA3565_nr_small_foo.txt" -e -g -o "/home/kcw2/data/testing/PA3565_nr_small_foo_bar.fasta"
+
 # set default values for optional arguments
 header=false
 extract=false
 concat_genome=false
-output="${blast%.*}.fasta"
 
 # Parse flags
 while [[ $# -gt 0 ]]; do
@@ -47,8 +49,8 @@ while [[ $# -gt 0 ]]; do
       concat_genome=true
       shift
       ;;
-    -o|--output)
-      output="$2"
+    -o|--outfile)
+      outfile="$2"
       shift 2
       ;;
     -h|--help)
@@ -67,6 +69,8 @@ if [[ -z "$blast" ]]; then
   exit 1
 fi
 
+# Assign default outfile only if not set
+output="${outfile:-${blast%.*}.fasta}"
 
 > "$output"
 
