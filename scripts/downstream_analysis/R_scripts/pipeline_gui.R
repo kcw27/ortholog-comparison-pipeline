@@ -38,10 +38,6 @@ ui <- navbarPage("Pipeline GUI",
       textInput("metadata_file", "Metadata file path:", ""),
       textInput("outdir", "Output directory:", ""),
       actionButton("submit_btn", "Submit"),
-#      conditionalPanel("output.loading",
-#        tags$div(class = "spinner-border text-primary", role = "status",
-#                 tags$span(class = "visually-hidden", "Loading..."))
-#      ),
       verbatimTextOutput("output_text"),
       
       # QQ plot path and image
@@ -57,11 +53,15 @@ ui <- navbarPage("Pipeline GUI",
         conditionalPanel("input.fig_script == 'make_histograms.R'",
           selectInput("group_var", "Group by:",
                       choices = c("category", "genus"),
-                      selected = "category")
+                      selected = "category"),
+          selectInput("hist_width", "Bin width:",
+                      choices = c(1, 5, 10, 25, 50, 100),
+                      selected = 10)
         ),
         actionButton("run_figures", "Run figure script"),
+        actionButton("refresh_images", "Refresh Image List", icon = icon("refresh")),
         uiOutput("image_selector"),
-        imageOutput("selected_image")
+        uiOutput("selected_image")
       )
     )
   ),
@@ -107,11 +107,11 @@ server <- function(input, output, session) {
   test_type_store <- reactiveVal(NULL)
   show_output <- reactiveVal(FALSE)
   
-  #loading <- reactiveVal(FALSE)
-  #output$loading <- reactive({ loading() })
-  #outputOptions(output, "loading", suspendWhenHidden = FALSE)
-
-
+  # Store the resource path for serving files
+  resource_path_added <- reactiveVal(FALSE)
+  # Add reactive value to trigger image list refresh
+  image_refresh_trigger <- reactiveVal(0)
+  
   append_log <- function(msg) {
     log_store$lines <- c(log_store$lines, msg)
   }
@@ -123,7 +123,6 @@ server <- function(input, output, session) {
   outputOptions(output, "show_output", suspendWhenHidden = FALSE)
 
   observeEvent(input$submit_btn, {
-    #loading(TRUE)
     show_output(TRUE)
     
     # Sanitize inputs
@@ -131,8 +130,6 @@ server <- function(input, output, session) {
     metadata_file <- normalizePath(as.character(strip_quotes(input$metadata_file)), mustWork = FALSE)
     outdir <- normalizePath(as.character(strip_quotes(input$outdir)), mustWork = FALSE)
 
-    #append_log(glue("FASTA file has {count_lines(fasta_file)} lines"))
-    #append_log(glue("Metadata file has {count_lines(metadata_file)} lines"))
     benchmark_output <- capture.output(benchmark(metadata_file))
     lapply(benchmark_output, append_log)
 
@@ -143,7 +140,6 @@ server <- function(input, output, session) {
       process_aligned_shiny(fasta_file, metadata_file, outdir, script_dir, log_fn = append_log)
     }
 
-
     df_store(result$df)
     test_type_store(result$test_type)
     
@@ -153,11 +149,6 @@ server <- function(input, output, session) {
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
 
     tabs_ready(TRUE)
-
-    categorized_path <- file.path(outdir, "categorized_ids.txt")
-    #append_log(glue("\ncategorized_ids.txt has {count_lines(categorized_path)} lines"))
-    #loading(FALSE)
-    
 
     # Run normality test and capture output
     test_output <- capture.output({
@@ -184,19 +175,13 @@ server <- function(input, output, session) {
         NULL
       }
     }, deleteFile = FALSE)
-
     
-      output$output_text <- renderText({
-        invalidateLater(500, session)
-        paste(log_store$lines, collapse = "\n")
-      })
+    output$output_text <- renderText({
+      invalidateLater(500, session)
+      paste(log_store$lines, collapse = "\n")
+    })
   })
 
-#  output$output_text <- renderText({
-#    invalidateLater(500, session)
-#    paste(log_store$lines, collapse = "\n")
-#  })
-  
   observeEvent(input$run_test, {
     df <- df_store()
     if (is.null(df)) return()
@@ -233,51 +218,107 @@ server <- function(input, output, session) {
     }
   })
 
-
-  # Run figure script
+  # Update the observeEvent for running figures to trigger refresh
   observeEvent(input$run_figures, {
     df <- df_store()
     if (is.null(df)) return()
     fig_script <- input$fig_script
     group_var <- input$group_var
+    width <- as.numeric(input$hist_width)
     script_path <- file.path(script_dir, "figures", fig_script)
-
+  
     if (file.exists(script_path)) {
       append_log(glue("Running {fig_script}..."))
       if (fig_script == "make_histograms.R") {
         source(script_path, local = TRUE)
-        if (group_var != "") {
-          make_histograms(df, outdir, group_var)
-        } else {
-          make_histograms(df, outdir)
-        }
+        # Call histograms_by_source directly with the required arguments
+        histograms_by_source(df, 
+                            outdir = file.path(input$outdir, "figures"), 
+                            group_var = group_var, 
+                            width = width)
         append_log("Histograms generated.")
+        
+        # Trigger image list refresh after generating figures
+        image_refresh_trigger(image_refresh_trigger() + 1)
+        append_log("Image list refreshed automatically.")
       }
     }
   })
-
-  # Browse images
+  
+  # Refresh button handler
+  observeEvent(input$refresh_images, {
+    image_refresh_trigger(image_refresh_trigger() + 1)
+    append_log("Image list manually refreshed.")
+  })
+  
+  # Image selector with refresh trigger dependency
   output$image_selector <- renderUI({
     req(tabs_ready())
+    # Depend on refresh trigger to update when triggered
+    image_refresh_trigger()
+    
     img_dir <- file.path(input$outdir, "figures")
-    imgs <- list.files(img_dir, pattern = "\\.(png|jpg|jpeg)$", full.names = TRUE)
-    div(style = "max-width: 275px; overflow: hidden;",
-      selectInput("image_file", "Select image:", choices = imgs)
-    )
-
+    if (!dir.exists(img_dir)) return(div("No figures directory"))
+    
+    imgs <- list.files(img_dir, pattern = "\\.(png|jpg|jpeg|pdf)$", 
+                       full.names = TRUE, recursive = TRUE)
+    
+    if (length(imgs) == 0) return(div("No images found"))
+    
+    selectInput("image_file", "Select image:", 
+                choices = setNames(imgs, basename(imgs)))
   })
-
-  output$selected_image <- renderImage({
+  
+  # Fixed image display using renderUI with proper resource path
+  output$selected_image <- renderUI({
     req(input$image_file)
-    list(src = input$image_file, contentType = "image/png", alt = "Figure")
-  }, deleteFile = FALSE)
+    
+    # Validate file exists
+    if (!file.exists(input$image_file)) {
+      return(div("Selected file not found"))
+    }
+    
+    # Set up resource path for serving files
+    img_dir <- file.path(input$outdir, "figures")
+    if (!resource_path_added()) {
+      addResourcePath("figures", img_dir)
+      resource_path_added(TRUE)
+    }
+    
+    file_ext <- tolower(tools::file_ext(input$image_file))
+    
+    # Get relative path from the figures directory
+    relative_path <- sub(paste0("^", img_dir, "/?"), "", input$image_file)
+    
+    if (file_ext == "pdf") {
+      # For PDFs, use tags$embed to display
+      tags$div(
+        tags$embed(
+          src = file.path("figures", relative_path),
+          type = "application/pdf",
+          width = "100%",
+          height = "600px"
+        ),
+        style = "border: 1px solid #ccc; margin-top: 10px;"
+      )
+    } else {
+      # For images, use img tag with proper styling and resource path
+      tags$div(
+        tags$img(
+          src = file.path("figures", relative_path),
+          style = "max-width: 100%; height: auto; display: block;",
+          alt = "Figure"
+        ),
+        style = "border: 1px solid #ccc; margin-top: 10px; text-align: center;"
+      )
+    }
+  })
 
   observe({
     updateSelectInput(session, "test_type",
                       choices = c("parametric", "non-parametric"),
                       selected = test_type_store())
   })
-
 
   observeEvent(input$run_test, {
     df <- df_store()
@@ -320,9 +361,5 @@ server <- function(input, output, session) {
   })
 
 }
-
-
-
-
 
 shinyApp(ui = ui, server = server, options = list(host = "0.0.0.0", port = 3838))
