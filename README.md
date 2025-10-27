@@ -41,6 +41,20 @@ If running on a Unix server, take the following steps to view the GUI:
    http://<server-ip>:3838
    ```
 
+Example inputs to GUI (for debugging):
+Unaligned FASTA:
+```text
+"/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_synteny_PairwiseBlastIntersected_pident99.fasta"
+```
+Metadata:
+```text
+"/home/kcw2/data/results_65_67/synteny_summary.tsv"
+```
+Outdir:
+```text
+/home/kcw2/data/testing/foo
+```
+
 ## Dependencies
 I am working on getting everything into a single conda environment and setting up a YAML file to facilitate installation. For now, you may simply clone the repository. Note the following main dependencies:
 * Command line:
@@ -54,6 +68,7 @@ I am working on getting everything into a single conda environment and setting u
   * [ggseqlogo](https://github.com/omarwagih/ggseqlogo)
   * [rstatix](https://www.rdocumentation.org/packages/rstatix/versions/0.7.2)
   * shiny
+  * pdftools
 * Python
 * [iTOL](https://itol.embl.de/) (website): you can drag + drop the phylogenetic tree and annotation files to produce a phylogeny annotated by metadata.
 
