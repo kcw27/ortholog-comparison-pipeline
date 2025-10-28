@@ -41,8 +41,8 @@ If running on a Unix server, take the following steps to view the GUI:
    http://<server-ip>:3838
    ```
 
-Example inputs to GUI (for debugging):
-Unaligned FASTA:
+Example inputs to GUI (for debugging):  
+### Unaligned FASTA:
 ```text
 "/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_synteny_PairwiseBlastIntersected_pident99.fasta"
 ```
@@ -53,6 +53,27 @@ Metadata:
 Outdir:
 ```text
 /home/kcw2/data/testing/foo
+```
+Reference sequence:
+```text
+GCF_000006765.1-NP_252255.1
+```
+
+### Aligned FASTA:
+```text
+"/home/kcw2/data/PA3565_align_and_tree_new/alignment/aligned.fasta"
+```
+Metadata:
+```text
+"/home/kcw2/data/results_65_67/synteny_summary.tsv"
+```
+Outdir:
+```text
+/home/kcw2/data/testing/foo
+```
+Name map:
+```text
+"/home/kcw2/data/PA3565_align_and_tree_new/alignment/name_map.tsv"
 ```
 
 ## Dependencies
