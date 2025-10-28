@@ -5,14 +5,15 @@ library(purrr)
 theme_set(theme_bw())
 
 # Function to save histograms based on grouping variable
-save_histograms <- function(df, group_var, outdir, pdf_suffix, reference_length=NA, reference_label=NA, consistent_y_axis = TRUE, export_locus_tags = FALSE, width = 10) {
+save_histograms <- function(df, group_var, outdir, pdf_suffix, column_name = "sequence_length", reference_length=NA, reference_label=NA, consistent_y_axis = TRUE, export_locus_tags = FALSE, width = 10) {
   if (!group_var %in% names(df)) stop(glue("Column '{group_var}' not found in df"))
+  if (!column_name %in% names(df)) stop(glue("Column '{column_name}' not found in df"))
   
   df <- df[!is.na(df[[group_var]]), ] # remove rows with NA's for group_var so that the split will work properly
 
   ## To create a set of plots with consistent x and y axes, calculate the x and y limits.
   # x limits for a histogram are just the range of values
-  x_limits = range(df$sequence_length)
+  x_limits = range(df[[column_name]])
   buffer_size = 0.10 # make buffers that are some percentage of the range
   x_limits <- x_limits + c(-buffer_size*diff(x_limits), buffer_size*diff(x_limits)) 
   # add a bit of buffer on either side so that it doesn't crop out the data at either end of the x axis
@@ -20,25 +21,25 @@ save_histograms <- function(df, group_var, outdir, pdf_suffix, reference_length=
   if (!is.na(reference_length) & !is.na(reference_label)) {
     plots <- split(df, df[[group_var]]) |>
       map(~ ggplot(.x) +
-            geom_histogram(aes(x=sequence_length), binwidth = width) +
+            geom_histogram(aes(x = .data[[column_name]]), binwidth = width) +
             geom_vline(aes(xintercept=reference_length, colour="reference_length"), size=0.5) +
-            geom_vline(aes(xintercept=mean(sequence_length), colour="mean"), size=0.5) +
-            labs(x = "Length of sequence", y = "Count", title = glue("{group_var}: {unique(.x[[group_var]])[1]}; n: {nrow(.x)}")) +
-            scale_color_manual(name = "Sequence lengths",
-                               values = c(reference_length = "red", mean = "blue"),
+            geom_vline(aes(xintercept=mean(.data[[column_name]]), colour="mean"), size=0.5) +
+            labs(x = column_name, y = "Count", title = glue("{group_var}: {unique(.x[[group_var]])[1]}; n: {nrow(.x)}")) +
+            scale_color_manual(name = "Values",
+                               values = c(reference_length = "blue", mean = "red"),
                                labels = c(reference_length = glue("{reference_label} = {reference_length}"),
-                                          mean = glue("Mean = {round(mean(.x$sequence_length), 1)}"))) +
+                                          mean = glue("Mean = {round(mean(.x[[column_name]]), 1)}"))) +
             xlim(x_limits) # notice that we set x limits here, but no y limits yet
           )
   } else {
     plots <- split(df, df[[group_var]]) |>
       map(~ ggplot(.x) +
-            geom_histogram(aes(x=sequence_length), binwidth = width) +
-            geom_vline(aes(xintercept=mean(sequence_length), colour="mean"), size=0.5) +
-            labs(x = "Length of sequence", y = "Count", title = glue("{group_var}: {unique(.x[[group_var]])[1]}; n: {nrow(.x)}")) +
-            scale_color_manual(name = "Sequence lengths",
-                               values = c(mean = "blue"),
-                               labels = c(mean = glue("Mean = {round(mean(.x$sequence_length), 1)}"))) +
+            geom_histogram(aes(x = .data[[column_name]]), binwidth = width) +
+            geom_vline(aes(xintercept=mean(.data[[column_name]]), colour="mean"), size=0.5) +
+            labs(x = column_name, y = "Count", title = glue("{group_var}: {unique(.x[[group_var]])[1]}; n: {nrow(.x)}")) +
+            scale_color_manual(name = "Values",
+                               values = c(mean = "red"),
+                               labels = c(mean = glue("Mean = {round(mean(.x[[column_name]]), 1)}"))) +
             xlim(x_limits) # notice that we set x limits here, but no y limits yet
           )
   }
@@ -83,11 +84,11 @@ save_histograms <- function(df, group_var, outdir, pdf_suffix, reference_length=
   }
 }
 
-histograms_by_source <- function(df, outdir, reference_length=NA, reference_label=NA, consistent_y_axis = TRUE, group_var = "category", export_locus_tags = FALSE, width = 10) {
+histograms_by_source <- function(df, outdir, column_name = "sequence_length", reference_length=NA, reference_label=NA, consistent_y_axis = TRUE, group_var = "category", export_locus_tags = FALSE, width = 10) {
   make_dir(outdir)
   # Generate histogram PDF for group_var
   save_histograms(df, group_var, outdir, glue("{group_var}_histograms"), 
-                  reference_length=reference_length, reference_label=reference_label, consistent_y_axis, export_locus_tags, width)
+                  column_name = column_name, reference_length=reference_length, reference_label=reference_label, consistent_y_axis, export_locus_tags, width)
   
   if (export_locus_tags) {
     write.table(df$locus_tags, file=glue("{outdir}/{group_var}_histograms_locusTags.txt"), row.names=FALSE, col.names=FALSE, quote=FALSE)
@@ -102,7 +103,7 @@ histograms_by_source <- function(df, outdir, reference_length=NA, reference_labe
     # Generate subcategory-level histogram PDF
     walk(names(df_categories), ~ save_histograms(df_categories[[.x]], "subcategory", 
                                                 outdir, glue("subcategories/{.x}_histograms"), 
-                                                reference_length=reference_length, reference_label=reference_label, 
+                                                column_name = column_name, reference_length=reference_length, reference_label=reference_label, 
                                                 consistent_y_axis, export_locus_tags, width))
   } else if (group_var == "genus") { # make additional plots for species
     df <- df[!is.na(df$genus), ] # remove rows with NA's for group_var so that the split will work properly
@@ -112,7 +113,7 @@ histograms_by_source <- function(df, outdir, reference_length=NA, reference_labe
     # Generate species-level histogram PDF
     walk(names(df_categories), ~ save_histograms(df_categories[[.x]], "species", 
                                                 outdir, glue("species/{.x}_histograms"), 
-                                                reference_length=reference_length, reference_label=reference_label, 
+                                                column_name = column_name, reference_length=reference_length, reference_label=reference_label, 
                                                 consistent_y_axis, export_locus_tags, width))
   }
 }

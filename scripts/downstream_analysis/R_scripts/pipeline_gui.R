@@ -47,6 +47,11 @@ ui <- navbarPage("Pipeline GUI",
       # Reference sequence ID section
       textInput("ref_seqID", "Reference sequence ID (optional):", ""),
       actionButton("submit_ref_btn", "Submit Reference Sequence ID"),
+      # Add subset FASTA button - only show when data is loaded
+      conditionalPanel(
+        "output.tabs_ready",
+        actionButton("subset_fasta_btn", "Subset FASTA to Categorized Sequences")
+      ),
       verbatimTextOutput("output_text"),
       
       # QQ plot path and image
@@ -60,12 +65,16 @@ ui <- navbarPage("Pipeline GUI",
         selectInput("fig_script", "Select figure script:",
                     choices = c("make_histograms.R")),
         conditionalPanel("input.fig_script == 'make_histograms.R'",
+          selectInput("hist_column", "Column for histogram:",
+                      choices = NULL),
           selectInput("group_var", "Group by:",
                       choices = c("category", "genus"),
                       selected = "category"),
           selectInput("hist_width", "Bin width:",
                       choices = c(1, 5, 10, 25, 50, 100),
-                      selected = 10)
+                      selected = 10),
+          checkboxInput("consistent_y_axis", "Consistent Y-axis across plots", 
+                       value = TRUE)
         ),
         actionButton("run_figures", "Run figure script"),
         actionButton("refresh_images", "Refresh Image List", icon = icon("refresh")),
@@ -166,8 +175,8 @@ server <- function(input, output, session) {
 
     df_store(result$df)
     test_type_store(result$test_type)
-    
-    # Update column selectors for statistical tests
+                      
+    # Update column selectors for statistical tests AND figures
     numeric_cols <- names(result$df)[sapply(result$df, is.numeric)]
     updateSelectInput(session, "response_col",
                       choices = numeric_cols,
@@ -175,8 +184,11 @@ server <- function(input, output, session) {
     updateSelectInput(session, "normality_col",
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
-
-    tabs_ready(TRUE)
+    updateSelectInput(session, "hist_column",
+                      choices = numeric_cols,
+                      selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
+  
+      tabs_ready(TRUE)
 
 #    # Run normality test and capture output
 #    test_output <- capture.output({
@@ -348,13 +360,14 @@ server <- function(input, output, session) {
     }
   })
 
-  # Update the observeEvent for running figures to trigger refresh
   observeEvent(input$run_figures, {
     df <- df_store()
     if (is.null(df)) return()
     fig_script <- input$fig_script
     group_var <- input$group_var
+    column_name <- input$hist_column
     width <- as.numeric(input$hist_width)
+    consistent_y_axis <- input$consistent_y_axis  # Get the toggle value
     script_path <- file.path(script_dir, "figures", fig_script)
   
     if (file.exists(script_path)) {
@@ -366,8 +379,10 @@ server <- function(input, output, session) {
         args <- list(
           df = df,
           outdir = file.path(input$outdir, "figures"),
+          column_name = column_name,
           group_var = group_var,
-          width = width
+          width = width,
+          consistent_y_axis = consistent_y_axis  # Pass the toggle value
         )
         
         # Add reference sequence parameters if available
@@ -379,13 +394,72 @@ server <- function(input, output, session) {
         
         # Call histograms_by_source with the appropriate arguments
         do.call(histograms_by_source, args)
-        append_log("Histograms generated.")
+        append_log(glue("Histograms generated for column: {column_name}"))
+        append_log(glue("Consistent Y-axis: {consistent_y_axis}"))
         
         # Trigger image list refresh after generating figures
         image_refresh_trigger(image_refresh_trigger() + 1)
         append_log("Image list refreshed automatically.")
       }
     }
+  })
+  
+  # Add the subset FASTA functionality
+  observeEvent(input$subset_fasta_btn, {
+    req(input$fasta_file, input$outdir)
+    
+    fasta_file <- normalizePath(as.character(strip_quotes(input$fasta_file)), mustWork = FALSE)
+    outdir <- normalizePath(as.character(strip_quotes(input$outdir)), mustWork = FALSE)
+    categorized_ids_file <- file.path(outdir, "categorized_ids.txt")
+    
+    if (!file.exists(categorized_ids_file)) {
+      append_log("Error: categorized_ids.txt not found. Please submit data first.")
+      return()
+    }
+    
+    # Read the categorized IDs
+    categorized_ids <- readLines(categorized_ids_file)
+    append_log(glue("Found {length(categorized_ids)} categorized sequence IDs"))
+    
+    # Read the original FASTA file
+    tryCatch({
+      library(seqinr)
+      alignment <- read.alignment(fasta_file, format = "fasta")
+      
+      seqs <- alignment[["seq"]] |>
+        unlist() |> # convert from list to vector
+        toupper() # originally in lowercase; convert to uppercase
+      
+      alignment_names = (alignment["nam"][[1]]) 
+      allseqs_df <- data.frame(sequence_id = alignment_names, sequence = seqs)
+      
+      # Filter to only categorized sequences
+      subset_df <- allseqs_df[allseqs_df$sequence_id %in% categorized_ids, ]
+      
+      if (nrow(subset_df) == 0) {
+        append_log("Warning: No sequences from the FASTA file match the categorized IDs.")
+        return()
+      }
+      
+      append_log(glue("Subsetting FASTA: {nrow(subset_df)} sequences match categorized IDs"))
+      
+      # Write the subset to a new FASTA file
+      subset_fasta_file <- file.path(outdir, "categorized_sequences.fasta")
+      
+      # Create FASTA format
+      fasta_lines <- character()
+      for (i in 1:nrow(subset_df)) {
+        fasta_lines <- c(fasta_lines, 
+                         paste0(">", subset_df$sequence_id[i]),
+                         subset_df$sequence[i])
+      }
+      
+      writeLines(fasta_lines, subset_fasta_file)
+      append_log(glue("Subset FASTA saved to: {subset_fasta_file}"))
+      
+    }, error = function(e) {
+      append_log(glue("Error subsetting FASTA file: {e$message}"))
+    })
   })
   
   # Refresh button handler

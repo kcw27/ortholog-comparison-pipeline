@@ -5,7 +5,26 @@ library(dplyr)
 library(glue)
 
 benchmark <- function(metadata_file) {
-  df <- read.csv(metadata_file, header=TRUE, sep="\t")
+  #df <- read.csv(metadata_file, header=TRUE, sep="\t")
+  if (!requireNamespace("data.table", quietly = TRUE)) {
+    install.packages("data.table")
+  }
+  library(data.table)
+  
+  # Read with maximum error tolerance
+  df <- fread(metadata_file, 
+                   sep = "\t",
+                   header = TRUE,
+                   quote = "",
+                   fill = TRUE,
+                   skip = 0,
+                   nThread = 1,  # Single thread for stability
+                   stringsAsFactors = FALSE,
+                   showProgress = FALSE)
+  
+  df <- as.data.frame(df)
+  
+  cat("Successfully read", nrow(df), "rows (some lines may have been skipped)\n")
   
   print(glue("There are {nrow(df)} lines in the metadata file."))
   

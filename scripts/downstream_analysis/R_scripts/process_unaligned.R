@@ -66,33 +66,41 @@ process_data <- function(multifasta_file, metadata, metadata_type, sequence_name
 }
 
 process_metadata <- function(metadata_file, metadata_type) {
-  # loads metadata based on where it came from
+  # Use data.table with maximum error tolerance
+  if (!requireNamespace("data.table", quietly = TRUE)) {
+    install.packages("data.table")
+  }
+  library(data.table)
+  
+  # Read with maximum error tolerance
+  metadata <- fread(metadata_file, 
+                   sep = "\t",
+                   header = TRUE,
+                   quote = "",
+                   fill = TRUE,
+                   skip = 0,
+                   nThread = 1,  # Single thread for stability
+                   stringsAsFactors = FALSE,
+                   showProgress = FALSE)
+  
+  metadata <- as.data.frame(metadata)
+  
+  cat("Successfully read", nrow(metadata), "rows (some lines may have been skipped)\n")
+  
+  # Rest of your processing code remains the same...
   if (metadata_type == "synteny_summary") {
-#    metadata <- read.csv(metadata_file, header=FALSE, sep="\t")
-    
-#    colnames(synteny_df) <- c("genome_id", "contig", "organism", 
-#      "isolation_source", "titles", "locus", "protein_id", "sequence", 
-#      "sequencing_technology", "assembly_method")[1:ncol(metadata)]
-
-    metadata <- read.csv(metadata_file, header=TRUE, sep="\t")
-      
     metadata <- metadata |>
       mutate(sequence_id = paste(genome_id, protein_id, sep = "-"))
-      
   } else if (metadata_type == "fetched") {
-    metadata <- read.csv(metadata_file, header=TRUE, sep="\t")
-    
     metadata <- metadata |>
       mutate(sequence_id = paste(genome_id, subject, sep = "-"))
-  } else {
-    print(glue("Error: invalid metadata_type {metadata_type}; must be 'synteny_summary' or 'fetched'."))
   }
   
   if ("organism" %in% colnames(metadata)) {
     metadata <- metadata |>
-      mutate(genus = sapply(organism, function(x) strsplit(x, " ")[[1]][1])) |> # add genus column
+      mutate(genus = sapply(organism, function(x) strsplit(x, " ")[[1]][1])) |>
       mutate(genus = ifelse(is.na(genus), " ", genus)) |>
-      mutate(species = sapply(organism, function(x) strsplit(x, " ")[[1]][2])) |> # add species column
+      mutate(species = sapply(organism, function(x) strsplit(x, " ")[[1]][2])) |>
       mutate(species = ifelse(is.na(species), " ", species))
   }
   
@@ -148,11 +156,35 @@ process_unaligned_shiny <- function(multifasta_file, metadata_file, outdir, scri
   script_files <- list.files(stats_dir, pattern = "\\.R$", full.names = TRUE)
   for (f in script_files) source(f)
   
-  # Capture printed output only
-  test_output <- capture.output({
-    invisible(test_type <- test_normality(df, "sequence_length", glue("{outdir}/figures")))
-  })
-  lapply(test_output, log_fn)
+    
+  numeric_col = ifelse("sequence_length" %in% colnames(df), "sequence_length", "sequence_length.x")
+  
+  # Determine which column to use for normality test
+  if ("sequence_length" %in% colnames(df)) {
+    numeric_col <- "sequence_length"
+  } else {
+    numeric_cols <- names(df)[sapply(df, is.numeric)]
+    if (length(numeric_cols) > 0) {
+      numeric_col <- numeric_cols[1]
+      log_fn(glue("Using first numeric column '{numeric_col}' for normality test"))
+    } else {
+      test_type <- "non-parametric"
+      log_fn("No numeric columns found - using default test type: non-parametric")
+    }
+  }
+  
+  # Only run normality test if we found a numeric column
+  if (exists("numeric_col")) {
+    # Capture printed output only
+    test_output <- capture.output({
+      invisible(test_type <- test_normality(df, numeric_col, glue("{outdir}/figures")))
+    })
+    lapply(test_output, log_fn)
+    log_fn(glue("Use this test type on the '{numeric_col}' numerical variable: {test_type}"))
+  } else {
+    # test_type is already set to "non-parametric" above
+    log_fn("Skipping normality test - no suitable numeric column available")
+  }
 
   log_fn(glue("Use this test type on the 'sequence_length' numerical variable: {test_type}"))
 
@@ -234,8 +266,10 @@ if (!interactive() && length(commandArgs(trailingOnly = TRUE)) >= 2) {
   script_files <- list.files(stats_dir, pattern = "\\.R$", full.names = TRUE)
   for (f in script_files) source(f)
   
+  #numeric_col = ifelse("sequence_length" %in% colnames(df), "sequence_length", "sequence_length.x")
+  #test_type <- test_normality(df, numeric_col, glue("{outdir}/figures"))
   test_type <- test_normality(df, "sequence_length", glue("{outdir}/figures"))
-  print(glue("Use this test type on the 'sequence_length' numerical variable: {test_type}"))
+  print(glue("Use this test type on the '{numeric_col}' numerical variable: {test_type}"))
   
   df |>
     pull(sequence_id) |>

@@ -480,22 +480,32 @@ def determine_origin(metadata_file):
 	Guess whether metadata_file was obtained through synteny summary or fetching
 	based on contents of titles column.
 	'''
-	df = pd.read_csv(metadata_file, sep="\t")
+	try:
+		df = pd.read_csv(metadata_file, sep="\t")
 
-	if len(df["titles"]) == 0:
-		return "neither" # can't tell what it is if no titles column
+		if "titles" not in df.columns or df.empty:
+			return "neither"
 
-	txt = df["titles"][0] # formatting is consistent throughout, so just check the 0th entry
+		# Get first non-empty title
+		titles = df["titles"].dropna()
+		if len(titles) == 0:
+			return "neither"
 
-	# define regex patterns
-	p_fetch = re.compile(r'\[Reference\(.*\]')
-	p_synteny = re.compile(r'TITLE')
+		txt = str(titles.iloc[0])
 
-	if re.search(p_fetch, txt):
-		return "fetched"
-	elif re.search(p_synteny, txt):
-		return "synteny_summary"
-	else:
+		# define regex patterns
+		p_fetch = re.compile(r'\[Reference\(.*\]')
+		p_synteny = re.compile(r'TITLE')
+
+		if re.search(p_fetch, txt):
+			return "fetched"
+		elif re.search(p_synteny, txt):
+			return "synteny_summary"
+		else:
+			return "neither"
+
+	except Exception as e:
+		print(f"Error reading {metadata_file}: {e}")
 		return "neither"
 
 

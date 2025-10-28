@@ -57,27 +57,41 @@ process_alignment_and_metadata <- function(alignment_file, alignment_type, metad
 }
 
 process_metadata <- function(metadata_file, metadata_type) {
-  # loads metadata based on where it came from
+  # Use data.table with maximum error tolerance
+  if (!requireNamespace("data.table", quietly = TRUE)) {
+    install.packages("data.table")
+  }
+  library(data.table)
+  
+  # Read with maximum error tolerance
+  metadata <- fread(metadata_file, 
+                   sep = "\t",
+                   header = TRUE,
+                   quote = "",
+                   fill = TRUE,
+                   skip = 0,
+                   nThread = 1,  # Single thread for stability
+                   stringsAsFactors = FALSE,
+                   showProgress = FALSE)
+  
+  metadata <- as.data.frame(metadata)
+  
+  cat("Successfully read", nrow(metadata), "rows (some lines may have been skipped)\n")
+  
+  # Rest of your processing code remains the same...
   if (metadata_type == "synteny_summary") {
-    metadata <- read.csv(metadata_file, header=TRUE, sep="\t")
-      
     metadata <- metadata |>
       mutate(sequence_id = paste(genome_id, protein_id, sep = "-"))
-      
   } else if (metadata_type == "fetched") {
-    metadata <- read.csv(metadata_file, header=TRUE, sep="\t")
-    
     metadata <- metadata |>
       mutate(sequence_id = paste(genome_id, subject, sep = "-"))
-  } else {
-    print(glue("Error: invalid metadata_type {metadata_type}; must be 'synteny_summary' or 'fetched'."))
   }
   
   if ("organism" %in% colnames(metadata)) {
     metadata <- metadata |>
-      mutate(genus = sapply(organism, function(x) strsplit(x, " ")[[1]][1])) |> # add genus column
+      mutate(genus = sapply(organism, function(x) strsplit(x, " ")[[1]][1])) |>
       mutate(genus = ifelse(is.na(genus), " ", genus)) |>
-      mutate(species = sapply(organism, function(x) strsplit(x, " ")[[1]][2])) |> # add species column
+      mutate(species = sapply(organism, function(x) strsplit(x, " ")[[1]][2])) |>
       mutate(species = ifelse(is.na(species), " ", species))
   }
   
