@@ -21,7 +21,7 @@ def find_matches(p, string):
 
 	return (matches, starts, ends)
 
-def summarize_pq_repeats(multifasta, outname, pattern=r"(?:PQ)+"):
+def summarize_pq_repeats(multifasta, outname, pattern=r"(?:PQ)+", remove_gaps = True):
 	'''
 	New version that writes the coordinates of only the longest PQ repeat per sequence. 
 	Inputs: a multifasta file in which to find PQ repeats, an output file name,
@@ -42,6 +42,9 @@ def summarize_pq_repeats(multifasta, outname, pattern=r"(?:PQ)+"):
 				# get info from the fasta
 				locus_tag = record.id
 				seq = str(record.seq)
+
+				if remove_gaps:
+					seq = seq.replace("-", "")
 
 				# find the pattern in the sequence
 				matches, starts, ends = find_matches(p, seq)

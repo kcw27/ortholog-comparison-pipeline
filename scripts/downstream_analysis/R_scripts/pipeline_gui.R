@@ -37,7 +37,16 @@ ui <- navbarPage("Pipeline GUI",
       textInput("fasta_file", "FASTA file path:", ""),
       textInput("metadata_file", "Metadata file path:", ""),
       textInput("outdir", "Output directory:", ""),
-      actionButton("submit_btn", "Submit"),
+      # Conditional name map input for aligned sequences
+      conditionalPanel(
+        "input.fasta_type == 'Aligned'",
+        textInput("name_map_file", "Name map file path (optional):", "")
+      ),
+      actionButton("submit_btn", "Submit Data"),
+      br(), br(),
+      # Reference sequence ID section
+      textInput("ref_seqID", "Reference sequence ID (optional):", ""),
+      actionButton("submit_ref_btn", "Submit Reference Sequence ID"),
       verbatimTextOutput("output_text"),
       
       # QQ plot path and image
@@ -69,11 +78,17 @@ ui <- navbarPage("Pipeline GUI",
     conditionalPanel("output.tabs_ready",
       fluidPage(
         selectInput("test_script", "Select statistical test script:",
-                    choices = c("test_quantResponse_categPredictor.R",
-                                   "test_alleleFreqs_within_categories.R",
-                                   "test_categFreqs_within_quantQuadrants.R",
-                                   "test_resampled_distribution_properties.R",
-                                   "test_sequence_diversity.R")),
+                    choices = c("test_normality.R",
+                                "test_quantResponse_categPredictor.R",
+                                "test_alleleFreqs_within_categories.R",
+                                "test_categFreqs_within_quantQuadrants.R",
+                                "test_resampled_distribution_properties.R",
+                                "test_sequence_diversity.R")),
+        
+        # Inputs for test_normality.R
+        conditionalPanel("input.test_script == 'test_normality.R'",
+          selectInput("normality_col", "Column to test:", choices = NULL)
+        ),
         
         # Inputs for test_quantResponse_categPredictor.R
         conditionalPanel("input.test_script == 'test_quantResponse_categPredictor.R'",
@@ -106,6 +121,9 @@ server <- function(input, output, session) {
   tabs_ready <- reactiveVal(FALSE)
   test_type_store <- reactiveVal(NULL)
   show_output <- reactiveVal(FALSE)
+  ref_seqID_store <- reactiveVal(NULL)
+  ref_length_store <- reactiveVal(NULL)
+  ref_sequence_store <- reactiveVal(NULL)
   
   # Store the resource path for serving files
   resource_path_added <- reactiveVal(FALSE)
@@ -129,6 +147,12 @@ server <- function(input, output, session) {
     fasta_file <- normalizePath(as.character(strip_quotes(input$fasta_file)), mustWork = FALSE)
     metadata_file <- normalizePath(as.character(strip_quotes(input$metadata_file)), mustWork = FALSE)
     outdir <- normalizePath(as.character(strip_quotes(input$outdir)), mustWork = FALSE)
+    
+    # Handle name map file for aligned sequences
+    name_map_file <- NULL
+    if (input$fasta_type == "Aligned" && input$name_map_file != "") {
+      name_map_file <- normalizePath(as.character(strip_quotes(input$name_map_file)), mustWork = FALSE)
+    }
 
     benchmark_output <- capture.output(benchmark(metadata_file))
     lapply(benchmark_output, append_log)
@@ -137,48 +161,120 @@ server <- function(input, output, session) {
     result <- if (input$fasta_type == "Unaligned") {
       process_unaligned_shiny(fasta_file, metadata_file, outdir, script_dir, log_fn = append_log)
     } else {
-      process_aligned_shiny(fasta_file, metadata_file, outdir, script_dir, log_fn = append_log)
+      process_aligned_shiny(fasta_file, metadata_file, outdir, script_dir, name_map_file = name_map_file, log_fn = append_log)
     }
 
     df_store(result$df)
     test_type_store(result$test_type)
     
+    # Update column selectors for statistical tests
     numeric_cols <- names(result$df)[sapply(result$df, is.numeric)]
     updateSelectInput(session, "response_col",
+                      choices = numeric_cols,
+                      selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
+    updateSelectInput(session, "normality_col",
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
 
     tabs_ready(TRUE)
 
-    # Run normality test and capture output
-    test_output <- capture.output({
-      invisible(test_type <- test_normality(result$df, "sequence_length", file.path(outdir, "figures")))
-    })
-    lapply(test_output, append_log)
-    test_type_store(test_type)
-    
-    # Show QQ plot image and path
-    qqplot_path <- file.path(outdir, "figures", "qqplot_sequence_length.png")
-    
-    output$qqplot_path <- renderText({
-      if (file.exists(qqplot_path)) {
-        glue("QQ plot saved to: {qqplot_path}")
-      } else {
-        "QQ plot not found."
-      }
-    })
-    
-    output$qqplot_image <- renderImage({
-      if (file.exists(qqplot_path)) {
-        list(src = qqplot_path, contentType = "image/png", alt = "QQ Plot")
-      } else {
-        NULL
-      }
-    }, deleteFile = FALSE)
+#    # Run normality test and capture output
+#    test_output <- capture.output({
+#      invisible(test_type <- test_normality(result$df, "sequence_length", file.path(outdir, "figures")))
+#    })
+#    lapply(test_output, append_log)
+#    test_type_store(test_type)
+#    
+#    # Show QQ plot image and path
+#    qqplot_path <- file.path(outdir, "figures", "qqplot_sequence_length.png")
+#    
+#    output$qqplot_path <- renderText({
+#      if (file.exists(qqplot_path)) {
+#        glue("QQ plot saved to: {qqplot_path}")
+#      } else {
+#        "QQ plot not found."
+#      }
+#    })
+#    
+#    output$qqplot_image <- renderImage({
+#      if (file.exists(qqplot_path)) {
+#        list(src = qqplot_path, contentType = "image/png", alt = "QQ Plot")
+#      } else {
+#        NULL
+#      }
+#    }, deleteFile = FALSE)
     
     output$output_text <- renderText({
       invalidateLater(500, session)
       paste(log_store$lines, collapse = "\n")
+    })
+  })
+
+  # Handle reference sequence ID submission - look in FASTA file
+  observeEvent(input$submit_ref_btn, {
+    req(input$fasta_file)
+    
+    ref_seqID <- strip_quotes(input$ref_seqID)
+    
+    if (ref_seqID == "") {
+      append_log("No reference sequence ID provided.")
+      ref_seqID_store(NULL)
+      ref_length_store(NULL)
+      ref_sequence_store(NULL)
+      return()
+    }
+    
+    fasta_file <- normalizePath(as.character(strip_quotes(input$fasta_file)), mustWork = FALSE)
+    
+    if (!file.exists(fasta_file)) {
+      append_log(glue("FASTA file not found: {fasta_file}"))
+      return()
+    }
+    
+    # Read the FASTA file to find the reference sequence
+    tryCatch({
+      library(seqinr)
+      alignment <- read.alignment(fasta_file, format = "fasta")
+      
+      seqs <- alignment[["seq"]] |>
+        unlist() |> # convert from list to vector
+        toupper() # originally in lowercase; convert to uppercase
+      
+      alignment_names = (alignment["nam"][[1]]) 
+      allseqs_df <- data.frame(sequence_id = alignment_names, sequence = seqs)
+      
+      # Check if reference sequence ID exists
+      matching_rows <- which(allseqs_df$sequence_id == ref_seqID)
+      
+      if (length(matching_rows) == 0) {
+        append_log(glue("WARNING: Reference sequence ID '{ref_seqID}' not found in FASTA file."))
+        append_log("Please submit a sequence ID that exists in the FASTA file.")
+        ref_seqID_store(NULL)
+        ref_length_store(NULL)
+        ref_sequence_store(NULL)
+      } else if (length(matching_rows) > 1) {
+        append_log(glue("WARNING: Reference sequence ID '{ref_seqID}' appears {length(matching_rows)} times in FASTA file."))
+        append_log("The first matching sequence will be used.")
+        ref_seqID_store(ref_seqID)
+        # Use first occurrence
+        first_match <- matching_rows[1]
+        ref_sequence_store(allseqs_df$sequence[first_match])
+        ref_length_store(nchar(allseqs_df$sequence[first_match]))
+      } else {
+        append_log(glue("Reference sequence ID '{ref_seqID}' found in FASTA file."))
+        ref_seqID_store(ref_seqID)
+        ref_sequence_store(allseqs_df$sequence[matching_rows])
+        ref_length_store(nchar(allseqs_df$sequence[matching_rows]))
+      }
+      
+      if (!is.null(ref_length_store())) {
+        append_log(glue("Reference sequence length: {ref_length_store()}"))
+      }
+      if (!is.null(ref_sequence_store())) {
+        append_log(glue("Reference sequence stored (first 50 chars): {substr(ref_sequence_store(), 1, 50)}..."))
+      }
+    }, error = function(e) {
+      append_log(glue("Error reading FASTA file: {e$message}"))
     })
   })
 
@@ -198,23 +294,57 @@ server <- function(input, output, session) {
     source(test_script, local = TRUE)
   
     result <- NULL
-    if (script_name == "test_quantResponse_categPredictor.R") {
+    if (script_name == "test_normality.R") {
+      # Run normality test on selected column
+      colname <- input$normality_col
+      if (is.null(colname) || colname == "") {
+        output$test_output <- renderText({ "Please select a column to test." })
+        return()
+      }
+      
+      # For test_normality: capture print statements and show them, then show return value separately
+      test_output <- capture.output({
+        result <- test_normality(df, colname, file.path(input$outdir, "figures"))
+      })
+      
+      # Combine captured output and return value clearly separated
+      full_output <- c(test_output, "", "Final test type:", result)
+      output$test_output <- renderText({ paste(full_output, collapse = "\n") })
+      
+    } else if (script_name == "test_quantResponse_categPredictor.R") {
       args <- list(df, input$response_col, input$predictor_col, input$test_type)
       if (input$adjust_method != "") {
         args <- c(args, input$adjust_method)
       }
   
-      # Run and capture output
+      # For quantResponse_categPredictor: the function returns formatted output, so just capture and display it
       test_output <- capture.output({
-        invisible(result <- do.call(quantResponse_categPredictor, args))
+        result <- do.call(quantResponse_categPredictor, args)
       })
-      output$test_output <- renderText({ paste(test_output, collapse = "\n") })
+      
+      # Since quantResponse_categPredictor returns formatted strings, just display the result
+      output$test_output <- renderText({ result })
   
       # Render QQ plot image
       qqplot_path <- file.path(input$outdir, "figures", glue("qqplot_{input$response_col}.png"))
       output$qqplot_image <- renderImage({
         list(src = qqplot_path, contentType = "image/png", alt = "QQ Plot")
       }, deleteFile = FALSE)
+    } else if (script_name == "test_alleleFreqs_within_categories.R") {
+      result <- test_alleleFreqs_within_categories(df, input$allele_predictor)
+      output$test_output <- renderText({ paste(result, collapse = "\n") })
+  
+    } else if (script_name == "test_categFreqs_within_quantQuadrants.R") {
+      result <- test_categFreqs_within_quantQuadrants(df)
+      output$test_output <- renderText({ paste(result, collapse = "\n") })
+  
+    } else if (script_name == "test_resampled_distribution_properties.R") {
+      result <- test_resampled_distribution_properties(df)
+      output$test_output <- renderText({ paste(result, collapse = "\n") })
+  
+    } else if (script_name == "test_sequence_diversity.R") {
+      result <- test_sequence_diversity(df)
+      output$test_output <- renderText({ paste(result, collapse = "\n") })
     }
   })
 
@@ -231,11 +361,24 @@ server <- function(input, output, session) {
       append_log(glue("Running {fig_script}..."))
       if (fig_script == "make_histograms.R") {
         source(script_path, local = TRUE)
-        # Call histograms_by_source directly with the required arguments
-        histograms_by_source(df, 
-                            outdir = file.path(input$outdir, "figures"), 
-                            group_var = group_var, 
-                            width = width)
+        
+        # Prepare arguments for histograms_by_source
+        args <- list(
+          df = df,
+          outdir = file.path(input$outdir, "figures"),
+          group_var = group_var,
+          width = width
+        )
+        
+        # Add reference sequence parameters if available
+        if (!is.null(ref_seqID_store()) && !is.null(ref_length_store())) {
+          args$reference_label <- ref_seqID_store()
+          args$reference_length <- ref_length_store()
+          append_log(glue("Using reference sequence: {ref_seqID_store()} (length: {ref_length_store()})"))
+        }
+        
+        # Call histograms_by_source with the appropriate arguments
+        do.call(histograms_by_source, args)
         append_log("Histograms generated.")
         
         # Trigger image list refresh after generating figures
@@ -269,9 +412,14 @@ server <- function(input, output, session) {
                 choices = setNames(imgs, basename(imgs)))
   })
   
-  # Fixed image display using renderUI with proper resource path
+  # Fixed image display using renderUI with proper resource path - show default message
   output$selected_image <- renderUI({
-    req(input$image_file)
+    # Always show the default message when no image is selected
+    # This will reset when images are refreshed since input$image_file becomes NULL
+    if (is.null(input$image_file)) {
+      return(div("Please select an image to view.", 
+                 style = "border: 1px solid #ccc; margin-top: 10px; padding: 20px; text-align: center; color: #666;"))
+    }
     
     # Validate file exists
     if (!file.exists(input$image_file)) {
@@ -318,46 +466,6 @@ server <- function(input, output, session) {
     updateSelectInput(session, "test_type",
                       choices = c("parametric", "non-parametric"),
                       selected = test_type_store())
-  })
-
-  observeEvent(input$run_test, {
-    df <- df_store()
-    if (is.null(df)) return()
-    
-    script_name <- input$test_script
-    if (script_name == "") return()
-    
-    test_script <- file.path(script_dir, "hypothesis_testing", script_name)
-    if (!file.exists(test_script)) {
-      output$test_output <- renderText({ glue("Script not found: {script_name}") })
-      return()
-    }
-  
-    source(test_script, local = TRUE)
-  
-    # Dispatch based on selected script
-    result <- NULL
-    if (script_name == "test_quantResponse_categPredictor.R") {
-      args <- list(df, input$response_col, input$predictor_col, input$test_type)
-      if (input$adjust_method != "") {
-        args <- c(args, input$adjust_method)
-      }
-      result <- do.call(quantResponse_categPredictor, args)
-  
-    } else if (script_name == "test_alleleFreqs_within_categories.R") {
-      result <- test_alleleFreqs_within_categories(df, input$allele_predictor)
-  
-    } else if (script_name == "test_categFreqs_within_quantQuadrants.R") {
-      result <- test_categFreqs_within_quantQuadrants(df)
-  
-    } else if (script_name == "test_resampled_distribution_properties.R") {
-      result <- test_resampled_distribution_properties(df)
-  
-    } else if (script_name == "test_sequence_diversity.R") {
-      result <- test_sequence_diversity(df)
-    }
-  
-    output$test_output <- renderText({ paste(result, collapse = "\n") })
   })
 
 }
