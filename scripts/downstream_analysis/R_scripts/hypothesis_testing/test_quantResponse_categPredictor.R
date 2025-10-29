@@ -14,6 +14,7 @@ quantResponse_categPredictor <- function(df, response = "sequence_length", predi
     test <- aov(as.formula(glue("{response} ~ {predictor}")), data = df)
     p <- summary(test)[[1]][["Pr(>F)"]][1]
     output <- c(output, capture.output(summary(test)))
+    #output <- c(output, capture.output(print(summary(test), max = 1000)))
 
     if (p < 0.05) {
       output <- c(output, "Conducting a post-hoc Tukey HSD test.")

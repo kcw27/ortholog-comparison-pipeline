@@ -135,7 +135,7 @@ process_aligned_shiny <- function(alignment_file, metadata_file, outdir, script_
   df <- df_raw |>
     filter(!is.na(category)) |>
     filter(category != "no category")
-  
+
   log_fn(glue("Benchmarking: {nrow(df_raw)} sequences in input BLAST file; {nrow(df)} were successfully categorized."))
   
   log_output <- df_raw |>
@@ -165,5 +165,6 @@ process_aligned_shiny <- function(alignment_file, metadata_file, outdir, script_
               row.names = FALSE, col.names = FALSE, quote = FALSE)
   log_fn(glue("IDs of categorized sequences saved to {outdir}/categorized_ids.txt"))
   
-  return(list(df = df, test_type = test_type))
+  #return(list(df = df, test_type = test_type))
+  return(list(df = df_raw, test_type = test_type)) # return df_raw instead so that you can customize filtering later
 }

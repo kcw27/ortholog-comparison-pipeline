@@ -194,7 +194,8 @@ process_unaligned_shiny <- function(multifasta_file, metadata_file, outdir, scri
               row.names = FALSE, col.names = FALSE, quote = FALSE)
   log_fn(glue("IDs of categorized sequences saved to {outdir}/categorized_ids.txt"))
   
-  return(list(df = df, test_type = test_type))
+  #return(list(df = df, test_type = test_type))
+  return(list(df = df_raw, test_type = test_type)) # return df_raw instead so that you can customize filtering later
 }
 
 # Only run as standalone script if called via Rscript with CLI arguments

@@ -47,10 +47,25 @@ ui <- navbarPage("Pipeline GUI",
       # Reference sequence ID section
       textInput("ref_seqID", "Reference sequence ID (optional):", ""),
       actionButton("submit_ref_btn", "Submit Reference Sequence ID"),
-      # Add subset FASTA button - only show when data is loaded
+      
+      # NEW: Subset data by group section
       conditionalPanel(
         "output.tabs_ready",
-        actionButton("subset_fasta_btn", "Subset FASTA to Categorized Sequences")
+        wellPanel(
+          h4("Subset data by group"),
+          selectInput("subset_group_var", "Group variable:", 
+                     choices = c("category", "genus"), 
+                     selected = "category"),
+          uiOutput("subset_levels_ui"),
+          actionButton("apply_subset", "Apply Subset"),
+          actionButton("clear_subset", "Clear Subset")
+        )
+      ),
+      
+      # UPDATED: Subset FASTA button
+      conditionalPanel(
+        "output.tabs_ready",
+        actionButton("subset_fasta_btn", "Subset FASTA")
       ),
       verbatimTextOutput("output_text"),
       
@@ -120,13 +135,12 @@ ui <- navbarPage("Pipeline GUI",
       )
     )
   )
-
 )
-
 
 server <- function(input, output, session) {
   log_store <- reactiveValues(lines = character())
   df_store <- reactiveVal(NULL)
+  selected_df_store <- reactiveVal(NULL)  # NEW: Store for subsetted data
   tabs_ready <- reactiveVal(FALSE)
   test_type_store <- reactiveVal(NULL)
   show_output <- reactiveVal(FALSE)
@@ -148,6 +162,63 @@ server <- function(input, output, session) {
   
   output$show_output <- reactive({ show_output() })
   outputOptions(output, "show_output", suspendWhenHidden = FALSE)
+
+  # NEW: Dynamic UI for subset levels
+  output$subset_levels_ui <- renderUI({
+    req(df_store())
+    df <- df_store()
+    group_var <- input$subset_group_var
+    
+    if (!group_var %in% names(df)) {
+      return(div("Selected group variable not found in data"))
+    }
+    
+    levels <- sort(unique(df[[group_var]]))
+    levels <- levels[!is.na(levels)]  # Remove NA values
+    
+    checkboxGroupInput("subset_levels", "Select levels to include:",
+                      choices = levels,
+                      selected = levels)  # Default: all levels selected
+  })
+
+  # NEW: Apply subset
+  observeEvent(input$apply_subset, {
+    req(df_store(), input$subset_group_var, input$subset_levels)
+    
+    df <- df_store()
+    group_var <- input$subset_group_var
+    
+    if (!group_var %in% names(df)) {
+      append_log("Error: Selected group variable not found in data")
+      return()
+    }
+    
+    # Filter to selected levels
+    selected_df <- df[df[[group_var]] %in% input$subset_levels, ]
+    
+    if (nrow(selected_df) == 0) {
+      append_log("Warning: No data matches the selected levels")
+      return()
+    }
+    
+    selected_df_store(selected_df)
+    append_log(glue("Data subset applied: {nrow(selected_df)} rows selected from {group_var} levels: {paste(input$subset_levels, collapse=', ')}"))
+  })
+
+  # NEW: Clear subset
+  observeEvent(input$clear_subset, {
+    selected_df_store(NULL)
+    append_log("Data subset cleared - using full dataset")
+  })
+
+  # UPDATED: Get current dataframe (subsetted or full)
+  get_current_df <- reactive({
+    if (!is.null(selected_df_store())) {
+      return(selected_df_store())
+    } else {
+      return(df_store())
+    }
+  })
 
   observeEvent(input$submit_btn, {
     show_output(TRUE)
@@ -174,6 +245,7 @@ server <- function(input, output, session) {
     }
 
     df_store(result$df)
+    selected_df_store(NULL)  # Reset subset when new data is loaded
     test_type_store(result$test_type)
                       
     # Update column selectors for statistical tests AND figures
@@ -188,33 +260,7 @@ server <- function(input, output, session) {
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
   
-      tabs_ready(TRUE)
-
-#    # Run normality test and capture output
-#    test_output <- capture.output({
-#      invisible(test_type <- test_normality(result$df, "sequence_length", file.path(outdir, "figures")))
-#    })
-#    lapply(test_output, append_log)
-#    test_type_store(test_type)
-#    
-#    # Show QQ plot image and path
-#    qqplot_path <- file.path(outdir, "figures", "qqplot_sequence_length.png")
-#    
-#    output$qqplot_path <- renderText({
-#      if (file.exists(qqplot_path)) {
-#        glue("QQ plot saved to: {qqplot_path}")
-#      } else {
-#        "QQ plot not found."
-#      }
-#    })
-#    
-#    output$qqplot_image <- renderImage({
-#      if (file.exists(qqplot_path)) {
-#        list(src = qqplot_path, contentType = "image/png", alt = "QQ Plot")
-#      } else {
-#        NULL
-#      }
-#    }, deleteFile = FALSE)
+    tabs_ready(TRUE)
     
     output$output_text <- renderText({
       invalidateLater(500, session)
@@ -291,7 +337,7 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$run_test, {
-    df <- df_store()
+    df <- get_current_df()  # UPDATED: Use current df (subsetted or full)
     if (is.null(df)) return()
     
     script_name <- input$test_script
@@ -361,7 +407,7 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$run_figures, {
-    df <- df_store()
+    df <- get_current_df()  # UPDATED: Use current df (subsetted or full)
     if (is.null(df)) return()
     fig_script <- input$fig_script
     group_var <- input$group_var
@@ -403,22 +449,38 @@ server <- function(input, output, session) {
     }
   })
   
-  # Add the subset FASTA functionality
+  # UPDATED: Subset FASTA functionality
   observeEvent(input$subset_fasta_btn, {
     req(input$fasta_file, input$outdir)
     
-    fasta_file <- normalizePath(as.character(strip_quotes(input$fasta_file)), mustWork = FALSE)
-    outdir <- normalizePath(as.character(strip_quotes(input$outdir)), mustWork = FALSE)
-    categorized_ids_file <- file.path(outdir, "categorized_ids.txt")
-    
-    if (!file.exists(categorized_ids_file)) {
-      append_log("Error: categorized_ids.txt not found. Please submit data first.")
+    df <- get_current_df()  # UPDATED: Use current df (subsetted or full)
+    if (is.null(df)) {
+      append_log("Error: No data available for subsetting")
       return()
     }
     
-    # Read the categorized IDs
-    categorized_ids <- readLines(categorized_ids_file)
-    append_log(glue("Found {length(categorized_ids)} categorized sequence IDs"))
+    fasta_file <- normalizePath(as.character(strip_quotes(input$fasta_file)), mustWork = FALSE)
+    outdir <- normalizePath(as.character(strip_quotes(input$outdir)), mustWork = FALSE)
+    
+    # Get sequence IDs from current dataframe
+    if ("sequence_id" %in% names(df)) {
+      sequence_ids <- df$sequence_id
+    } else if ("sequence_id.x" %in% names(df)) {
+      sequence_ids <- df$sequence_id.x
+    } else {
+      # Try to find any column that might contain sequence IDs
+      id_cols <- names(df)[grepl("sequence|id", names(df), ignore.case = TRUE)]
+      if (length(id_cols) > 0) {
+        sequence_ids <- df[[id_cols[1]]]
+        append_log(glue("Using column '{id_cols[1]}' for sequence IDs"))
+      } else {
+        append_log("Error: No sequence ID column found in data")
+        return()
+      }
+    }
+    
+    sequence_ids <- unique(sequence_ids[!is.na(sequence_ids)])
+    append_log(glue("Found {length(sequence_ids)} unique sequence IDs in current data"))
     
     # Read the original FASTA file
     tryCatch({
@@ -432,18 +494,18 @@ server <- function(input, output, session) {
       alignment_names = (alignment["nam"][[1]]) 
       allseqs_df <- data.frame(sequence_id = alignment_names, sequence = seqs)
       
-      # Filter to only categorized sequences
-      subset_df <- allseqs_df[allseqs_df$sequence_id %in% categorized_ids, ]
+      # Filter to only sequences in current data
+      subset_df <- allseqs_df[allseqs_df$sequence_id %in% sequence_ids, ]
       
       if (nrow(subset_df) == 0) {
-        append_log("Warning: No sequences from the FASTA file match the categorized IDs.")
+        append_log("Warning: No sequences from the FASTA file match the IDs in current data.")
         return()
       }
       
-      append_log(glue("Subsetting FASTA: {nrow(subset_df)} sequences match categorized IDs"))
+      append_log(glue("Subsetting FASTA: {nrow(subset_df)} sequences match current data IDs"))
       
       # Write the subset to a new FASTA file
-      subset_fasta_file <- file.path(outdir, "categorized_sequences.fasta")
+      subset_fasta_file <- file.path(outdir, "subset_sequences.fasta")
       
       # Create FASTA format
       fasta_lines <- character()
@@ -540,7 +602,6 @@ server <- function(input, output, session) {
                       choices = c("parametric", "non-parametric"),
                       selected = test_type_store())
   })
-
 }
 
 shinyApp(ui = ui, server = server, options = list(host = "0.0.0.0", port = 3838))

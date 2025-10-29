@@ -122,10 +122,36 @@ histograms_by_source <- function(df, outdir, column_name = "sequence_length", re
     }
     
   }
+  
+  # Generate histogram for overall data
+  fname = glue("{outdir}/overall_histogram_{column_name}.pdf")
+  if (!is.na(reference_label) & !is.na(reference_length)) {
+    df |> ggplot() +
+      geom_histogram(aes(x = df[[column_name]]), binwidth = width) +
+      geom_vline(aes(xintercept=reference_length, colour="reference_length"), size=0.5) +
+      geom_vline(aes(xintercept=mean(df[[column_name]]), colour="mean"), size=0.5) +
+      labs(x = column_name, y = "Count", title = glue("{group_var}: Overall histogram; n: {nrow(df)}")) +
+      scale_color_manual(name = "Values",
+                           values = c(reference_length = "blue", mean = "red"),
+                           labels = c(reference_length = glue("{reference_label} = {reference_length}"),
+                           mean = glue("Mean = {round(mean(df[[column_name]]), 1)}")))
+      ggsave(fname, create.dir=TRUE, width = 8, height = 6)
+      print(glue("Histogram saved to {fname}"))
+  } else {
+    df |> ggplot() +
+      geom_histogram(aes(x = df[[column_name]]), binwidth = width) +
+      geom_vline(aes(xintercept=mean(df[[column_name]]), colour="mean"), size=0.5) +
+      labs(x = column_name, y = "Count", title = glue("{group_var}: Overall histogram; n: {nrow(df)}")) +
+      scale_color_manual(name = "Values",
+                           values = c(mean = "red"),
+                           labels = c(mean = glue("Mean = {round(mean(df[[column_name]]), 1)}")))
+      ggsave(fname, create.dir=TRUE, width = 8, height = 6)
+      print(glue("Histogram saved to {fname}"))
+  }
     
   
   # Generate histogram PDF for group_var
-  save_histograms(df, group_var, outdir, glue("{group_var}_histograms"), 
+  save_histograms(df, group_var, outdir, glue("{group_var}_histograms_{column_name}"), 
                   column_name = column_name, reference_label=reference_label, reference_length=reference_length, consistent_y_axis, export_locus_tags, width)
   
   if (export_locus_tags) {
@@ -140,7 +166,7 @@ histograms_by_source <- function(df, outdir, column_name = "sequence_length", re
     make_dir(glue("{outdir}/subcategories"))
     # Generate subcategory-level histogram PDF
     walk(names(df_categories), ~ save_histograms(df_categories[[.x]], "subcategory", 
-                                                outdir, glue("subcategories/{.x}_histograms"), 
+                                                outdir, glue("subcategories/{.x}_histograms_{column_name}"), 
                                                 column_name = column_name, reference_label=reference_label, 
                                                 reference_length=reference_length,
                                                 consistent_y_axis, export_locus_tags, width))
@@ -151,7 +177,7 @@ histograms_by_source <- function(df, outdir, column_name = "sequence_length", re
     make_dir(glue("{outdir}/species"))
     # Generate species-level histogram PDF
     walk(names(df_categories), ~ save_histograms(df_categories[[.x]], "species", 
-                                                outdir, glue("species/{.x}_histograms"), 
+                                                outdir, glue("species/{.x}_histograms_{column_name}"), 
                                                 column_name = column_name, reference_label=reference_label, 
                                                 reference_length=reference_length,
                                                 consistent_y_axis, export_locus_tags, width))
