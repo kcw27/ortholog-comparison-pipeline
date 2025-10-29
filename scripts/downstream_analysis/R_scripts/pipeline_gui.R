@@ -385,11 +385,10 @@ server <- function(input, output, session) {
           consistent_y_axis = consistent_y_axis  # Pass the toggle value
         )
         
-        # Add reference sequence parameters if available
-        if (!is.null(ref_seqID_store()) && !is.null(ref_length_store())) {
+        # Add reference_label if available (but NOT reference_length)
+        if (!is.null(ref_seqID_store())) {
           args$reference_label <- ref_seqID_store()
-          args$reference_length <- ref_length_store()
-          append_log(glue("Using reference sequence: {ref_seqID_store()} (length: {ref_length_store()})"))
+          append_log(glue("Using reference sequence: {ref_seqID_store()}"))
         }
         
         # Call histograms_by_source with the appropriate arguments

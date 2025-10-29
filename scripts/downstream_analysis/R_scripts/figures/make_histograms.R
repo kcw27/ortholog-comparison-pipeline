@@ -5,7 +5,7 @@ library(purrr)
 theme_set(theme_bw())
 
 # Function to save histograms based on grouping variable
-save_histograms <- function(df, group_var, outdir, pdf_suffix, column_name = "sequence_length", reference_length=NA, reference_label=NA, consistent_y_axis = TRUE, export_locus_tags = FALSE, width = 10) {
+save_histograms <- function(df, group_var, outdir, pdf_suffix, column_name = "sequence_length", reference_label=NA, reference_length=NA, consistent_y_axis = TRUE, export_locus_tags = FALSE, width = 10) {
   if (!group_var %in% names(df)) stop(glue("Column '{group_var}' not found in df"))
   if (!column_name %in% names(df)) stop(glue("Column '{column_name}' not found in df"))
   
@@ -18,7 +18,8 @@ save_histograms <- function(df, group_var, outdir, pdf_suffix, column_name = "se
   x_limits <- x_limits + c(-buffer_size*diff(x_limits), buffer_size*diff(x_limits)) 
   # add a bit of buffer on either side so that it doesn't crop out the data at either end of the x axis
   
-  if (!is.na(reference_length) & !is.na(reference_label)) {
+  if (!is.na(reference_label) & !is.na(reference_length)) {
+  
     plots <- split(df, df[[group_var]]) |>
       map(~ ggplot(.x) +
             geom_histogram(aes(x = .data[[column_name]]), binwidth = width) +
@@ -84,11 +85,48 @@ save_histograms <- function(df, group_var, outdir, pdf_suffix, column_name = "se
   }
 }
 
-histograms_by_source <- function(df, outdir, column_name = "sequence_length", reference_length=NA, reference_label=NA, consistent_y_axis = TRUE, group_var = "category", export_locus_tags = FALSE, width = 10) {
+histograms_by_source <- function(df, outdir, column_name = "sequence_length", reference_label=NA, consistent_y_axis = TRUE, group_var = "category", export_locus_tags = FALSE, width = 10) {
   make_dir(outdir)
+  
+  reference_length = NA # default value
+  print("AAG03471.1" %in% df$sequence_id)
+  
+  if (!is.na(reference_label)) {
+    if ("sequence_id" %in% names(df)) {
+      matching_rows <- which(df$sequence_id == reference_label)
+    } else {
+      # If sequence_id column doesn't exist, search through all character columns
+      matching_rows <- integer(0)
+      char_cols <- names(df)[sapply(df, is.character)]
+      
+      for (col in char_cols) {
+        matches <- which(df[[col]] == reference_label)
+        if (length(matches) > 0) {
+          matching_rows <- matches
+          print(glue("Found reference label '{reference_label}' in column '{col}'"))
+          break
+        }
+      }
+    }
+    
+    if (length(matching_rows) == 0) {
+      print(glue("WARNING: Reference sequence ID '{reference_label}' not found in sequence_id column."))
+      reference_length <- NA
+    } else if (length(matching_rows) > 1) {
+      print(glue("WARNING: Reference sequence ID '{reference_label}' appears {length(matching_rows)} times. Using first match."))
+      reference_length <- df[[column_name]][matching_rows[1]]
+      print(glue("Reference length for '{reference_label}': {reference_length}"))
+    } else {
+      reference_length <- df[[column_name]][matching_rows]
+      print(glue("Reference length for '{reference_label}': {reference_length}"))
+    }
+    
+  }
+    
+  
   # Generate histogram PDF for group_var
   save_histograms(df, group_var, outdir, glue("{group_var}_histograms"), 
-                  column_name = column_name, reference_length=reference_length, reference_label=reference_label, consistent_y_axis, export_locus_tags, width)
+                  column_name = column_name, reference_label=reference_label, reference_length=reference_length, consistent_y_axis, export_locus_tags, width)
   
   if (export_locus_tags) {
     write.table(df$locus_tags, file=glue("{outdir}/{group_var}_histograms_locusTags.txt"), row.names=FALSE, col.names=FALSE, quote=FALSE)
@@ -103,7 +141,8 @@ histograms_by_source <- function(df, outdir, column_name = "sequence_length", re
     # Generate subcategory-level histogram PDF
     walk(names(df_categories), ~ save_histograms(df_categories[[.x]], "subcategory", 
                                                 outdir, glue("subcategories/{.x}_histograms"), 
-                                                column_name = column_name, reference_length=reference_length, reference_label=reference_label, 
+                                                column_name = column_name, reference_label=reference_label, 
+                                                reference_length=reference_length,
                                                 consistent_y_axis, export_locus_tags, width))
   } else if (group_var == "genus") { # make additional plots for species
     df <- df[!is.na(df$genus), ] # remove rows with NA's for group_var so that the split will work properly
@@ -113,7 +152,8 @@ histograms_by_source <- function(df, outdir, column_name = "sequence_length", re
     # Generate species-level histogram PDF
     walk(names(df_categories), ~ save_histograms(df_categories[[.x]], "species", 
                                                 outdir, glue("species/{.x}_histograms"), 
-                                                column_name = column_name, reference_length=reference_length, reference_label=reference_label, 
+                                                column_name = column_name, reference_label=reference_label, 
+                                                reference_length=reference_length,
                                                 consistent_y_axis, export_locus_tags, width))
   }
 }
