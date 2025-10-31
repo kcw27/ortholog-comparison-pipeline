@@ -54,7 +54,7 @@ ui <- navbarPage("Pipeline GUI",
         wellPanel(
           h4("Subset data by group"),
           selectInput("subset_group_var", "Group variable:", 
-                     choices = c("category", "genus"), 
+                     choices = c("category", "subcategory", "genus", "species"), 
                      selected = "category"),
           uiOutput("subset_levels_ui"),
           actionButton("apply_subset", "Apply Subset"),
@@ -78,7 +78,9 @@ ui <- navbarPage("Pipeline GUI",
     conditionalPanel("output.tabs_ready",
       fluidPage(
         selectInput("fig_script", "Select figure script:",
-                    choices = c("make_histograms.R")),
+                    choices = c("make_histograms.R",
+                                "make_violin_plots.R")),
+        # inputs for make_histograms.R
         conditionalPanel("input.fig_script == 'make_histograms.R'",
           selectInput("hist_column", "Column for histogram:",
                       choices = NULL),
@@ -91,6 +93,19 @@ ui <- navbarPage("Pipeline GUI",
           checkboxInput("consistent_y_axis", "Consistent Y-axis across plots", 
                        value = TRUE)
         ),
+        
+        # inputs for make_violin_plots.R
+        conditionalPanel("input.fig_script == 'make_violin_plots.R'",
+          selectInput("violin_column", "Column for violin plot:",
+                      choices = NULL),
+          selectInput("group_var", "Group by:",
+                      choices = c("category", "genus"),
+                      selected = "category"),
+          selectInput("additional", "Overlay:",
+                      choices = c("boxplot", "mean", "none"),
+                      selected = "boxplot"),
+        ),
+        
         actionButton("run_figures", "Run figure script"),
         actionButton("refresh_images", "Refresh Image List", icon = icon("refresh")),
         uiOutput("image_selector"),
@@ -111,7 +126,8 @@ ui <- navbarPage("Pipeline GUI",
         
         # Inputs for test_normality.R
         conditionalPanel("input.test_script == 'test_normality.R'",
-          selectInput("normality_col", "Column to test:", choices = NULL)
+          selectInput("normality_col", "Column to test:", choices = NULL),
+          selectInput("normality_group", "Group to test for variance (optional):", choices = NULL)
         ),
         
         # Inputs for test_quantResponse_categPredictor.R
@@ -250,15 +266,25 @@ server <- function(input, output, session) {
                       
     # Update column selectors for statistical tests AND figures
     numeric_cols <- names(result$df)[sapply(result$df, is.numeric)]
+    #categorical_cols <- names(result$df)[!sapply(result$df, is.numeric)]
+    
     updateSelectInput(session, "response_col",
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
     updateSelectInput(session, "normality_col",
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
+    updateSelectInput(session, "normality_group",  
+                      #choices = c("none", categorical_cols),
+                      choices = c("none", "category", "genus"),
+                      selected = "none")
     updateSelectInput(session, "hist_column",
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
+    updateSelectInput(session, "violin_column",  
+                      choices = numeric_cols,
+                      selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
+
   
     tabs_ready(TRUE)
     
@@ -355,6 +381,7 @@ server <- function(input, output, session) {
     if (script_name == "test_normality.R") {
       # Run normality test on selected column
       colname <- input$normality_col
+      groupname <- input$normality_group
       if (is.null(colname) || colname == "") {
         output$test_output <- renderText({ "Please select a column to test." })
         return()
@@ -362,7 +389,11 @@ server <- function(input, output, session) {
       
       # For test_normality: capture print statements and show them, then show return value separately
       test_output <- capture.output({
-        result <- test_normality(df, colname, file.path(input$outdir, "figures"))
+        if (groupname == "none") {
+          result <- test_normality(df, colname, file.path(input$outdir, "figures"))
+        } else {
+          result <- test_normality(df, colname, file.path(input$outdir, "figures"), groupname)
+        }
       })
       
       # Combine captured output and return value clearly separated
@@ -407,18 +438,32 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$run_figures, {
-    df <- get_current_df()  # UPDATED: Use current df (subsetted or full)
+    df <- get_current_df()
     if (is.null(df)) return()
     fig_script <- input$fig_script
     group_var <- input$group_var
-    column_name <- input$hist_column
     width <- as.numeric(input$hist_width)
-    consistent_y_axis <- input$consistent_y_axis  # Get the toggle value
+    consistent_y_axis <- input$consistent_y_axis
+    additional <- input$additional
     script_path <- file.path(script_dir, "figures", fig_script)
+  
+    # Get the appropriate column name based on which script is selected
+    if (fig_script == "make_histograms.R") {
+      column_name <- input$hist_column  # Use histogram column selector
+    } else if (fig_script == "make_violin_plots.R") {
+      column_name <- input$violin_column  # Use violin column selector
+    } else {
+      column_name <- NULL
+    }
+    
+    if (is.null(column_name)) {
+      append_log("Error: No column selected")
+      return()
+    }
   
     if (file.exists(script_path)) {
       append_log(glue("Running {fig_script}..."))
-      if (fig_script == "make_histograms.R") {
+      if (fig_script == "make_histograms.R") { # histograms
         source(script_path, local = TRUE)
         
         # Prepare arguments for histograms_by_source
@@ -441,6 +486,32 @@ server <- function(input, output, session) {
         do.call(histograms_by_source, args)
         append_log(glue("Histograms generated for column: {column_name}"))
         append_log(glue("Consistent Y-axis: {consistent_y_axis}"))
+        
+        # Trigger image list refresh after generating figures
+        image_refresh_trigger(image_refresh_trigger() + 1)
+        append_log("Image list refreshed automatically.")
+        
+      } else if (fig_script == "make_violin_plots.R") { # violin plots
+        source(script_path, local = TRUE)
+        
+        # Prepare arguments for violin_plots_by_source
+        args <- list(
+          df = df,
+          outdir = file.path(input$outdir, "figures"),
+          column_name = column_name,
+          group_var = group_var,
+          additional = additional
+        )
+        
+        # Add reference_label if available (but NOT reference_length)
+        if (!is.null(ref_seqID_store())) {
+          args$reference_label <- ref_seqID_store()
+          append_log(glue("Using reference sequence: {ref_seqID_store()}"))
+        }
+        
+        # Call violin_plots_by_source with the appropriate arguments
+        do.call(violin_plots_by_source, args)
+        append_log(glue("Violin plots generated for column: {column_name}"))
         
         # Trigger image list refresh after generating figures
         image_refresh_trigger(image_refresh_trigger() + 1)

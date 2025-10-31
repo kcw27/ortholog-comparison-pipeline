@@ -1,7 +1,8 @@
 library(ggplot2)
+library(rstatix)
 library(glue)
 
-test_normality <- function(df, colname, fig_dir) {
+test_normality <- function(df, colname, fig_dir, group_var = NA) {
   outfile = glue("{fig_dir}/qqplot_{colname}.pdf")
   
   # Ensure the directory exists
@@ -36,6 +37,16 @@ test_normality <- function(df, colname, fig_dir) {
   } else {
     print(glue("{colname} is probably normal; p={signif(normality_test$p.val, 3)}"))
     test_type = "parametric"
+  }
+  
+  if (!is.na(group_var)) {
+    variance_test <- levene_test(df, as.formula(glue("{colname} ~ {group_var}")))
+    
+    if (variance_test$p < 0.05) {
+      print(glue("Warning: {colname} probably does not have normal variance across {group_var}; p={signif(variance_test$p, 3)}"))
+    } else {
+      print(glue("{colname} probably has normal variance across {group_var}; p={signif(variance_test$p, 3)}"))
+    }
   }
   return(test_type)
 }

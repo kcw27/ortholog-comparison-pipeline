@@ -89,7 +89,6 @@ histograms_by_source <- function(df, outdir, column_name = "sequence_length", re
   make_dir(outdir)
   
   reference_length = NA # default value
-  print("AAG03471.1" %in% df$sequence_id)
   
   if (!is.na(reference_label)) {
     if ("sequence_id" %in% names(df)) {

@@ -57,12 +57,12 @@ ref="${name_dir}/${name_root}_accessions_ref.txt"
 #ref="${name_dir}/${name_root}_accessions_refseq.txt"
 
 # Commented out for now, but I should set up a flag so that the user can require confirmation before downloading genomes.
-#read -p "Please review ${gb} and ${ref}, then decide whether to proceed with downloading genomes (y/n). " choice
-#case "$choice" in 
-#  y|Y ) echo "Proceeding...";;
-#  n|N ) echo "Terminating."; exit 1;;
-#  * ) echo "Invalid choice."; exit 1;;
-#esac
+read -p "Please review ${gb} and ${ref}, then decide whether to proceed with downloading genomes (y/n). " choice
+case "$choice" in 
+  y|Y ) echo "Proceeding...";;
+  n|N ) echo "Terminating."; exit 1;;
+  * ) echo "Invalid choice."; exit 1;;
+esac
 
 
 # run download_databases.sh

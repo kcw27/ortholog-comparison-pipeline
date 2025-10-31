@@ -186,7 +186,7 @@ process_unaligned_shiny <- function(multifasta_file, metadata_file, outdir, scri
     log_fn("Skipping normality test - no suitable numeric column available")
   }
 
-  log_fn(glue("Use this test type on the 'sequence_length' numerical variable: {test_type}"))
+  #log_fn(glue("Use this test type on the 'sequence_length' numerical variable: {test_type}"))
 
   # Save categorized IDs
   ids_file <- file.path(outdir, "categorized_ids.txt")
