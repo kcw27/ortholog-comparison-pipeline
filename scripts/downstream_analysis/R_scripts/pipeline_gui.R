@@ -48,7 +48,6 @@ ui <- navbarPage("Pipeline GUI",
       textInput("ref_seqID", "Reference sequence ID (optional):", ""),
       actionButton("submit_ref_btn", "Submit Reference Sequence ID"),
       
-      # NEW: Subset data by group section
       conditionalPanel(
         "output.tabs_ready",
         wellPanel(
@@ -57,15 +56,29 @@ ui <- navbarPage("Pipeline GUI",
                      choices = c("category", "subcategory", "genus", "species"), 
                      selected = "category"),
           uiOutput("subset_levels_ui"),
-          actionButton("apply_subset", "Apply Subset"),
-          actionButton("clear_subset", "Clear Subset")
+          fluidRow(
+            column(6, actionButton("apply_subset", "Apply Subset", style = "width: 100%;")),
+            column(6, actionButton("clear_subset", "Clear Subset", style = "width: 100%;"))
+          ),
+          br(),
+          fluidRow(
+            column(6, actionButton("select_all", "Select All", style = "width: 100%;")),
+            column(6, actionButton("deselect_all", "Deselect All", style = "width: 100%;"))
+          )
         )
       ),
       
-      # UPDATED: Subset FASTA button
+      # UPDATED: Subset FASTA and Save Data buttons
       conditionalPanel(
         "output.tabs_ready",
-        actionButton("subset_fasta_btn", "Subset FASTA")
+        fluidRow(
+          column(6, 
+                 actionButton("subset_fasta_btn", "Subset FASTA", style = "width: 100%;")
+          ),
+          column(6,
+                 actionButton("save_data_btn", "Save current data to TSV", style = "width: 100%;")
+          )
+        )
       ),
       verbatimTextOutput("output_text"),
       
@@ -116,9 +129,12 @@ ui <- navbarPage("Pipeline GUI",
           conditionalPanel("output.ref_seqID_available == true",
             textOutput("current_ref_seqID")
           ),
-          textInput("sites_str", "Enter sites to annotate in the sequence logo (comma-delimited):", ""),
-          selectInput("seq_colname", "Sequence column:",
+          textInput("sites_str", "Enter sites to annotate in the sequence logo (comma-delimited):", "1, 2, 3"),
+          selectInput("seq_colname", "Sequence column (must all be the same length):",
                       choices = NULL),
+          selectInput("group_var", "Group by:",
+                      choices = c("category", "genus"),
+                      selected = "category"),
           numericInput("logo_width", "Width (inches):", value = 8, min = 1, max = 20, step = 0.5),
           numericInput("logo_height", "Height (inches):", value = 6, min = 1, max = 20, step = 0.5)
         ),
@@ -267,6 +283,28 @@ server <- function(input, output, session) {
     }
   })
   
+  # NEW: Select all levels
+  observeEvent(input$select_all, {
+    req(df_store(), input$subset_group_var)
+    
+    df <- df_store()
+    group_var <- input$subset_group_var
+    
+    if (!group_var %in% names(df)) return()
+    
+    levels <- sort(unique(df[[group_var]]))
+    levels <- levels[!is.na(levels)]  # Remove NA values
+    
+    updateCheckboxGroupInput(session, "subset_levels",
+                            selected = levels)
+  })
+  
+  # NEW: Deselect all levels
+  observeEvent(input$deselect_all, {
+    updateCheckboxGroupInput(session, "subset_levels",
+                            selected = character(0))
+  })
+  
   # NEW: Output to check if reference sequence ID is available
   output$ref_seqID_available <- reactive({
     !is.null(ref_seqID_store())
@@ -302,7 +340,7 @@ server <- function(input, output, session) {
     append_log("\nProcessing input data...")
     
     if (!dir.exists(outdir)) {
-      dir.create(outdir)
+      dir.create(outdir, recursive=TRUE)
       print(glue("{outdir} created"))
       }
     result <- if (input$fasta_type == "Unaligned") {
@@ -673,7 +711,8 @@ server <- function(input, output, session) {
           sites_str = input$sites_str,
           seq_colname = input$seq_colname,
           width = input$logo_width,
-          height = input$logo_height
+          height = input$logo_height,
+          group_var = group_var
         )
         
         # Call plot_local_logo with the appropriate arguments
@@ -763,6 +802,32 @@ server <- function(input, output, session) {
     })
   })
   
+  # NEW: Save current data to TSV
+  observeEvent(input$save_data_btn, {
+    req(input$outdir)
+    
+    df <- get_current_df()  # Get current df (subsetted or full)
+    if (is.null(df)) {
+      append_log("Error: No data available to save")
+      return()
+    }
+    
+    outdir <- normalizePath(as.character(strip_quotes(input$outdir)), mustWork = FALSE)
+    
+    # Create filename with timestamp
+    timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+    filename <- glue("current_data_{timestamp}.tsv")
+    filepath <- file.path(outdir, filename)
+    
+    tryCatch({
+      write_tsv(df, filepath)
+      append_log(glue("Current data saved to: {filepath}"))
+      append_log(glue("Data dimensions: {nrow(df)} rows, {ncol(df)} columns"))
+    }, error = function(e) {
+      append_log(glue("Error saving data: {e$message}"))
+    })
+  })
+  
   # Refresh button handler
   observeEvent(input$refresh_images, {
     image_refresh_trigger(image_refresh_trigger() + 1)
@@ -778,13 +843,14 @@ server <- function(input, output, session) {
     img_dir <- file.path(input$outdir, "figures")
     if (!dir.exists(img_dir)) return(div("No figures directory"))
     
-    imgs <- list.files(img_dir, pattern = "\\.(png|jpg|jpeg|pdf)$", 
+    # Include both image files and TSV files
+    files <- list.files(img_dir, pattern = "\\.(png|jpg|jpeg|pdf|tsv|fasta)$", 
                        full.names = TRUE, recursive = TRUE)
     
-    if (length(imgs) == 0) return(div("No images found"))
+    if (length(files) == 0) return(div("No images or data files found"))
     
-    selectInput("image_file", "Select image:", 
-                choices = setNames(imgs, basename(imgs)))
+    selectInput("image_file", "Select image or data file:", 
+                choices = setNames(files, basename(files)))
   })
   
   # Fixed image display using renderUI with proper resource path - show default message
@@ -792,7 +858,7 @@ server <- function(input, output, session) {
     # Always show the default message when no image is selected
     # This will reset when images are refreshed since input$image_file becomes NULL
     if (is.null(input$image_file)) {
-      return(div("Please select an image to view.", 
+      return(div("Please select an image or data file to view.", 
                  style = "border: 1px solid #ccc; margin-top: 10px; padding: 20px; text-align: center; color: #666;"))
     }
     
@@ -801,20 +867,43 @@ server <- function(input, output, session) {
       return(div("Selected file not found"))
     }
     
-    # Set up resource path for serving files
-    img_dir <- file.path(input$outdir, "figures")
-    if (!resource_path_added()) {
-      addResourcePath("figures", img_dir)
-      resource_path_added(TRUE)
-    }
-    
     file_ext <- tolower(tools::file_ext(input$image_file))
     
-    # Get relative path from the figures directory
-    relative_path <- sub(paste0("^", img_dir, "/?"), "", input$image_file)
-    
-    if (file_ext == "pdf") {
+    if (file_ext == "tsv") {
+      # Handle TSV files - display as a table
+      tryCatch({
+        # Read the TSV file
+        tsv_data <- read.delim(input$image_file, stringsAsFactors = FALSE)
+        
+        # Create a styled table
+        tags$div(
+          h4(basename(input$image_file)),
+          tags$p(glue("Rows: {nrow(tsv_data)}, Columns: {ncol(tsv_data)}")),
+          tags$div(
+            style = "max-height: 600px; overflow: auto; border: 1px solid #ccc;",
+            renderTable({
+              tsv_data
+            }, striped = TRUE, hover = TRUE, bordered = TRUE, 
+            align = 'c', digits = 3)
+          ),
+          style = "border: 1px solid #ccc; margin-top: 10px; padding: 10px;"
+        )
+      }, error = function(e) {
+        div(glue("Error reading TSV file: {e$message}"),
+            style = "border: 1px solid #ccc; margin-top: 10px; padding: 20px; color: red;")
+      })
+    } else if (file_ext == "pdf") {
       # For PDFs, use tags$embed to display
+      # Set up resource path for serving files
+      img_dir <- file.path(input$outdir, "figures")
+      if (!resource_path_added()) {
+        addResourcePath("figures", img_dir)
+        resource_path_added(TRUE)
+      }
+      
+      # Get relative path from the figures directory
+      relative_path <- sub(paste0("^", img_dir, "/?"), "", input$image_file)
+      
       tags$div(
         tags$embed(
           src = file.path("figures", relative_path),
@@ -826,6 +915,16 @@ server <- function(input, output, session) {
       )
     } else {
       # For images, use img tag with proper styling and resource path
+      # Set up resource path for serving files
+      img_dir <- file.path(input$outdir, "figures")
+      if (!resource_path_added()) {
+        addResourcePath("figures", img_dir)
+        resource_path_added(TRUE)
+      }
+      
+      # Get relative path from the figures directory
+      relative_path <- sub(paste0("^", img_dir, "/?"), "", input$image_file)
+      
       tags$div(
         tags$img(
           src = file.path("figures", relative_path),
