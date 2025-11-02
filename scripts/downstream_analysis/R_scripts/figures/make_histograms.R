@@ -24,23 +24,23 @@ save_histograms <- function(df, group_var, outdir, pdf_suffix, column_name = "se
       map(~ ggplot(.x) +
             geom_histogram(aes(x = .data[[column_name]]), binwidth = width) +
             geom_vline(aes(xintercept=reference_length, colour="reference_length"), size=0.5) +
-            geom_vline(aes(xintercept=mean(.data[[column_name]]), colour="mean"), size=0.5) +
+            geom_vline(aes(xintercept=mean(.data[[column_name]], na.rm = TRUE), colour="mean"), size=0.5) +
             labs(x = column_name, y = "Count", title = glue("{group_var}: {unique(.x[[group_var]])[1]}; n: {nrow(.x)}")) +
             scale_color_manual(name = "Values",
                                values = c(reference_length = "blue", mean = "red"),
                                labels = c(reference_length = glue("{reference_label} = {reference_length}"),
-                                          mean = glue("Mean = {round(mean(.x[[column_name]]), 1)}"))) +
+                                          mean = glue("Mean = {round(mean(.x[[column_name]], na.rm = TRUE), 1)}"))) +
             xlim(x_limits) # notice that we set x limits here, but no y limits yet
           )
   } else {
     plots <- split(df, df[[group_var]]) |>
       map(~ ggplot(.x) +
             geom_histogram(aes(x = .data[[column_name]]), binwidth = width) +
-            geom_vline(aes(xintercept=mean(.data[[column_name]]), colour="mean"), size=0.5) +
+            geom_vline(aes(xintercept=mean(.data[[column_name]], na.rm = TRUE), colour="mean"), size=0.5) +
             labs(x = column_name, y = "Count", title = glue("{group_var}: {unique(.x[[group_var]])[1]}; n: {nrow(.x)}")) +
             scale_color_manual(name = "Values",
                                values = c(mean = "red"),
-                               labels = c(mean = glue("Mean = {round(mean(.x[[column_name]]), 1)}"))) +
+                               labels = c(mean = glue("Mean = {round(mean(.x[[column_name]], na.rm = TRUE), 1)}"))) +
             xlim(x_limits) # notice that we set x limits here, but no y limits yet
           )
   }
@@ -128,22 +128,22 @@ histograms_by_source <- function(df, outdir, column_name = "sequence_length", re
     df |> ggplot() +
       geom_histogram(aes(x = df[[column_name]]), binwidth = width) +
       geom_vline(aes(xintercept=reference_length, colour="reference_length"), size=0.5) +
-      geom_vline(aes(xintercept=mean(df[[column_name]]), colour="mean"), size=0.5) +
+      geom_vline(aes(xintercept=mean(df[[column_name]], na.rm = TRUE), colour="mean"), size=0.5) +
       labs(x = column_name, y = "Count", title = glue("{group_var}: Overall histogram; n: {nrow(df)}")) +
       scale_color_manual(name = "Values",
                            values = c(reference_length = "blue", mean = "red"),
                            labels = c(reference_length = glue("{reference_label} = {reference_length}"),
-                           mean = glue("Mean = {round(mean(df[[column_name]]), 1)}")))
+                           mean = glue("Mean = {round(mean(df[[column_name]], na.rm = TRUE), 1)}")))
       ggsave(fname, create.dir=TRUE, width = 8, height = 6)
       print(glue("Histogram saved to {fname}"))
   } else {
     df |> ggplot() +
       geom_histogram(aes(x = df[[column_name]]), binwidth = width) +
-      geom_vline(aes(xintercept=mean(df[[column_name]]), colour="mean"), size=0.5) +
+      geom_vline(aes(xintercept=mean(df[[column_name]], na.rm = TRUE), colour="mean"), size=0.5) +
       labs(x = column_name, y = "Count", title = glue("{group_var}: Overall histogram; n: {nrow(df)}")) +
       scale_color_manual(name = "Values",
                            values = c(mean = "red"),
-                           labels = c(mean = glue("Mean = {round(mean(df[[column_name]]), 1)}")))
+                           labels = c(mean = glue("Mean = {round(mean(df[[column_name]], na.rm = TRUE), 1)}")))
       ggsave(fname, create.dir=TRUE, width = 8, height = 6)
       print(glue("Histogram saved to {fname}"))
   }

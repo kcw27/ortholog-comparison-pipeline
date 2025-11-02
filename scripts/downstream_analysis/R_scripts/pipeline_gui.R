@@ -106,6 +106,23 @@ ui <- navbarPage("Pipeline GUI",
                       selected = "boxplot"),
         ),
         
+        # NEW: inputs for make_sequence_logos.R
+        conditionalPanel("input.fig_script == 'make_sequence_logos.R' && input.fasta_type == 'Aligned'",
+          # Reference sequence input - only show if not already submitted
+          conditionalPanel("output.ref_seqID_available == false",
+            textInput("seq_logo_ref_seqID", "Reference sequence ID:", ""),
+            actionButton("submit_seq_logo_ref_btn", "Submit Reference Sequence ID")
+          ),
+          conditionalPanel("output.ref_seqID_available == true",
+            textOutput("current_ref_seqID")
+          ),
+          textInput("sites_str", "Enter sites to annotate in the sequence logo (comma-delimited):", ""),
+          selectInput("seq_colname", "Sequence column:",
+                      choices = NULL),
+          numericInput("logo_width", "Width (inches):", value = 8, min = 1, max = 20, step = 0.5),
+          numericInput("logo_height", "Height (inches):", value = 6, min = 1, max = 20, step = 0.5)
+        ),
+        
         actionButton("run_figures", "Run figure script"),
         actionButton("refresh_images", "Refresh Image List", icon = icon("refresh")),
         uiOutput("image_selector"),
@@ -196,6 +213,20 @@ server <- function(input, output, session) {
                       choices = levels,
                       selected = levels)  # Default: all levels selected
   })
+  
+  # Update figure script choices based on FASTA type
+  observe({
+    if (input$fasta_type == "Aligned") {
+      updateSelectInput(session, "fig_script",
+                        choices = c("make_histograms.R",
+                                    "make_violin_plots.R",
+                                    "make_sequence_logos.R"))
+    } else {
+      updateSelectInput(session, "fig_script",
+                        choices = c("make_histograms.R",
+                                    "make_violin_plots.R"))
+    }
+  })
 
   # NEW: Apply subset
   observeEvent(input$apply_subset, {
@@ -235,6 +266,21 @@ server <- function(input, output, session) {
       return(df_store())
     }
   })
+  
+  # NEW: Output to check if reference sequence ID is available
+  output$ref_seqID_available <- reactive({
+    !is.null(ref_seqID_store())
+  })
+  outputOptions(output, "ref_seqID_available", suspendWhenHidden = FALSE)
+  
+  # NEW: Display current reference sequence ID
+  output$current_ref_seqID <- renderText({
+    if (!is.null(ref_seqID_store())) {
+      glue("Using reference sequence: {ref_seqID_store()}")
+    } else {
+      "No reference sequence set"
+    }
+  })
 
   observeEvent(input$submit_btn, {
     show_output(TRUE)
@@ -254,6 +300,11 @@ server <- function(input, output, session) {
     lapply(benchmark_output, append_log)
 
     append_log("\nProcessing input data...")
+    
+    if (!dir.exists(outdir)) {
+      dir.create(outdir)
+      print(glue("{outdir} created"))
+      }
     result <- if (input$fasta_type == "Unaligned") {
       process_unaligned_shiny(fasta_file, metadata_file, outdir, script_dir, log_fn = append_log)
     } else {
@@ -284,8 +335,26 @@ server <- function(input, output, session) {
     updateSelectInput(session, "violin_column",  
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
+    
+    # NEW: Update sequence column selector for sequence logos
+    if (input$fasta_type == "Aligned") {
+      # Find columns with "sequence" in the name that are non-numeric
+      all_cols <- names(result$df)
+      sequence_cols <- all_cols[grepl("sequence", all_cols, ignore.case = TRUE) & 
+                          !sapply(result$df, is.numeric) &
+                          all_cols != "sequence_id"]
+                                
+      
+      if (length(sequence_cols) == 0) {
+        # If no sequence columns found, show all non-numeric columns
+        sequence_cols <- all_cols[!sapply(result$df, is.numeric)]
+      }
+      
+      updateSelectInput(session, "seq_colname",
+                        choices = sequence_cols,
+                        selected = if ("sequence" %in% sequence_cols) "sequence" else sequence_cols[1])
+    }
 
-  
     tabs_ready(TRUE)
     
     output$output_text <- renderText({
@@ -336,6 +405,68 @@ server <- function(input, output, session) {
         ref_seqID_store(NULL)
         ref_length_store(NULL)
         ref_sequence_store(NULL)
+      } else if (length(matching_rows) > 1) {
+        append_log(glue("WARNING: Reference sequence ID '{ref_seqID}' appears {length(matching_rows)} times in FASTA file."))
+        append_log("The first matching sequence will be used.")
+        ref_seqID_store(ref_seqID)
+        # Use first occurrence
+        first_match <- matching_rows[1]
+        ref_sequence_store(allseqs_df$sequence[first_match])
+        ref_length_store(nchar(allseqs_df$sequence[first_match]))
+      } else {
+        append_log(glue("Reference sequence ID '{ref_seqID}' found in FASTA file."))
+        ref_seqID_store(ref_seqID)
+        ref_sequence_store(allseqs_df$sequence[matching_rows])
+        ref_length_store(nchar(allseqs_df$sequence[matching_rows]))
+      }
+      
+      if (!is.null(ref_length_store())) {
+        append_log(glue("Reference sequence length: {ref_length_store()}"))
+      }
+      if (!is.null(ref_sequence_store())) {
+        append_log(glue("Reference sequence stored (first 50 chars): {substr(ref_sequence_store(), 1, 50)}..."))
+      }
+    }, error = function(e) {
+      append_log(glue("Error reading FASTA file: {e$message}"))
+    })
+  })
+  
+  # NEW: Handle reference sequence ID submission for sequence logos
+  observeEvent(input$submit_seq_logo_ref_btn, {
+    req(input$fasta_file)
+    
+    ref_seqID <- strip_quotes(input$seq_logo_ref_seqID)
+    
+    if (ref_seqID == "") {
+      append_log("No reference sequence ID provided for sequence logos.")
+      return()
+    }
+    
+    fasta_file <- normalizePath(as.character(strip_quotes(input$fasta_file)), mustWork = FALSE)
+    
+    if (!file.exists(fasta_file)) {
+      append_log(glue("FASTA file not found: {fasta_file}"))
+      return()
+    }
+    
+    # Read the FASTA file to find the reference sequence
+    tryCatch({
+      library(seqinr)
+      alignment <- read.alignment(fasta_file, format = "fasta")
+      
+      seqs <- alignment[["seq"]] |>
+        unlist() |> # convert from list to vector
+        toupper() # originally in lowercase; convert to uppercase
+      
+      alignment_names = (alignment["nam"][[1]]) 
+      allseqs_df <- data.frame(sequence_id = alignment_names, sequence = seqs)
+      
+      # Check if reference sequence ID exists
+      matching_rows <- which(allseqs_df$sequence_id == ref_seqID)
+      
+      if (length(matching_rows) == 0) {
+        append_log(glue("WARNING: Reference sequence ID '{ref_seqID}' not found in FASTA file."))
+        append_log("Please submit a sequence ID that exists in the FASTA file.")
       } else if (length(matching_rows) > 1) {
         append_log(glue("WARNING: Reference sequence ID '{ref_seqID}' appears {length(matching_rows)} times in FASTA file."))
         append_log("The first matching sequence will be used.")
@@ -452,11 +583,13 @@ server <- function(input, output, session) {
       column_name <- input$hist_column  # Use histogram column selector
     } else if (fig_script == "make_violin_plots.R") {
       column_name <- input$violin_column  # Use violin column selector
+    } else if (fig_script == "make_sequence_logos.R") {
+      column_name <- NULL  # Not used for sequence logos
     } else {
       column_name <- NULL
     }
     
-    if (is.null(column_name)) {
+    if (fig_script != "make_sequence_logos.R" && is.null(column_name)) {
       append_log("Error: No column selected")
       return()
     }
@@ -512,6 +645,42 @@ server <- function(input, output, session) {
         # Call violin_plots_by_source with the appropriate arguments
         do.call(violin_plots_by_source, args)
         append_log(glue("Violin plots generated for column: {column_name}"))
+        
+        # Trigger image list refresh after generating figures
+        image_refresh_trigger(image_refresh_trigger() + 1)
+        append_log("Image list refreshed automatically.")
+        
+      } else if (fig_script == "make_sequence_logos.R") { # sequence logos
+        source(script_path, local = TRUE)
+        
+        # Check if reference sequence is available
+        if (is.null(ref_seqID_store())) {
+          append_log("Error: No reference sequence ID available. Please submit one in the Data Import tab or on this page.")
+          return()
+        }
+        
+        # Check if sites string is provided
+        if (input$sites_str == "") {
+          append_log("Error: Please enter sites to annotate.")
+          return()
+        }
+        
+        # Prepare arguments for plot_local_logo
+        args <- list(
+          df = df,
+          outdir = file.path(input$outdir, "figures"),
+          reference_label = ref_seqID_store(),
+          sites_str = input$sites_str,
+          seq_colname = input$seq_colname,
+          width = input$logo_width,
+          height = input$logo_height
+        )
+        
+        # Call plot_local_logo with the appropriate arguments
+        do.call(plot_local_logo, args)
+        append_log(glue("Sequence logo generated for reference: {ref_seqID_store()}"))
+        append_log(glue("Annotated sites: {input$sites_str}"))
+        append_log(glue("Sequence column: {input$seq_colname}"))
         
         # Trigger image list refresh after generating figures
         image_refresh_trigger(image_refresh_trigger() + 1)
