@@ -103,14 +103,14 @@ test_alleleFreqs_within_categories <- function(df, site, residue, group_var = "c
   
   # Overall test - is there any significant variation?
   cat("\nFisher's exact test:\n")
-  print(test <- fisher_test(xtab))
+  print(test <- fisher_test(xtab, detailed = TRUE)) #, alternative = "greater")) # since this is just to determine whether there's variation between the groups, would it even make sense to use alternative = "greater" here?
   p <- test$p
   
   if (p < 0.05) {
     cat("\np from Fisher's exact test is significant; conducting pairwise comparisons\n")
     # Pairwise tests - which specific pairs are different?
     cat("Pairwise Fisher's tests:\n")
-    pairwise_results <- pairwise_fisher_test(xtab, p.adjust.method = adjust)
+    pairwise_results <- pairwise_fisher_test(xtab, p.adjust.method = adjust, alternative = "greater")
     print(pairwise_results)
     
     # Identify significantly different pairs
@@ -140,6 +140,25 @@ test_alleleFreqs_within_categories <- function(df, site, residue, group_var = "c
   } else {
     cat("  None\n")
   }
+  
+#  # Code recommended by Copilot: the pre- and post- adjustment pvals look like p_value_binomial and p_adj_binomial from the earlier binomial test,
+#  # so this code is redundant.
+#  # Total number of "yes" alleles
+#  total_yes <- sum(xtab["yes", ])
+#  # Total number of samples
+#  total_samples <- colSums(xtab)
+#  
+#  # Expected proportion of "A"
+#  expected_p <- total_yes / sum(total_samples)
+#  
+#  # Binomial tests per group
+#  pvals <- sapply(1:5, function(i) {
+#    binom.test(xtab["yes", i], total_samples[i], p = expected_p, alternative = "greater")$p.value
+#  })
+#  names(pvals) <- colnames(xtab)
+#  print(pvals)
+#  print(p.adjust(pvals, method = adjust)) 
+
   
   # Return all results for potential further analysis
   invisible(list(
