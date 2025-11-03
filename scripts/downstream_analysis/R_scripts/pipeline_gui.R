@@ -173,10 +173,45 @@ ui <- navbarPage("Pipeline GUI",
           selectInput("test_type", "Test type:", choices = c("parametric", "non-parametric"))
         ),
         
+        # NEW: Inputs for test_alleleFreqs_within_categories.R
+        conditionalPanel("input.test_script == 'test_alleleFreqs_within_categories.R' && input.fasta_type == 'Aligned'",
+          # Reference sequence input - only show if not already submitted
+          conditionalPanel("output.ref_seqID_available == false",
+            textInput("allele_ref_seqID", "Reference sequence ID:", ""),
+            actionButton("submit_allele_ref_btn", "Submit Reference Sequence ID")
+          ),
+          conditionalPanel("output.ref_seqID_available == true",
+            textOutput("current_allele_ref_seqID")
+          ),
+          numericInput("allele_site", "Site (reference coordinate):", value = 1, min = 1, step = 1),
+          selectInput("allele_seq_colname", "Sequence column:",
+                      choices = NULL),
+          selectInput("allele_group_var", "Group by:",
+                      choices = c("category", "genus"),
+                      selected = "category"),
+          uiOutput("allele_residue_ui"),  # Dynamic residue selection
+          selectInput("adjust_method", "Adjustment method:",
+                      choices = c("", "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"),
+                      selected = "fdr")
+        ),
+        
         # Inputs for other scripts can be added similarly
-        # Example: test_alleleFreqs_within_categories.R
-        conditionalPanel("input.test_script == 'test_alleleFreqs_within_categories.R'",
+        # Example: test_alleleFreqs_within_categories.R (old version - keep for backward compatibility)
+        conditionalPanel("input.test_script == 'test_alleleFreqs_within_categories.R' && input.fasta_type != 'Aligned'",
           selectInput("allele_predictor", "Predictor:", choices = c("category", "genus"))
+        ),
+        
+        # Inputs for other scripts
+        conditionalPanel("input.test_script == 'test_categFreqs_within_quantQuadrants.R'",
+          # Add inputs if needed
+        ),
+        
+        conditionalPanel("input.test_script == 'test_resampled_distribution_properties.R'",
+          # Add inputs if needed
+        ),
+        
+        conditionalPanel("input.test_script == 'test_sequence_diversity.R'",
+          # Add inputs if needed
         ),
         
         actionButton("run_test", "Run statistical test"),
@@ -333,29 +368,29 @@ server <- function(input, output, session) {
     if (input$fasta_type == "Aligned" && input$name_map_file != "") {
       name_map_file <- normalizePath(as.character(strip_quotes(input$name_map_file)), mustWork = FALSE)
     }
-
+  
     benchmark_output <- capture.output(benchmark(metadata_file))
     lapply(benchmark_output, append_log)
-
+  
     append_log("\nProcessing input data...")
     
     if (!dir.exists(outdir)) {
       dir.create(outdir, recursive=TRUE)
       print(glue("{outdir} created"))
-      }
+    }
+    
     result <- if (input$fasta_type == "Unaligned") {
       process_unaligned_shiny(fasta_file, metadata_file, outdir, script_dir, log_fn = append_log)
     } else {
       process_aligned_shiny(fasta_file, metadata_file, outdir, script_dir, name_map_file = name_map_file, log_fn = append_log)
     }
-
+  
     df_store(result$df)
     selected_df_store(NULL)  # Reset subset when new data is loaded
     test_type_store(result$test_type)
                       
     # Update column selectors for statistical tests AND figures
     numeric_cols <- names(result$df)[sapply(result$df, is.numeric)]
-    #categorical_cols <- names(result$df)[!sapply(result$df, is.numeric)]
     
     updateSelectInput(session, "response_col",
                       choices = numeric_cols,
@@ -364,7 +399,6 @@ server <- function(input, output, session) {
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
     updateSelectInput(session, "normality_group",  
-                      #choices = c("none", categorical_cols),
                       choices = c("none", "category", "genus"),
                       selected = "none")
     updateSelectInput(session, "hist_column",
@@ -374,25 +408,30 @@ server <- function(input, output, session) {
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
     
-    # NEW: Update sequence column selector for sequence logos
+    # NEW: Update sequence column selectors for both sequence logos AND allele frequencies
     if (input$fasta_type == "Aligned") {
       # Find columns with "sequence" in the name that are non-numeric
       all_cols <- names(result$df)
       sequence_cols <- all_cols[grepl("sequence", all_cols, ignore.case = TRUE) & 
-                          !sapply(result$df, is.numeric) &
-                          all_cols != "sequence_id"]
-                                
+                                !sapply(result$df, is.numeric) &
+                                all_cols != "sequence_id"]
       
       if (length(sequence_cols) == 0) {
         # If no sequence columns found, show all non-numeric columns
         sequence_cols <- all_cols[!sapply(result$df, is.numeric)]
       }
       
+      # Update sequence logos column selector
       updateSelectInput(session, "seq_colname",
                         choices = sequence_cols,
                         selected = if ("sequence" %in% sequence_cols) "sequence" else sequence_cols[1])
+      
+      # NEW: Update allele frequencies column selector
+      updateSelectInput(session, "allele_seq_colname",
+                        choices = sequence_cols,
+                        selected = if ("sequence" %in% sequence_cols) "sequence" else sequence_cols[1])
     }
-
+  
     tabs_ready(TRUE)
     
     output$output_text <- renderText({
@@ -530,6 +569,152 @@ server <- function(input, output, session) {
       append_log(glue("Error reading FASTA file: {e$message}"))
     })
   })
+  
+  # NEW: Display current reference sequence ID for allele frequencies
+  output$current_allele_ref_seqID <- renderText({
+    if (!is.null(ref_seqID_store())) {
+      glue("Using reference sequence: {ref_seqID_store()}")
+    } else {
+      "No reference sequence set"
+    }
+  })
+  
+  # NEW: Handle reference sequence ID submission for allele frequencies
+  observeEvent(input$submit_allele_ref_btn, {
+    req(input$fasta_file)
+    
+    ref_seqID <- strip_quotes(input$allele_ref_seqID)
+    
+    if (ref_seqID == "") {
+      append_log("No reference sequence ID provided for allele frequency test.")
+      return()
+    }
+    
+    fasta_file <- normalizePath(as.character(strip_quotes(input$fasta_file)), mustWork = FALSE)
+    
+    if (!file.exists(fasta_file)) {
+      append_log(glue("FASTA file not found: {fasta_file}"))
+      return()
+    }
+    
+    # Read the FASTA file to find the reference sequence
+    tryCatch({
+      library(seqinr)
+      alignment <- read.alignment(fasta_file, format = "fasta")
+      
+      seqs <- alignment[["seq"]] |>
+        unlist() |> # convert from list to vector
+        toupper() # originally in lowercase; convert to uppercase
+      
+      alignment_names = (alignment["nam"][[1]]) 
+      allseqs_df <- data.frame(sequence_id = alignment_names, sequence = seqs)
+      
+      # Check if reference sequence ID exists
+      matching_rows <- which(allseqs_df$sequence_id == ref_seqID)
+      
+      if (length(matching_rows) == 0) {
+        append_log(glue("WARNING: Reference sequence ID '{ref_seqID}' not found in FASTA file."))
+        append_log("Please submit a sequence ID that exists in the FASTA file.")
+      } else if (length(matching_rows) > 1) {
+        append_log(glue("WARNING: Reference sequence ID '{ref_seqID}' appears {length(matching_rows)} times in FASTA file."))
+        append_log("The first matching sequence will be used.")
+        ref_seqID_store(ref_seqID)
+        # Use first occurrence
+        first_match <- matching_rows[1]
+        ref_sequence_store(allseqs_df$sequence[first_match])
+        ref_length_store(nchar(allseqs_df$sequence[first_match]))
+      } else {
+        append_log(glue("Reference sequence ID '{ref_seqID}' found in FASTA file."))
+        ref_seqID_store(ref_seqID)
+        ref_sequence_store(allseqs_df$sequence[matching_rows])
+        ref_length_store(nchar(allseqs_df$sequence[matching_rows]))
+      }
+      
+      if (!is.null(ref_length_store())) {
+        append_log(glue("Reference sequence length: {ref_length_store()}"))
+      }
+      if (!is.null(ref_sequence_store())) {
+        append_log(glue("Reference sequence stored (first 50 chars): {substr(ref_sequence_store(), 1, 50)}..."))
+      }
+    }, error = function(e) {
+      append_log(glue("Error reading FASTA file: {e$message}"))
+    })
+  })
+  
+  # NEW: Dynamic UI for residue selection based on site and sequence column
+  output$allele_residue_ui <- renderUI({
+    req(df_store(), input$allele_site, input$allele_seq_colname, ref_seqID_store())
+    
+    # Add selected_df_store() as a dependency to force update when data is subsetted
+    selected_df_store()
+    
+    # Use FULL dataframe for coordinate calibration (to ensure reference sequence is available)
+    full_df <- df_store()
+    site <- input$allele_site
+    seq_colname <- input$allele_seq_colname
+    
+    if (!seq_colname %in% names(full_df)) {
+      return(div("Selected sequence column not found in data"))
+    }
+    
+    # Calculate adjusted site using reference sequence from FULL dataframe
+    matching_rows <- which(full_df$sequence_id == ref_seqID_store())
+    if (length(matching_rows) == 0) {
+      return(div(glue("Reference sequence '{ref_seqID_store()}' not found in dataset")))
+    }
+    
+    reference_seq <- full_df[[seq_colname]][matching_rows[1]]
+    sites_adj <- calibrate_coords(reference_seq, site)
+    
+    if (length(sites_adj) == 0) {
+      return(div(glue("Site {site} not found in reference sequence (may be in gapped region)")))
+    }
+    
+    adj_site <- sites_adj[1]
+    
+    # Use CURRENT (possibly subsetted) dataframe for residue counts
+    current_df <- get_current_df()
+    
+    # Extract characters at the adjusted site from CURRENT dataframe
+    characters <- substr(current_df[[seq_colname]], adj_site, adj_site)
+    characters <- characters[!is.na(characters) & characters != ""]
+    
+    if (length(characters) == 0) {
+      return(div("No characters found at this site in current data subset"))
+    }
+    
+    # Get unique residues and their frequencies from CURRENT dataframe
+    residue_counts <- table(characters)
+    residue_options <- names(residue_counts)
+    
+    # Create labels with frequencies from CURRENT dataframe
+    residue_labels <- glue("{residue_options} ({residue_counts[residue_options]} sequences)")
+    
+    selectInput("allele_residue", "Residue to test:",
+                choices = setNames(residue_options, residue_labels))
+  })
+  
+  # NEW: Update test script choices based on FASTA type
+  observe({
+    if (input$fasta_type == "Aligned") {
+      # Show all tests including allele frequencies
+      updateSelectInput(session, "test_script",
+                        choices = c("test_normality.R",
+                                    "test_quantResponse_categPredictor.R",
+                                    "test_alleleFreqs_within_categories.R",
+                                    "test_categFreqs_within_quantQuadrants.R",
+                                    "test_resampled_distribution_properties.R",
+                                    "test_sequence_diversity.R"))
+    } else {
+      # Hide allele frequency test for unaligned data
+      updateSelectInput(session, "test_script",
+                        choices = c("test_normality.R",
+                                    "test_quantResponse_categPredictor.R",
+                                    "test_categFreqs_within_quantQuadrants.R",
+                                    "test_resampled_distribution_properties.R",
+                                    "test_sequence_diversity.R"))
+    }
+  })
 
   observeEvent(input$run_test, {
     df <- get_current_df()  # UPDATED: Use current df (subsetted or full)
@@ -589,17 +774,68 @@ server <- function(input, output, session) {
         list(src = qqplot_path, contentType = "image/png", alt = "QQ Plot")
       }, deleteFile = FALSE)
     } else if (script_name == "test_alleleFreqs_within_categories.R") {
-      result <- test_alleleFreqs_within_categories(df, input$allele_predictor)
-      output$test_output <- renderText({ paste(result, collapse = "\n") })
-  
+      # NEW: Handle allele frequency test
+      if (input$fasta_type == "Aligned") {
+        # Use the new UI inputs for aligned data
+        if (is.null(ref_seqID_store())) {
+          output$test_output <- renderText({ "Error: Reference sequence ID required for allele frequency test" })
+          return()
+        }
+        if (is.null(input$allele_residue)) {
+          output$test_output <- renderText({ "Error: Please select a residue to test" })
+          return()
+        }
+        
+        # For coordinate calibration, use the FULL dataframe to ensure reference sequence is available
+        full_df <- df_store()
+        
+        # Calculate adjusted site using full dataframe
+        matching_rows <- which(full_df$sequence_id == ref_seqID_store())
+        if (length(matching_rows) == 0) {
+          output$test_output <- renderText({ 
+            glue("Error: Reference sequence '{ref_seqID_store()}' not found in dataset")
+          })
+          return()
+        }
+        
+        reference_seq <- full_df[[input$allele_seq_colname]][matching_rows[1]]
+        sites_adj <- calibrate_coords(reference_seq, input$allele_site)
+        
+        if (length(sites_adj) == 0) {
+          output$test_output <- renderText({ 
+            glue("Error: Site {input$allele_site} not found in reference sequence (may be in gapped region)")
+          })
+          return()
+        }
+        
+        adj_site <- sites_adj[1]
+        
+        # Pass the adjusted site to the function (not the original site)
+        args <- list(
+          df = df,  # Use current (possibly subsetted) df for the actual statistical test
+          site = adj_site,  # Pass the pre-adjusted site
+          residue = input$allele_residue,
+          group_var = input$allele_group_var,
+          seq_colname = input$allele_seq_colname
+        )
+        if (input$adjust_method != "") {
+          args <- c(args, input$adjust_method)
+        }
+        
+        test_output <- capture.output({
+          result <- do.call(test_alleleFreqs_within_categories, args)
+        })
+        
+        output$test_output <- renderText({ paste(test_output, collapse = "\n") })
+      }
     } else if (script_name == "test_categFreqs_within_quantQuadrants.R") {
       result <- test_categFreqs_within_quantQuadrants(df)
       output$test_output <- renderText({ paste(result, collapse = "\n") })
-  
+      
     } else if (script_name == "test_resampled_distribution_properties.R") {
       result <- test_resampled_distribution_properties(df)
       output$test_output <- renderText({ paste(result, collapse = "\n") })
-  
+      
     } else if (script_name == "test_sequence_diversity.R") {
       result <- test_sequence_diversity(df)
       output$test_output <- renderText({ paste(result, collapse = "\n") })
