@@ -2,6 +2,7 @@ library(tidyverse)
 library(glue)
 library(gridExtra)
 library(purrr)
+theme_set(theme_classic())
 
 save_sequence_logos <- function(df, group_var = "category", sites, sites_adj, outdir, pdf_suffix, seq_colname) {
   

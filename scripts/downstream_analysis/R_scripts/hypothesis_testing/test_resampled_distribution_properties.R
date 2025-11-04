@@ -3,12 +3,21 @@ library(moments)
 library(glue)
 
 # stratified bootstrapping approach
-bootstrap_stats <- function(df, group_var = "category", data_col = "sequence_length", n = 1000, seed = 42) {
+bootstrap_stats <- function(df, group_var = "category", data_col = "sequence_length", n = 1000, seed = 42, downsample = FALSE) {
   set.seed(seed)
   
   # Pre-split data by group
   grouped_data <- split(df[[data_col]], df[[group_var]])
   group_sizes <- table(df[[group_var]])
+  
+  # If downsampling, use the smallest group size for all
+  if (downsample) {
+    cat("\nDownsampling to smallest group.")
+    min_size <- min(group_sizes)
+    group_sizes[] <- min_size
+  }
+  cat("\nGroup sizes:")
+  print(group_sizes)
 
   # Bootstrap loop
   replicate(n, {
@@ -33,7 +42,6 @@ bootstrap_stats <- function(df, group_var = "category", data_col = "sequence_len
 }
 
 # function to perform hypothesis tests
-# input includes adjust for p-value adjustment
 compare_bootstrapped_stats <- function(bs_df, group_var = "category", adjust = "fdr", test_type = "non-parametric") {
   for (stat_name in unique(bs_df$statistic_name)) {
     df <- bs_df |> filter(statistic_name == stat_name)
@@ -80,7 +88,7 @@ compare_bootstrapped_stats <- function(bs_df, group_var = "category", adjust = "
 }
 
 
-plot_bootstrapped_stats <- function(original_df, bootstrapped_df, group_var = "category", data_col = "sequence_length", outdir) {
+plot_bootstrapped_stats <- function(original_df, bootstrapped_df, outdir, group_var = "category", data_col = "sequence_length", downsample = FALSE) {
   # Compute observed statistics
   obs_stats <- original_df |>
     group_by(.data[[group_var]]) |>
@@ -98,6 +106,11 @@ plot_bootstrapped_stats <- function(original_df, bootstrapped_df, group_var = "c
     group_by(!!sym(group_var)) |>
     summarise(size = n(), .groups = "drop")
 
+  # If downsampling, use the smallest group size for all
+  if (downsample) {
+    group_sizes <- group_sizes |>
+      mutate(size = min(size))
+  }
 
   # Merge sizes into obs_stats for labeling
   obs_stats <- obs_stats |>
