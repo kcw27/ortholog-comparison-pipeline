@@ -205,13 +205,35 @@ ui <- navbarPage("Pipeline GUI",
         conditionalPanel("input.test_script == 'test_categFreqs_within_quantQuadrants.R'",
           # Add inputs if needed
         ),
-        
+        # Inputs for test_resampled_distribution_properties.R
         conditionalPanel("input.test_script == 'test_resampled_distribution_properties.R'",
-          # Add inputs if needed
+          selectInput("resample_group_var", "Group by:", 
+                      choices = c("category", "genus"), 
+                      selected = "category"),
+          selectInput("resample_data_col", "Data column:", choices = NULL),
+          selectInput("resample_adjust_method", "Adjustment method:",
+                      choices = c("", "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"),
+                      selected = "fdr"),
+          selectInput("resample_test_type", "Test type:", 
+                      choices = c("non-parametric", "parametric"),
+                      selected = "non-parametric"),
+          numericInput("n_resamples", "Number of resamples:", value = 1000, min = 10, max = 10000, step = 10),
+          numericInput("resample_seed", "Random seed:", value = 42, min = 1, max = 10000, step = 1),
+          checkboxInput("downsample", "Downsample to smallest group", value = TRUE)
         ),
         
+        # Inputs for test_sequence_diversity.R
         conditionalPanel("input.test_script == 'test_sequence_diversity.R'",
-          # Add inputs if needed
+          selectInput("diversity_group_var", "Group by:", 
+                      choices = c("category", "genus"), 
+                      selected = "category"),
+          selectInput("diversity_seq_colname", "Sequence column:", choices = NULL),
+          selectInput("diversity_adjust_method", "Adjustment method:",
+                      choices = c("", "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"),
+                      selected = "fdr"),
+          selectInput("diversity_test_type", "Test type:", 
+                      choices = c("non-parametric", "parametric"),
+                      selected = "non-parametric")
         ),
         
         actionButton("run_test", "Run statistical test"),
@@ -392,6 +414,18 @@ server <- function(input, output, session) {
     # Update column selectors for statistical tests AND figures
     numeric_cols <- names(result$df)[sapply(result$df, is.numeric)]
     
+    # Find columns with "sequence" in the name that are non-numeric
+    all_cols <- names(result$df)
+    sequence_cols <- all_cols[grepl("sequence", all_cols, ignore.case = TRUE) & 
+                              !sapply(result$df, is.numeric) &
+                              all_cols != "sequence_id"]
+    
+    if (length(sequence_cols) == 0) {
+      # If no sequence columns found, show all non-numeric columns
+      sequence_cols <- all_cols[!sapply(result$df, is.numeric)]
+    }
+    
+    
     updateSelectInput(session, "response_col",
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
@@ -407,20 +441,15 @@ server <- function(input, output, session) {
     updateSelectInput(session, "violin_column",  
                       choices = numeric_cols,
                       selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
+    updateSelectInput(session, "resample_data_col",
+                      choices = numeric_cols,
+                      selected = if ("sequence_length" %in% numeric_cols) "sequence_length" else numeric_cols[1])
+    updateSelectInput(session, "diversity_seq_colname",
+                      choices = sequence_cols,
+                      selected = if ("sequence" %in% sequence_cols) "sequence" else sequence_cols[1])
     
     # NEW: Update sequence column selectors for both sequence logos AND allele frequencies
     if (input$fasta_type == "Aligned") {
-      # Find columns with "sequence" in the name that are non-numeric
-      all_cols <- names(result$df)
-      sequence_cols <- all_cols[grepl("sequence", all_cols, ignore.case = TRUE) & 
-                                !sapply(result$df, is.numeric) &
-                                all_cols != "sequence_id"]
-      
-      if (length(sequence_cols) == 0) {
-        # If no sequence columns found, show all non-numeric columns
-        sequence_cols <- all_cols[!sapply(result$df, is.numeric)]
-      }
-      
       # Update sequence logos column selector
       updateSelectInput(session, "seq_colname",
                         choices = sequence_cols,
@@ -831,14 +860,76 @@ server <- function(input, output, session) {
     } else if (script_name == "test_categFreqs_within_quantQuadrants.R") {
       result <- test_categFreqs_within_quantQuadrants(df)
       output$test_output <- renderText({ paste(result, collapse = "\n") })
-      
     } else if (script_name == "test_resampled_distribution_properties.R") {
-      result <- test_resampled_distribution_properties(df)
-      output$test_output <- renderText({ paste(result, collapse = "\n") })
+      # Run resampled distribution properties test
+      if (is.null(input$resample_data_col) || input$resample_data_col == "") {
+        output$test_output <- renderText({ "Please select a data column." })
+        return()
+      }
+      
+      test_output <- capture.output({
+        # Run bootstrap_stats
+        bs_df <- bootstrap_stats(
+          df = df,
+          group_var = input$resample_group_var,
+          data_col = input$resample_data_col,
+          n = input$n_resamples,
+          seed = input$resample_seed,
+          downsample = input$downsample
+        )
+        
+        # Run compare_bootstrapped_stats
+        compare_bootstrapped_stats(
+          bs_df = bs_df,
+          group_var = input$resample_group_var,
+          adjust = if (input$resample_adjust_method != "") input$resample_adjust_method else "fdr",
+          test_type = input$resample_test_type
+        )
+        
+        # Run plot_bootstrapped_stats
+        plot_bootstrapped_stats(
+          original_df = df,
+          bootstrapped_df = bs_df,
+          outdir = file.path(input$outdir, "figures"),
+          group_var = input$resample_group_var,
+          data_col = input$resample_data_col,
+          downsample = input$downsample
+        )
+      })
+      
+      output$test_output <- renderText({ paste(test_output, collapse = "\n") })
       
     } else if (script_name == "test_sequence_diversity.R") {
-      result <- test_sequence_diversity(df)
-      output$test_output <- renderText({ paste(result, collapse = "\n") })
+      # Run sequence diversity test
+      if (is.null(input$diversity_seq_colname) || input$diversity_seq_colname == "") {
+        output$test_output <- renderText({ "Please select a sequence column." })
+        return()
+      }
+      
+      test_output <- capture.output({
+        # Run get_pairwise_dists
+        dist_df <- get_pairwise_dists(
+          df = df,
+          group_var = input$diversity_group_var,
+          seq_colname = input$diversity_seq_colname
+        )
+        
+        # Run compare_pairwise_dists
+        compare_pairwise_dists(
+          dist_df = dist_df,
+          test_type = input$diversity_test_type,
+          adjust = if (input$diversity_adjust_method != "") input$diversity_adjust_method else "fdr"
+        )
+        
+        # Run plot_pairwise_dists
+        plot_pairwise_dists(
+          dist_df = dist_df,
+          outdir = file.path(input$outdir, "figures"),
+          group_var = input$diversity_group_var
+        )
+      })
+      
+      output$test_output <- renderText({ paste(test_output, collapse = "\n") })
     }
   })
 

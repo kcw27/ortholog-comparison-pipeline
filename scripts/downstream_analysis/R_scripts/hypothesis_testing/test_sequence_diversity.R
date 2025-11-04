@@ -4,6 +4,14 @@ library(glue)
 theme_set(theme_bw())
 
 get_pairwise_dists <- function(df, group_var = "category", seq_colname = "sequence") {
+  dimensions <- paste(unlist(dim(df)), collapse = ", ")
+  cat(glue("\nDimensions of df: {dimensions}\n"))
+  cat("\n")
+  df <- df[!is.na(df[[group_var]]), ] # filter out NA's, if any
+  dimensions <- paste(unlist(dim(df)), collapse = ", ")
+  cat(glue("\nDimensions of df after filtering out NA's in {group_var}, if any: {dimensions}\n"))
+  cat("\n")
+
   df_categories <- split(df, df[[group_var]])
 
   # Collect partial dataframes
@@ -26,7 +34,7 @@ compare_pairwise_dists <- function(dist_df, test_type = "non-parametric", adjust
     print("Running ANOVA test.")
     test <- aov(pairwise_dist ~ group, data = dist_df)
     p <- summary(test)[[1]][["Pr(>F)"]][1]
-    print(glue("ANOVA p-value: {signif(p, 4)}"))
+    print(glue("ANOVA p-value: {p}"))
 
     if (p < 0.05) {
       print("Conducting a post-hoc Tukey HSD test.")
@@ -40,7 +48,7 @@ compare_pairwise_dists <- function(dist_df, test_type = "non-parametric", adjust
     print("Running Kruskal-Wallis test.")
     test <- kruskal.test(pairwise_dist ~ group, data = dist_df)
     p <- test$p.value
-    print(glue("Kruskal-Wallis p-value: {signif(p, 4)}"))
+    print(glue("Kruskal-Wallis p-value: {p}"))
     print(test)
 
     if (p < 0.05) {
@@ -73,7 +81,8 @@ plot_pairwise_dists <- function(dist_df, outdir, group_var = "category") {
     
   # save figure
   outname = glue("{outdir}/pairwiseSeqDists_within_{group_var}.pdf")
-  ggsave()
+  ggsave(outname, plot=p)
+  cat(glue("\nSaved pairwise distance histograms to {outname}!\n"))
 }
 
 #get_pairwise_dists <- function(df, group_var = "category", seq_colname = "sequence") {
