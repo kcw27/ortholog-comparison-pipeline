@@ -259,6 +259,15 @@ server <- function(input, output, session) {
   # Add reactive value to trigger image list refresh
   image_refresh_trigger <- reactiveVal(0)
   
+  # UPDATED: Get current dataframe (subsetted or full) - MOVED UP
+  get_current_df <- reactive({
+    if (!is.null(selected_df_store())) {
+      return(selected_df_store())
+    } else {
+      return(df_store())
+    }
+  })
+  
   append_log <- function(msg) {
     log_store$lines <- c(log_store$lines, msg)
   }
@@ -269,10 +278,10 @@ server <- function(input, output, session) {
   output$show_output <- reactive({ show_output() })
   outputOptions(output, "show_output", suspendWhenHidden = FALSE)
 
-  # NEW: Dynamic UI for subset levels
+  # NEW: Dynamic UI for subset levels - ENHANCED to show only current levels
   output$subset_levels_ui <- renderUI({
     req(df_store())
-    df <- df_store()
+    df <- get_current_df()  # CHANGED: Use current df instead of original
     group_var <- input$subset_group_var
     
     if (!group_var %in% names(df)) {
@@ -284,7 +293,7 @@ server <- function(input, output, session) {
     
     checkboxGroupInput("subset_levels", "Select levels to include:",
                       choices = levels,
-                      selected = levels)  # Default: all levels selected
+                      selected = levels)  # Default: all current levels selected
   })
   
   # Update figure script choices based on FASTA type
@@ -301,11 +310,11 @@ server <- function(input, output, session) {
     }
   })
 
-  # NEW: Apply subset
+  # NEW: Apply subset - MODIFIED for sequential subsetting
   observeEvent(input$apply_subset, {
     req(df_store(), input$subset_group_var, input$subset_levels)
     
-    df <- df_store()
+    df <- get_current_df()  # CHANGED: Use current df instead of always starting from original
     group_var <- input$subset_group_var
     
     if (!group_var %in% names(df)) {
@@ -324,20 +333,11 @@ server <- function(input, output, session) {
     selected_df_store(selected_df)
     append_log(glue("Data subset applied: {nrow(selected_df)} rows selected from {group_var} levels: {paste(input$subset_levels, collapse=', ')}"))
   })
-
+  
   # NEW: Clear subset
   observeEvent(input$clear_subset, {
     selected_df_store(NULL)
     append_log("Data subset cleared - using full dataset")
-  })
-
-  # UPDATED: Get current dataframe (subsetted or full)
-  get_current_df <- reactive({
-    if (!is.null(selected_df_store())) {
-      return(selected_df_store())
-    } else {
-      return(df_store())
-    }
   })
   
   # NEW: Select all levels
