@@ -224,6 +224,14 @@ ui <- navbarPage("Pipeline GUI",
         
         # Inputs for test_sequence_diversity.R
         conditionalPanel("input.test_script == 'test_sequence_diversity.R'",
+          # Reference sequence input - only show if not already submitted
+          conditionalPanel("output.ref_seqID_available == false",
+            textInput("diversity_ref_seqID", "Reference sequence ID:", ""),
+            actionButton("submit_diversity_ref_btn", "Submit Reference Sequence ID")
+          ),
+          conditionalPanel("output.ref_seqID_available == true",
+            textOutput("current_diversity_ref_seqID")
+          ),
           selectInput("diversity_group_var", "Group by:", 
                       choices = c("category", "genus"), 
                       selected = "category"),
@@ -418,7 +426,7 @@ server <- function(input, output, session) {
     all_cols <- names(result$df)
     sequence_cols <- all_cols[grepl("sequence", all_cols, ignore.case = TRUE) & 
                               !sapply(result$df, is.numeric) &
-                              all_cols != "sequence_id"]
+                              !grepl("sequence_id", all_cols, ignore.case = TRUE)]
     
     if (length(sequence_cols) == 0) {
       # If no sequence columns found, show all non-numeric columns
@@ -723,6 +731,77 @@ server <- function(input, output, session) {
                 choices = setNames(residue_options, residue_labels))
   })
   
+  # NEW: Display current reference sequence ID for sequence diversity
+  output$current_diversity_ref_seqID <- renderText({
+    if (!is.null(ref_seqID_store())) {
+      glue("Using reference sequence: {ref_seqID_store()}")
+    } else {
+      "No reference sequence set"
+    }
+  })
+  
+  # NEW: Handle reference sequence ID submission for sequence diversity
+  observeEvent(input$submit_diversity_ref_btn, {
+    req(input$fasta_file)
+    
+    ref_seqID <- strip_quotes(input$diversity_ref_seqID)
+    
+    if (ref_seqID == "") {
+      append_log("No reference sequence ID provided for sequence diversity test.")
+      return()
+    }
+    
+    fasta_file <- normalizePath(as.character(strip_quotes(input$fasta_file)), mustWork = FALSE)
+    
+    if (!file.exists(fasta_file)) {
+      append_log(glue("FASTA file not found: {fasta_file}"))
+      return()
+    }
+    
+    # Read the FASTA file to find the reference sequence
+    tryCatch({
+      library(seqinr)
+      alignment <- read.alignment(fasta_file, format = "fasta")
+      
+      seqs <- alignment[["seq"]] |>
+        unlist() |> # convert from list to vector
+        toupper() # originally in lowercase; convert to uppercase
+      
+      alignment_names = (alignment["nam"][[1]]) 
+      allseqs_df <- data.frame(sequence_id = alignment_names, sequence = seqs)
+      
+      # Check if reference sequence ID exists
+      matching_rows <- which(allseqs_df$sequence_id == ref_seqID)
+      
+      if (length(matching_rows) == 0) {
+        append_log(glue("WARNING: Reference sequence ID '{ref_seqID}' not found in FASTA file."))
+        append_log("Please submit a sequence ID that exists in the FASTA file.")
+      } else if (length(matching_rows) > 1) {
+        append_log(glue("WARNING: Reference sequence ID '{ref_seqID}' appears {length(matching_rows)} times in FASTA file."))
+        append_log("The first matching sequence will be used.")
+        ref_seqID_store(ref_seqID)
+        # Use first occurrence
+        first_match <- matching_rows[1]
+        ref_sequence_store(allseqs_df$sequence[first_match])
+        ref_length_store(nchar(allseqs_df$sequence[first_match]))
+      } else {
+        append_log(glue("Reference sequence ID '{ref_seqID}' found in FASTA file."))
+        ref_seqID_store(ref_seqID)
+        ref_sequence_store(allseqs_df$sequence[matching_rows])
+        ref_length_store(nchar(allseqs_df$sequence[matching_rows]))
+      }
+      
+      if (!is.null(ref_length_store())) {
+        append_log(glue("Reference sequence length: {ref_length_store()}"))
+      }
+      if (!is.null(ref_sequence_store())) {
+        append_log(glue("Reference sequence stored (first 50 chars): {substr(ref_sequence_store(), 1, 50)}..."))
+      }
+    }, error = function(e) {
+      append_log(glue("Error reading FASTA file: {e$message}"))
+    })
+  })
+  
   # NEW: Update test script choices based on FASTA type
   observe({
     if (input$fasta_type == "Aligned") {
@@ -898,40 +977,47 @@ server <- function(input, output, session) {
       })
       
       output$test_output <- renderText({ paste(test_output, collapse = "\n") })
-      
     } else if (script_name == "test_sequence_diversity.R") {
-      # Run sequence diversity test
+      # Run sequence diversity test with new functions
       if (is.null(input$diversity_seq_colname) || input$diversity_seq_colname == "") {
         output$test_output <- renderText({ "Please select a sequence column." })
         return()
       }
       
+      if (is.null(ref_seqID_store())) {
+        output$test_output <- renderText({ "Error: Reference sequence ID required for sequence diversity test" })
+        return()
+      }
+      
       test_output <- capture.output({
-        # Run get_pairwise_dists
-        dist_df <- get_pairwise_dists(
+        # Run get_mutational_richness with reference sequence
+        dist_df <- get_mutational_richness(
           df = df,
+          reference_sequence = ref_sequence_store(),
           group_var = input$diversity_group_var,
           seq_colname = input$diversity_seq_colname
         )
         
-        # Run compare_pairwise_dists
-        compare_pairwise_dists(
+        # Run compare_mutational_richness
+        compare_mutational_richness(
           dist_df = dist_df,
           test_type = input$diversity_test_type,
           adjust = if (input$diversity_adjust_method != "") input$diversity_adjust_method else "fdr"
         )
         
-        # Run plot_pairwise_dists
-        plot_pairwise_dists(
+        # Run plot_mutational_richness with reference label
+        plot_mutational_richness(
           dist_df = dist_df,
           outdir = file.path(input$outdir, "figures"),
-          group_var = input$diversity_group_var
+          reference_label = ref_seqID_store(),
+          group_var = input$diversity_group_var,
+          test_type = input$diversity_test_type
         )
       })
       
       output$test_output <- renderText({ paste(test_output, collapse = "\n") })
     }
-  })
+  })  # <<< ADDED THIS CLOSING BRACE for observeEvent(input$run_test, ...)
 
   observeEvent(input$run_figures, {
     df <- get_current_df()
@@ -1154,7 +1240,8 @@ server <- function(input, output, session) {
       append_log(glue("Error saving data: {e$message}"))
     })
   })
-  
+    
+
   # Refresh button handler
   observeEvent(input$refresh_images, {
     image_refresh_trigger(image_refresh_trigger() + 1)
