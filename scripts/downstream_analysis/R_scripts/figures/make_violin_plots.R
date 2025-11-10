@@ -26,11 +26,15 @@ save_violin_plots <- function(df, group_var = "category", outdir, pdf_suffix, co
   if (!is.na(reference_label) & !is.na(reference_length)) {
     # add the reference as a horizontal line
     plots <- plots + 
-      geom_hline(aes(yintercept = reference_length, colour = "value")) +
-      scale_color_manual(name = "Values",
-          values = c("value" = "blue"),  # match factor levels as strings
-          labels = c("value" = glue("{reference_label} {column_name} = {reference_length}"))
-    )
+      geom_hline(aes(yintercept = reference_length), colour = 'blue') +
+      labs(title = glue("{reference_label} {column_name} = {reference_length}"))
+    
+#    plots <- plots + 
+#      geom_hline(aes(yintercept = reference_length, colour = "value")) +
+#      scale_color_manual(name = "Values",
+#          values = c("value" = "blue"),  # match factor levels as strings
+#          labels = c("value" = glue("{reference_label} {column_name} = {reference_length}"))
+#    )
   }
   
   if (additional == "boxplot") {
