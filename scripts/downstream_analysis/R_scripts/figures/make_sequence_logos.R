@@ -51,15 +51,15 @@ save_sequence_logos <- function(df, group_var = "category", sites, sites_adj, ou
 }
 
 
-plot_local_logo <- function(df, outdir, reference_label, sites_str, seq_colname = "sequence", width = 8, height = 6, group_var = "category") {
+plot_local_logo <- function(df, outdir, reference_seq, sites_str, seq_colname = "sequence", width = 8, height = 6, group_var = "category") {
   # parse sites_str, a comma-delimited string, into a sorted numeric vector
   sites <- strsplit(sites_str, ",") |> lapply(as.numeric) |> unlist() |> sort()
 
   # calculate sites_adj based on reference sequence
-  matching_rows <- which(df$sequence_id == reference_label)
-  reference_seq <- df[[seq_colname]][matching_rows[1]] # if there are multiple sequences with the same ID, use the first
+#  matching_rows <- which(df$sequence_id == reference_label)
+#  reference_seq <- df[[seq_colname]][matching_rows[1]] # if there are multiple sequences with the same ID, use the first
   sites_adj <- calibrate_coords(reference_seq, sites)
-  print(reference_label)
+#  print(reference_label)
   print(reference_seq)
   print(sites)
   print(sites_adj)

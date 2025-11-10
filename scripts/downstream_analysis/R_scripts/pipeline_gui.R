@@ -1120,7 +1120,7 @@ server <- function(input, output, session) {
         args <- list(
           df = df,
           outdir = file.path(input$outdir, "figures"),
-          reference_label = ref_seqID_store(),
+          reference_seq = ref_sequence_store(),
           sites_str = input$sites_str,
           seq_colname = input$seq_colname,
           width = input$logo_width,
