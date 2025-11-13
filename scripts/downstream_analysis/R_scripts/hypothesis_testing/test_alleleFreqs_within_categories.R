@@ -7,6 +7,11 @@ test_alleleFreqs_within_categories <- function(df, site, residue, group_var = "c
   # df[[seq_colname]] is assumed to contain aligned sequences
   # site is assumed to be a single int, pre-adjusted upon entry into the GUI
   adj_site <- site
+  
+  df |>
+    group_by(!!sym(group_var)) |>
+    summarize(count=n()) |>
+    print()
 
   ### make contingency table for pairwise Fisher's test
   summary_df <- df |> 
@@ -36,7 +41,7 @@ test_alleleFreqs_within_categories <- function(df, site, residue, group_var = "c
   cat("\n=== OVERALL STATISTICS ===\n")
   cat("Total sequences:", total_sequences, "\n")
   cat("Total", residue, "alleles:", total_allele, "\n")
-  cat("Overall proportion:", round(overall_prop, 4), "(", round(overall_prop * 100, 2), "%)\n")
+  cat(glue("Overall proportion: {round(overall_prop, 4)} ( {round(overall_prop * 100, 1)}% )"), "\n")
   
   cat("\n=== ENRICHMENT TESTS ===\n")
   enrichment_results <- data.frame(
@@ -116,7 +121,13 @@ test_alleleFreqs_within_categories <- function(df, site, residue, group_var = "c
       cat("  -", enriched_categories$category[i], 
           "(observed:", enriched_categories$observed_alleles[i], "/", enriched_categories$total_sequences[i],
           "=", round(enriched_categories$observed_prop[i] * 100, 1), "%; expected:", 
-          round(enriched_categories$expected_alleles[i], 1), ")\n")
+          round(enriched_categories$expected_alleles[i], 1), 
+          ", p-value adjusted by", adjust, "is (p =", formatC(enriched_categories$p_adj_fisher_2x2[i], format = "e", digits = 2), ") )\n")
+          
+      # additional print statements to facilitate data entry
+      cat(glue("{enriched_categories$category[i]} (p = {formatC(enriched_categories$p_adj_fisher_2x2[i], format = 'e', digits = 2)}; {round(enriched_categories$observed_prop[i] * 100, 1)}%)"), "\n") 
+      # cat(glue("expected {round(enriched_categories$expected_alleles[i] / enriched_categories$total_sequences[i] * 100, 1)}%"))
+      cat(glue("expected {round(overall_prop * 100, 1)}%"), "\n\n")
     }
   } else {
     cat("  None\n")
