@@ -1,4 +1,5 @@
-# Metadata Magnet
+# Metadata Magnet pipeline
+<img width="1645" height="337" alt="Metadata Magnet long" src="https://github.com/user-attachments/assets/39370886-ab25-4f8e-a956-8a542dbd2484" />
 
 ## Table of Contents
 - [Introduction](#introduction)
