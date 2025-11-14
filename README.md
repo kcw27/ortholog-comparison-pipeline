@@ -1,4 +1,4 @@
-# AlleleSeeker (working title)
+# Metadata Magnet
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -21,11 +21,14 @@ A variety of utilities are provided: you may filter your ortholog dataset in var
 Refer to [this page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/scripts_info.md) for additional information.
 
 ## GUI
-Data input screen
-<img width="1250" alt="image" src="https://github.com/user-attachments/assets/d82f7240-bc29-460d-a0f4-ea2ffc9118c2" />
+Data input tab:
+<img width="3000" height="1750" alt="image" src="https://github.com/user-attachments/assets/f6f8d807-245c-4ae6-a834-ab7189ff8bba" />
 
-Statistical test screen
-<img width="1250" alt="image" src="https://github.com/user-attachments/assets/2d0e0d06-fda6-43dc-b08b-96a37329da40" />
+Figure generation tab:
+<img width="3000" height="1747" alt="image" src="https://github.com/user-attachments/assets/6f426a2b-4eb9-4d33-8355-b1c697bb6df1" />
+
+Statistical test tab:
+<img width="3000" height="1747" alt="image" src="https://github.com/user-attachments/assets/f0fc154c-7af6-4d6c-8be1-ebb796b3c058" />
 
 If running on a Unix server, take the following steps to view the GUI:
 1. Get your IP address.
@@ -97,4 +100,8 @@ I am working on getting everything into a single conda environment and setting u
 Refer to [this page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/example_run.md).
 
 ## Acknowledgements
-TODO
+* Advisor: Dr. Catherine Armbruster
+* Thesis committee:
+   * Dr. Irene Kaplow
+   * Dr. Phillip Compeau
+* Assistance with bioinformatic analysis: Dr. Arkadiy Garber
