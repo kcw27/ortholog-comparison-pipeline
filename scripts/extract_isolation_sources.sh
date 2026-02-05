@@ -52,8 +52,50 @@ write_iso_sources() {
   # then reintroduce newlines only between separate entries to use sort and uniq,
   # then remove newlines again by replacing with spaces
 
-  echo "$genome_id	$organism	$isolation_source	$titles" >> "$fname"
-
+  #echo "$genome_id	$organism	$isolation_source	$titles" >> "$fname" ### uncomment later!!!
+  
+  # testing out the search for Isolation Site metadata
+  # It is able to find isolation site metadata, which is pretty cool. There may be more than one hit per file, but I think they're all the same so we can just take the first instance.
+  # Also, the entry may span multiple lines, so it should be treated like the TITLE field.
+#  isolation_site=$(zcat $genbank_file | grep "Isolation Site")
+  isolation_site=$(zcat "$genbank_file" |
+    awk '
+      /Isolation Site/ {
+        if (done) next   # ignore additional matches
+        inblock = 1
+    
+        # Process and print the Isolation Site line itself
+        line = $0
+        sub(/^[[:space:]]+/, "", line)
+        sub(/.*::[[:space:]]*/, "", line)
+        print line
+    
+        next
+      }
+    
+      inblock {
+        # Stop when a line begins with exactly 12 spaces + a non-space
+        if ($0 ~ /^ {12}[^[:space:]]/) {
+          inblock = 0
+          done = 1      # prevent future matches
+          next
+        }
+    
+        line = $0
+        sub(/^[[:space:]]+/, "", line)
+        sub(/.*::[[:space:]]*/, "", line)
+        print line
+      }
+    ' |
+    sed ':a;N;$!ba;s/\n/ /g' |
+    tr -s ' '
+    
+      )
+    
+      if [ -n "$isolation_site" ]; then
+        echo "$isolation_site" >> "$fname"
+        echo "     found in $genbank_file" >> "$fname"
+      fi
 }
 
 

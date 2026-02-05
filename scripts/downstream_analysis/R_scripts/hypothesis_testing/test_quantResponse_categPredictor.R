@@ -6,6 +6,14 @@ library(glue)
 quantResponse_categPredictor <- function(df, response = "sequence_length", predictor = "category",
                                          test_type = "non-parametric", adjust = "fdr") {
   output <- c()
+  
+  summary_df <- df |>
+    group_by(!!sym(predictor)) |>
+    summarize(count = n())
+  
+  output <- capture.output(print(summary_df, width = Inf))
+
+  
   output <- c(output, glue("Test type: {test_type}"))
   output <- c(output, glue("P-value adjustment method: {adjust}"))
 
@@ -19,7 +27,7 @@ quantResponse_categPredictor <- function(df, response = "sequence_length", predi
     if (p < 0.05) {
       output <- c(output, "Conducting a post-hoc Tukey HSD test.")
       follow_up <- test |> tukey_hsd()
-      output <- c(output, capture.output(follow_up))
+      output <- c(output, capture.output(as.data.frame(follow_up))) # convert to data frame; tibbles have truncated outputs
     } else {
       output <- c(output, "No significant difference detected between predictor levels.")
     }

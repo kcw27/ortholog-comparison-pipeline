@@ -61,7 +61,7 @@ read -p "Please review ${gb} and ${ref}, then decide whether to proceed with dow
 case "$choice" in 
   y|Y ) echo "Proceeding...";;
   n|N ) echo "Terminating."; exit 1;;
-  * ) echo "Invalid choice."; exit 1;;
+  * ) echo "Invalid choice. Terminating."; exit 1;;
 esac
 
 
