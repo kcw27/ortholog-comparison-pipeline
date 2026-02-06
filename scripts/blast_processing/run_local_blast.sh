@@ -45,7 +45,7 @@ scriptsdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) 
 
 tempBlast=$(mktemp)
 echo "Running BLAST... Temp file at $tempBlast"
-blastp -db "$db_name" -query "$query" -max_target_seqs "$max" -show_gis -num_threads $procs_to_use -outfmt "6 sallgi sallseqid sseq evalue salltitles" -out $tempBlast
+blastp -db "$db_name" -query "$query" -max_target_seqs "$max" -num_threads $procs_to_use -outfmt "6 sallgi sallseqid sseq evalue salltitles" -out $tempBlast
 
 # add organisms column
 tempBlastOrgs=$(mktemp)

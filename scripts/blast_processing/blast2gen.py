@@ -80,10 +80,10 @@ def nucleotide_to_bioproject_assembly(nuc_id):
         pass
     return bioproject_acc, assembly_acc
 
-def fetch_info(accessions):
+def fetch_info(accessions, outdir):
     start_time = time.time()
-    print(f"Will write any errors to fetch_info_log.txt in the current directory: {os.getcwd()}")
-    log = open("fetch_info_log.txt", "w")
+    print(f"Will write any errors to fetch_info.log in the output directory: {outdir}")
+    log = open(f"{outdir}/fetch_info.log", "w")
     log.write(f"Current time: {time.ctime(time.time())}\n") # time.ctime() for human-readable time
 
     info_dict = {}
@@ -106,6 +106,23 @@ def fetch_info(accessions):
             #organism = record[0].get('Title', 'NA').split('[')[-1].rstrip(']')
             info = record.features[0].qualifiers
             organism = info["organism"][0] # it's a list containing a single string, so access that string
+            protein_seq = str(record.seq)
+
+            # protein_id and locus_tag
+            protein_id = "NA"
+            locus_tag = "NA"
+            
+            for feature in record.features:
+                if feature.type == "CDS": # CDS is for gene-level features
+                    q = feature.qualifiers
+                    #protein_id = q.get("protein_id", ["NA"])[0]
+                    #protein_id = record.id
+                    # or
+                    protein_id = record.annotations.get("accessions", ["NA"])[0]
+
+                    locus_tag = q.get("locus_tag", ["NA"])[0]
+                    break
+
             
             # Fetch isolation source and sequencing technology too, while we have this record
             # (copying and pasting some code from my own function, fetch_metadata() in metadata_processing.py
@@ -126,6 +143,9 @@ def fetch_info(accessions):
             sequencing_technology = genome_assembly.get('Sequencing Technology', 'NA')
             assembly_method = genome_assembly.get('Assembly Method', 'NA')
             genome_coverage = genome_assembly.get('Genome Coverage', 'NA')
+            
+            migs = structured_comment.get('MIGS-Data', {}) # once again default to empty dict
+            isolation_site = migs.get('Isolation Site', 'NA')
             
             # Title:
             title = anno.get('references', 'NA')
@@ -177,11 +197,15 @@ def fetch_info(accessions):
             'sequencing_technology': sequencing_technology,
             'title': title,
             'assembly_method': assembly_method,
-            'genome_coverage': genome_coverage
+            'genome_coverage': genome_coverage,
+            'protein_seq': protein_seq,
+            'protein_id': protein_id,
+            'locus_tag': locus_tag,
+            'isolation_site': isolation_site
         }
 
-        print(f"Processed {acc}: Nuc={nucleotide_acc}, BioProj={bioproject_acc}, Asm={assembly_acc}, Org={organism}, Source={isolation_source}, Seqtech={sequencing_technology}, Title={title}, Assembly method={assembly_method}, Coverage={genome_coverage}")
-        time.sleep(1)  # Respect rate limit # started with 0.4; increase it so NCBI doesn't complain about too many requests
+        print(f"Processed {acc}: Nuc={nucleotide_acc}, BioProj={bioproject_acc}, Asm={assembly_acc}, Org={organism}, Source={isolation_source}, Seqtech={sequencing_technology}, Title={title}, Assembly method={assembly_method}, Coverage={genome_coverage}, Isolation site={isolation_site}")
+        time.sleep(0.4)  # Respect rate limit. If needed, increase it so NCBI doesn't complain about too many requests
         
     end_time = time.time()
     print(f"Time elapsed in seconds: {end_time - start_time}")
@@ -190,6 +214,8 @@ def fetch_info(accessions):
     return info_dict
 
 def main(input_blast, output_tsv):
+    outdir = os.path.dirname(output_tsv)
+
     cols = ['genome_id', 'subject', 'sequence', 'evalue', 'title_old', 'organism_old'] # I believe 'subject' is meant to be the protein accession
 
     blast_df = pd.read_csv(input_blast, sep='\t', header=None, names=cols, engine='python')
@@ -198,7 +224,7 @@ def main(input_blast, output_tsv):
     print(len(unique_accs))
 
     print(f"Fetching detailed info for {len(unique_accs)} proteins from NCBI...")
-    info_dict = fetch_info(unique_accs)
+    info_dict = fetch_info(unique_accs, outdir)
 
     blast_df['nucleotide_accession'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['nucleotide_acc'])
     blast_df['bioproject_accession'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['bioproject_acc'])
@@ -210,13 +236,16 @@ def main(input_blast, output_tsv):
     blast_df['titles'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['title'])
     blast_df['assembly_method'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['assembly_method'])
     blast_df['genome_coverage'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['genome_coverage'])
+    blast_df['protein_seq'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['protein_seq'])
+    blast_df['protein_id'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['protein_id'])
+    blast_df['locus_tag'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['locus_tag'])
+    blast_df['isolation_site'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['isolation_site'])
 
     # Columns: same set of columns as the original, with new info written at the end
     final_df = blast_df[['genome_id', 'subject', 'sequence', 'evalue', 'title_old', 'organism_old',
                          'nucleotide_accession', 'bioproject_accession', 'assembly_accession', 'organism',
                          'isolation_source', 'sequencing_technology', 'titles', 'assembly_method',
-                         'genome_coverage']]
-    # I'll take a look at the output first, and change the output df to write only the columns I need
+                         'genome_coverage', 'protein_seq', 'protein_id', 'locus_tag', 'isolation_site']]
 
     final_df.to_csv(output_tsv, sep='\t', index=False)
     print(f"Annotated output saved to {output_tsv}")

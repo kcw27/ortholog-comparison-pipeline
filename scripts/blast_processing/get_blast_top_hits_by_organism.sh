@@ -1,21 +1,16 @@
-#!/bin/bash
+# example run:
+# $blastdir/get_blast_top_hits_by_organism.sh -f $rundir/path1/PA3565_hits_evalueThreshold_1e-100.blast
 
-# Example run:
-# $blastdir/filter_blast_by_evalue.sh -t "1e-100" -f $rundir/path1/PA3565_hits.blast
-
-# Default threshold
-THRESHOLD="1e-30"
 FILES=()
 
 print_help() {
-    echo "Usage: $0 [-t threshold] -f file1 [file2 ...]"
+    echo "Usage: $0 -f file1 [file2 ...]"
     echo
-    echo "Filters BLAST output files to include only rows where the e-value"
-    echo "(column 4) is smaller than the provided threshold."
-    echo "Output files are named like so: ${file%.*}_evalueThreshold_${THRESHOLD}.blast"
+    echo "Filters BLAST output files to include only the top record (lowest evalue, column 4) per organism name (column 6)."
+    echo "In event of a tie within an organism name, only the first record is kept."
+    echo "Output files are named like so: ${file%.*}_topPerOrganism.blast"
     echo
     echo "Options:"
-    echo "  -t <threshold>   Optional. Default: 1e-30"
     echo '  -f <files...>    Required. One or more BLAST output files with format -outfmt "6 sallgi sallseqid sseq evalue salltitles", and organism column added to the end.'
     echo "  -h               Show help message and exit"
 }
@@ -23,9 +18,6 @@ print_help() {
 # Parse options
 while getopts "t:f:h" opt; do
     case "$opt" in
-        t)
-            THRESHOLD="$OPTARG"
-            ;;
         f)
             FILES=("$OPTARG")              # get the first file
             shift $((OPTIND - 1))          # shift off processed args
@@ -54,7 +46,13 @@ fi
 
 # Process each file
 for file in "${FILES[@]}"; do
-    output="${file%.*}_evalueThreshold_${THRESHOLD}.blast"
-    awk -v threshold="$THRESHOLD" '$4 < threshold' "$file" > "$output" # -v is the safest way to pass a variable to awk
+    output="${file%.*}_topPerOrganism.blast"
+    
+    # Sort commands: the first is to ensure that the file is sorted by organism and then by evalue (in increasing order of evalue),
+    # the second is to get the top hit for each organism.
+    # Since the file is sorted from smallest to biggest evalue,
+    # the first hit for an organism is assumed the most significant.
+    # If records are tied for lowest evalue for an organism, it only takes the first.
+    cat "$file" | sort -t$'\t' -k6,6 -k4,4g | sort -u -t$'\t' -k6,6 > "$output"
     echo "Processed: $file -> $output"
 done
