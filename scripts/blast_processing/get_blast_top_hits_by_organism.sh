@@ -16,7 +16,7 @@ print_help() {
 }
 
 # Parse options
-while getopts "t:f:h" opt; do
+while getopts "f:h" opt; do
     case "$opt" in
         f)
             FILES=("$OPTARG")              # get the first file
@@ -35,18 +35,10 @@ while getopts "t:f:h" opt; do
     esac
 done
 
-
-# Check if file arguments were provided
-if [[ ${#FILES[@]} -eq 0 ]]; then
-    echo "Error: No input files provided."
-    echo
-    print_help
-    exit 1
-fi
-
 # Process each file
 for file in "${FILES[@]}"; do
     output="${file%.*}_topPerOrganism.blast"
+    > $output # if the file already exists, overwrite it
     
     # Sort commands: the first is to ensure that the file is sorted by organism and then by evalue (in increasing order of evalue),
     # the second is to get the top hit for each organism.

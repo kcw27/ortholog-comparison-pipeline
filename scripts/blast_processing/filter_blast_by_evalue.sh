@@ -43,18 +43,11 @@ while getopts "t:f:h" opt; do
     esac
 done
 
-
-# Check if file arguments were provided
-if [[ ${#FILES[@]} -eq 0 ]]; then
-    echo "Error: No input files provided."
-    echo
-    print_help
-    exit 1
-fi
-
 # Process each file
 for file in "${FILES[@]}"; do
     output="${file%.*}_evalueThreshold_${THRESHOLD}.blast"
+    > $output # if the file already exists, overwrite it
+    
     awk -v threshold="$THRESHOLD" '$4 < threshold' "$file" > "$output" # -v is the safest way to pass a variable to awk
     echo "Processed: $file -> $output"
 done

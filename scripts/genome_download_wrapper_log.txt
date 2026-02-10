@@ -1,8 +1,4 @@
-CLIs for genome_download_wrapper.sh: /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_with_orgs_long.blast, /home/kcw2/ortholog-comparison-pipeline/test_data/genomes
-Run extract_organisms.sh with CLIs /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_with_orgs_long.blast /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_with_orgs_long_organisms.txt; Job ID 1899393, time 1753219051
-Run convert_organisms_to_accessions.sh with CLIs /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_with_orgs_long_organisms.txt /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_with_orgs_long_accessions.txt; Job ID 1899401, time 1753219051
-Run sort_accessions.sh with CLIs /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_with_orgs_long_accessions.txt /home/kcw2/ortholog-comparison-pipeline/test_data; Job ID 1906787, time 1753219080
-Run download_databases.sh with CLIs /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_with_orgs_long_accessions_gb.txt /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_with_orgs_long_accessions_ref.txt /home/kcw2/ortholog-comparison-pipeline/test_data/genomes; Job ID 1923863, time 1753219180
-Finished! Elapsed: 439 seconds.
-Start time: 1753219051
-End time: 1753219490
+CLIs for genome_download_wrapper.sh: /home/kcw2/data/example_run/path2/PA3565_hits_filtered.blast, /home/kcw2/data/example_run/path2/genome_db
+Run extract_organisms.sh with CLIs /home/kcw2/data/example_run/path2/PA3565_hits_filtered.blast /home/kcw2/data/example_run/path2/PA3565_hits_filtered_organisms.txt; Job ID 578535, time 1770410677
+Run convert_organisms_to_accessions.sh with CLIs /home/kcw2/data/example_run/path2/PA3565_hits_filtered_organisms.txt /home/kcw2/data/example_run/path2/PA3565_hits_filtered_accessions.txt; Job ID 578541, time 1770410677
+Run sort_accessions.sh with CLIs /home/kcw2/data/example_run/path2/PA3565_hits_filtered_accessions.txt /home/kcw2/data/example_run/path2; Job ID 579693, time 1770410692

@@ -21,6 +21,7 @@ start_time="$(date -u +%s)"
 
 blast=$1
 dbdir=$2
+mkdir -p $dbdir
 
 wrapperdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) # get location of current script
 scriptsdir="${wrapperdir}/blast_processing" # this is where I put the scripts
