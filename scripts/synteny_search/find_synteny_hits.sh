@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Example run:
-# bash find_synteny_hits.sh -g "${HOME}/data/fha1_dbs" -i "${HOME}/data/synteny_input_fha1.tsv" -h "${HOME}/data/hmms_of_interest_fha1.txt" &
+# bash find_synteny_hits.sh -g "${HOME}/data/fha1_dbs" -i "${HOME}/data/synteny_input_fha1.tsv" -L "${HOME}/data/hmms_of_interest_fha1.txt" &
 # for testing:
-# bash find_synteny_hits.sh -g "${HOME}/data/genbank_toy/bacteria/" -i "${HOME}/data/synteny_input_example.tsv" -h "${HOME}/data/hmms_of_interest.txt"
+# bash find_synteny_hits.sh -g "${HOME}/data/genbank_toy/bacteria/" -i "${HOME}/data/synteny_input_example.tsv" -L "${HOME}/data/hmms_of_interest.txt"
 
 # Old example run:
 # a run with actual data, submitted as a job with &
@@ -61,23 +61,19 @@
 # Initialize variables
 genome_db=""
 input_file=""
-hmms=""
+hmms_list=""
 
 # Parse command-line flags
-while getopts "g:i:h:d:m:" opt; do
+while getopts "g:i:L:" opt; do
   case $opt in
     g) export genome_db="${OPTARG%/}/" ;;  # ensures the path to this dir ends with exactly one slash
     i) export input_file="$OPTARG" ;;
-    h) export hmms="$OPTARG" ;; # hmms of interest; only write metadata pertaining to these hmms
+    L) export hmms_list="$OPTARG" ;; # hmms of interest; only write metadata pertaining to these hmms
     \?) echo "Usage: $0 -g genome_db -i input_file -h hmms" >&2
         exit 1 ;;
   esac
 done
 
-
-#export genome_db=${1%/}
-#export input_file=${2%/}
-#export hmms=$3
 
 fname="synteny_matched.tsv" # Pynteny output file
 
@@ -100,10 +96,10 @@ write_metadata() {
     #contig_ids=$(grep -E "$(cat $hmms | grep -v "^$" | paste -sd '|')" "${output_genome}/synteny_matched.tsv" | cut -f 1)
     #locus_tags=$(grep -E "$(cat $hmms | grep -v "^$" | paste -sd '|')" "${output_genome}/synteny_matched.tsv" | cut -f 2)
     
-    # now require all items of $hmms to be observed on the same line in order to report a match
+    # now require all items of $hmms_list to be observed on the same line in order to report a match
     matches=$(awk '
       BEGIN {
-        while ((getline < "'"$hmms"'") > 0) {
+        while ((getline < "'"$hmms_list"'") > 0) {
           if ($0 != "") patterns[++n] = $0
         }
       }
@@ -153,6 +149,38 @@ write_metadata() {
       # then reintroduce newlines only between separate entries to use sort and uniq,
       # then remove newlines again by replacing with spaces
       
+      isolation_site=$(zcat "$genbank_file" |
+        awk '
+          /Isolation Site/ {
+            if (done) next   # ignore additional matches
+            inblock = 1
+      
+            line = $0
+            sub(/^[[:space:]]+/, "", line)
+            sub(/.*::[[:space:]]*/, "", line)
+            print line
+            next
+          }
+      
+          inblock {
+            if ($0 ~ /^ {12}[^[:space:]]/) {
+              inblock = 0
+              done = 1
+              next
+            }
+      
+            line = $0
+            sub(/^[[:space:]]+/, "", line)
+            sub(/.*::[[:space:]]*/, "", line)
+            print line
+          }
+        ' |
+        sed ':a;N;$!ba;s/\n/ /g' |
+        tr '\t' ' ' |      # <-- new: convert tabs to spaces
+        tr -s ' '          # squeeze spaces
+      )
+
+      
       # get the sequencing technology
       seq_tech=$(zcat $genbank_file | grep -oP '(?<=Sequencing Technology  :: ).*' | head -n 1)
       
@@ -171,7 +199,8 @@ write_metadata() {
         # write metadata for this protein to the summary file, tab-separated
         #echo "$genome_id	$contig	$organism	$isolation_source	$title	$locus	$protein_id	$sequence"
         #echo "Should write to ${outdir}/synteny_summary.tsv"
-        echo "$genome_id	$contig	$organism	$isolation_source	$titles	$locus	$protein_id	$sequence	$seq_tech" >> "${outdir}/synteny_summary.tsv"
+        echo "$genome_id	$contig	$organism	$isolation_source	$titles	$locus	$protein_id	$sequence	$seq_tech	$isolation_site" >> "${outdir}/synteny_summary.tsv"
+        #echo "$genome_id	$contig	$organism	$isolation_source	$titles	$locus	$protein_id	$sequence	$seq_tech" >> "${outdir}/synteny_summary.tsv"
       done
     #else
       #echo "No hits found for ${output_genome}"
@@ -191,7 +220,7 @@ write_metadata() {
 # Iterate over column 2 of the input file and parallelize metadata extraction
 cut -f2 "$input_file" | while read -r outdir; do
   outdir=${outdir%/}
-  echo "genome_id	contig	organism	isolation_source	titles	locus	protein_id	sequence	seq_tech" > "${outdir}/synteny_summary.tsv"  # Create a blank summary file for this synteny structure
+  echo "genome_id	contig	organism	isolation_source	titles	locus	protein_id	sequence	seq_tech	isolation_site" > "${outdir}/synteny_summary.tsv"  # Create a blank summary file for this synteny structure
   
   export -f write_metadata
   
