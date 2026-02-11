@@ -1,66 +1,39 @@
 #!/bin/bash
 
-# Inputs:
-# Mandatory: BLAST output file (-outfmt "6 sgi sseqid sseq evalue stitle")
-# Optional: header (true if there's a header in the BLAST file, which the program will skip; false otherwise)
-# Optional: extract (true if the sequence ID needs to be extracted from within | symbols, false otherwise)
-# Optional: concat_genome (true if you want to concatenate "genomeID-sequenceID"; false otherwise)
-# Optional: output filename (by default, "${blast%.*}.fasta")
+# Example run:
+# $blastdir/convert_blast_to_fasta.sh -b $outfile -r -c "genome" -o $rundir/sample_fasta.fasta
 
-# Output: FASTA file (with headers >ID|title|evalue)
-
-# Example runs:
-# on synteny-filtered output (-hd is required because it has a header):
-# bash $blastscripts/convert_blast_to_fasta.sh -b $datadir/PA3565_67_topHitsPerGenome.blast -hd
-
-# on blast output that hasn't been through metadata processing (i.e. blast2gen.py or intersect_blast_and_synteny_with_metadata.R) and therefore has no headers (-e)
-# bash $blastscripts/get_blast_top_hits.sh $datadir/PA3565_with_orgs_long.blast $datadir/PA3565_top_byOrganism.blast
-
-# on blast output that has been through a filtering script that left it without a header:
-# /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_top_byGenomeID.fasta
-
-# on blast2gen.py output which hasn't gone through further filtering (-hd and -e)
-# bash $blastscripts/convert_blast_to_fasta.sh -b $datadir/PA3565_with_orgs_long_annotatedByBlast2gen.blast -e -hd
-
-# with specified outname:
-# bash "/home/kcw2/ortholog-comparison-pipeline/scripts/blast_processing/convert_blast_to_fasta.sh" -b "/home/kcw2/data/testing/PA3565_nr_small_foo.txt" -e -g -o "/home/kcw2/data/testing/PA3565_nr_small_foo_bar.fasta"
+print_help() {
+    echo "Usage: $0 -b <blast> -r -e -c <'genome'|'locus'> -o <outfile> -h"
+    echo "        Output: FASTA file (with headers >ID|title|evalue)"
+    echo ""
+    echo "  -b    Required. Path to BLAST file in which the first five columns are sgi sseqid sseq evalue stitle, and optionally the sixth column is locus tag."
+    echo "  -r    Optional. Include this flag to remove the first row, assumed to be the header (default: false)."
+    echo "  -e    Optional. Extract if the sequence ID needs to be extracted from within | symbols; do not use otherwise."
+    echo "  -c    Optional. Concatenate IDs for sequence name. Default behavior: protein ID used as sequence name."
+    echo "                    -c 'genome': Use if you want to concatenate 'genomeID-sequenceID'."
+    echo "                    -c 'locus': Use if you want to concatenate 'genomeID-sequenceID-locusTag'. Locus tag is assumed to be in column 6."
+    echo "                        If you need to rearrange the input file to satisfy this requirement, use awk."
+    echo "                        Example where locus tag is in column 18: awk -F'\t' -v OFS='\t' '{ tmp=$6; $6=$18; $18=tmp; print }' $infile > $outfile"
+    echo "  -o    Optional. output filename (by default, ${blast%.*}.fasta)."
+    echo "  -h    Show help message and exit"
+}
 
 # set default values for optional arguments
 header=false
 extract=false
-concat_genome=false
+concat="no"
 
-# Parse flags
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    -b|--blast)
-      blast="$2"
-      shift 2
-      ;;
-    -hd|--header)
-      header=true
-      shift
-      ;;
-    -e|--extract)
-      extract=true
-      shift
-      ;;
-    -g|--concat_genome)
-      concat_genome=true
-      shift
-      ;;
-    -o|--outfile)
-      outfile="$2"
-      shift 2
-      ;;
-    -h|--help)
-      echo "I will add a help string later"
-      exit 1
-      ;;
-    *)
-      echo "Unknown option: $1" >&2
-      exit 1
-      ;;
+# Parse options with getopts (not GNU getopts, as that causes issues on Mac systems)
+while getopts "b:rec:o:h" opt; do
+  case $opt in
+    b) blast="$OPTARG" ;;
+    r) header="true" ;;
+    e) extract="true" ;;
+    c) concat="$OPTARG" ;;
+    o) outfile="$OPTARG" ;;
+    h) print_help; exit 0 ;;
+    *) print_help; exit 1 ;; #echo "Invalid option"; exit 1 ;;
   esac
 done
 
@@ -85,10 +58,16 @@ else
   tail_input=$(cat "$blast")
 fi
 
-if [[ "$concat_genome" = true ]]; then
+# define the write_fasta() function differently depending on concatenation mode
+if [[ "$concat" = "genome" ]]; then
   echo "Concatenating genome to subject ID"
   write_fasta() {
     printf ">%s-%s %s|%s\n%s\n" "$1" "$2" "$3" "$4" "$5" >> "$output"
+  }
+elif [[ "$concat" = "locus" ]]; then
+  echo "Concatenating genome and locus tag to subject ID"
+  write_fasta() {
+    printf ">%s-%s-%s %s|%s\n%s\n" "$1" "$2" "$6" "$3" "$4" "$5" >> "$output"
   }
 else
   echo "Not concatenating genome to subject ID"
@@ -98,10 +77,10 @@ else
 fi
 
 while read -r next; do
-  # Extract columns 2, 5, 4, 3 in one go
+  # Extract columnsin one go
   #read id title evalue sequence < <(awk -F '\t' '{print $2, $5, $4, $3}' <<< "$next")
   #IFS=$'\t' read -r col1 col2 col3 col4 col5 <<< "$next"
-  IFS=$'\t' read -r col1 col2 col3 col4 col5 col_rest <<< "$next"
+  IFS=$'\t' read -r col1 col2 col3 col4 col5 col6 col_rest <<< "$next"
   # there may be more than 5 columns, so if there are, they get dumped into col_rest. (If there aren't, col_rest will just be empty.)
   
   genome="$col1"
@@ -109,69 +88,67 @@ while read -r next; do
   title="$col5"
   evalue="$col4"
   sequence="$col3"
+  locus="$col6" # no harm if there's no 6th column in the file
 
   if [[ "$extract" = true ]]; then
     id="${id#*|}"
     id="${id%%|*}"
   fi
 
-#  echo "&&&"
-#  printf ">%s %s|%s\n%s\n" "$id" "$title" "$evalue" "$sequence"
-
-#  if [[ "$concat_genome" = true ]]; then
-#    printf ">%s-%s %s|%s\n%s\n" "$genome" "$id" "$title" "$evalue" "$sequence" >> "$output"
-#  else
-#    printf ">%s %s|%s\n%s\n" "$id" "$title" "$evalue" "$sequence" >> "$output"
-#  fi
   
-write_fasta "$genome" "$id" "$title" "$evalue" "$sequence"
+  write_fasta "$genome" "$id" "$title" "$evalue" "$sequence" "$locus"
 
-  
-#  echo "***"
-#  echo $id $title $evalue
-#  echo $sequence
-#  echo "///"
-#  echo ">${id} ${title}|${evalue}"
-#  echo "$sequence"
-  #echo ">${id} ${title}|${evalue}" >> $output
-  #echo "$sequence" >> $output # this is the sequence corresponding to the header
 done <<< "$tail_input"
 
 
 echo "Finished converting BLAST to FASTA: ${output}"
 
+# old example runs:
+# on synteny-filtered output (-hd is required because it has a header):
+# bash $blastscripts/convert_blast_to_fasta.sh -b $datadir/PA3565_67_topHitsPerGenome.blast -hd
 
-#### Example run:
-#### bash convert_blast_to_fasta.sh ${HOME}/data/PA3565_orthologs_65_66_67_top_evalueThreshold_1e-50.txt
-###
-###blast=$1
-###output="${blast%.*}.fasta"
-###> $output
-###echo "Writing results to ${output}..."
-###
-###IFS=$'\n' # input file is newline-separated.
-#### Need to set up the loop this way, otherwise it only reads the first line
-###
-#### Serial implementation, old version:
-###for next in $(cat $blast); do
-###  id=$(echo $next | cut -f 2 | cut -d "|" -f 2) # extract the id from within the pipe symbols 
-###  title=$(echo $next | cut -f 5)
-###  evalue=$(echo $next | cut -f 4)
-###  echo ">${id} ${title}|${evalue}" >> $output
-###  echo $next | cut -f 3 >> $output # this is the sequence corresponding to the header
-###done
-###
-#### Parallelization: I don't think this code actually writes the correct header-sequence pairs to the file, so use this with caution
-####export output  # Ensure output file is accessible across subshells
-###    
-####cat "$blast" | xargs -I {} -P "$(nproc)" bash -c '
-###    #id=$(echo "{}" | cut -f 2 | cut -d "|" -f 2)
-###    #title=$(echo "{}" | cut -f 5)
-###    #evalue=$(echo "{}" | cut -f 4)
-###    #seq=$(echo "{}" | cut -f 3)
-###    # need to use a single echo command to write the output to the file, otherwise the header might be separated from the sequence
-###    #echo -e ">${id}|${title}|${evalue}\n${seq}" >> '"$output"' # assumes there aren't escape sequences in the text, which is risky
-###
-###
-###
-###echo "Finished converting BLAST to FASTA!"
+# on blast output that hasn't been through metadata processing (i.e. blast2gen.py or intersect_blast_and_synteny_with_metadata.R) and therefore has no headers (-e)
+# bash $blastscripts/get_blast_top_hits.sh $datadir/PA3565_with_orgs_long.blast $datadir/PA3565_top_byOrganism.blast
+
+# on blast output that has been through a filtering script that left it without a header:
+# /home/kcw2/ortholog-comparison-pipeline/test_data/PA3565_top_byGenomeID.fasta
+
+# on blast2gen.py output which hasn't gone through further filtering (-hd and -e)
+# bash $blastscripts/convert_blast_to_fasta.sh -b $datadir/PA3565_with_orgs_long_annotatedByBlast2gen.blast -e -hd
+
+# with specified outname:
+# bash "/home/kcw2/ortholog-comparison-pipeline/scripts/blast_processing/convert_blast_to_fasta.sh" -b "/home/kcw2/data/testing/PA3565_nr_small_foo.txt" -e -g -o "/home/kcw2/data/testing/PA3565_nr_small_foo_bar.fasta"
+
+## Parse flags
+#while [[ $# -gt 0 ]]; do
+#  case "$1" in
+#    -b|--blast)
+#      blast="$2"
+#      shift 2
+#      ;;
+#    -hd|--header)
+#      header=true
+#      shift
+#      ;;
+#    -e|--extract)
+#      extract=true
+#      shift
+#      ;;
+#    -g|--concat_genome)
+#      concat_genome=true
+#      shift
+#      ;;
+#    -o|--outfile)
+#      outfile="$2"
+#      shift 2
+#      ;;
+#    -h|--help)
+#      echo "I will add a help string later"
+#      exit 1
+#      ;;
+#    *)
+#      echo "Unknown option: $1" >&2
+#      exit 1
+#      ;;
+#  esac
+#done

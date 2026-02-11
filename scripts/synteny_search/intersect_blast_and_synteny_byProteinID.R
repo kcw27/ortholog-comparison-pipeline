@@ -5,16 +5,17 @@
 # This may be the output of a protein blast, in which case it likely lacks genome IDs, but will be supplemented by the genome IDs in synteny_hits_file.
 ## args[2], synteny_hits_file: A synteny summary file produced by find_synteny_hits.sh, which is run by synteny_wrapper.sh
 ## args[3], outname: name of output file which contains the top BLAST hits per genome ID.
+## args[4], filter_flag: optional argument; use "y" to filter to the top hit per genome. All other inputs will be ignored.
 
 ### Script description:
-# Inner joins the data in blast_file_ and synteny_hits_file by protein ID, then filters to the top hit (i.e. lowest evalue) per genome ID.
+# Inner joins the data in blast_file_ and synteny_hits_file by protein ID, then (optionally) filters to the top hit (i.e. lowest evalue) per genome ID, then postprocesses the df and writes to a file.
 
 ### Example run:
-# Rscript $scriptsdir/synteny_search/intersect_blast_and_synteny_with_metadata.R $datadir/PA3565_with_orgs_long.blast $datadir/synteny_outputs/results_65_67/synteny_summary.tsv $datadir/PA3565_67_topHitsPerGenome.blast
-# Rscript intersect_blast_and_synteny_with_metadata.R "${HOME}/data/blast_outputs/PA3565_nr_orgs_long.txt" "${HOME}/data/results_65_67/synteny_summary.tsv" "${HOME}/data/blast_outputs/PA3565_67_topHitsPerGenome.tsv"
+# Rscript $scriptsdir/synteny_search/intersect_blast_and_synteny_byProteinID.R $datadir/PA3565_with_orgs_long.blast $datadir/synteny_outputs/results_65_67/synteny_summary.tsv $datadir/PA3565_67_topHitsPerGenome.blast
+# Rscript intersect_blast_and_synteny_byProteinID.R "${HOME}/data/blast_outputs/PA3565_nr_orgs_long.txt" "${HOME}/data/results_65_67/synteny_summary.tsv" "${HOME}/data/blast_outputs/PA3565_67_topHitsPerGenome.tsv"
 
 # for testing:
-# Rscript intersect_blast_and_synteny_with_metadata.R "${HOME}/data/testing/out/PA3565_nr_small_orgs_long.txt" "${HOME}/data/results_65_67/synteny_summary.tsv" "${HOME}/data/testing/out/PA3565_67_topHitsPerGenome_small.tsv"
+# Rscript intersect_blast_and_synteny_byProteinID.R "${HOME}/data/testing/out/PA3565_nr_small_orgs_long.txt" "${HOME}/data/results_65_67/synteny_summary.tsv" "${HOME}/data/testing/out/PA3565_67_topHitsPerGenome_small.tsv"
 
 
 ### Import packages
@@ -38,6 +39,9 @@ intersect_inputs <- function(blast_df, synteny_df) {
   blast_df <- blast_df |>
     #mutate(V2 = sub(".*\\|(.*)\\|.*", "\\1", V2))
     mutate(protein_id = sub(".*\\|(.*)\\|.*", "\\1", protein_id)) # I think this still works even if there are no | symbols
+    
+  # I don't think the protein IDs from the synteny hits files are ever in the format that has to be cleaned,
+  # but if they do need to be cleaned, you can use the same approach as above.
     
 #  # would it help if I got rid of the version numbers on the protein IDs in both the blast and synteny hits files?
 #  # e.g. CAI2795589.1 becomes CAI2795589
@@ -73,23 +77,41 @@ take_top_hit_per_genome <- function(filtered_df) {
   return(top_df)
 }
 
-postprocess <- function(top_df) {
-  # remove genome_id.x because it's all 0's, move genome_id.y to the front, and rename to genome_id
-  # Also overwrite sequence.x with sequence.y because they aren't necessarily the same; sequence.x is from BLAST and represents similar sequences that are clustered,
-  # while sequence.y corresponds to the specific sequence (the BLAST hit with the lowest evalue for that genome_id) that corresponds to the metadata 
-  # Additionally, overwrite organism.x with organism.y because organism.y is the specific organism that corresponds to sequence.y.
-#  top_df <- top_df |>
-#    subset(select = -genome_id.x) |>
-#    relocate(genome_id.y) |> # default behavior: move the col to the front
-#    rename(genome_id = genome_id.y) |> # new_name = old_name
-    
-  top_df <- top_df |>
-    mutate(genome_id.x = genome_id.y, sequence.x = sequence.y, organism.x = organism.y) |>
-    rename(genome_id = genome_id.x, sequence = sequence.x, organism = organism.x) |>
-    subset(select = -c(genome_id.y, sequence.y, organism.y))
+postprocess <- function(df) {
+  # new version: keep both sequence.x and sequence.y; might be good to compare them, but sequence.y is probably the one you want to use,
+  # so swap the two sequence columns so that sequence.y is the one that convert_blast_to_fasta.sh uses for the sequence (i.e. column 3).
+  # we still modify the genome_id and organism as before though.
+  df <- df |>
+    mutate(genome_id.x = genome_id.y, organism.x = organism.y) |>
+    rename(genome_id = genome_id.x, organism = organism.x) |>
+    subset(select = -c(genome_id.y, organism.y))
     # We mutate and rename, then drop, in order to ensure the new data is in the correct column positions to follow the BLAST file format
     
-  return(top_df)
+  # Swap sequence columns while keeping others in place
+  cols <- names(df)
+  swap_idx <- match(c("sequence.x", "sequence.y"), cols)
+  cols[swap_idx] <- rev(cols[swap_idx])
+  df <- df[cols] |>
+    rename(sequence_from_genbank = sequence.y, sequence_from_blast = sequence.x)
+
+
+#  # remove genome_id.x because it's all 0's, move genome_id.y to the front, and rename to genome_id
+#  # Also overwrite sequence.x with sequence.y because they aren't necessarily the same; sequence.x is from BLAST and represents similar sequences that are clustered,
+#  # while sequence.y corresponds to the specific sequence (the BLAST hit with the lowest evalue for that genome_id) that corresponds to the metadata 
+#  # Additionally, overwrite organism.x with organism.y because organism.y is the specific organism that corresponds to sequence.y.
+##  top_df <- top_df |>
+##    subset(select = -genome_id.x) |>
+##    relocate(genome_id.y) |> # default behavior: move the col to the front
+##    rename(genome_id = genome_id.y) |> # new_name = old_name
+#    
+#  df <- df |>
+#    mutate(genome_id.x = genome_id.y, sequence.x = sequence.y, organism.x = organism.y) |>
+#    rename(genome_id = genome_id.x, sequence = sequence.x, organism = organism.x) |>
+#    subset(select = -c(genome_id.y, sequence.y, organism.y))
+#    # We mutate and rename, then drop, in order to ensure the new data is in the correct column positions to follow the BLAST file format
+    
+    
+  return(df)
 }
 
 
@@ -97,17 +119,20 @@ postprocess <- function(top_df) {
 args <- commandArgs(trailingOnly = TRUE) # only get the CLIs that come after the name of the script
 
 if (length(args) < 3) {
-  stop("Please provide at least three arguments: <blast_file> <synteny_hits_file> <outname>")
+  stop('Please provide at least three arguments: <blast_file> <synteny_hits_file> <outname> [optional: "y" to also filter the data to the top hit per genome]')
 }
 
 blast_file <- args[1]
 synteny_hits_file <- args[2]
 outname <- args[3]
+filter_flag <- args[4]
 
 # print the arguments
 cat("Blast file provided:", blast_file, "\n")
 cat("Synteny hits file:", synteny_hits_file, "\n")
 cat("Output file:", outname, "\n")
+cat("Filter flag:", filter_flag, "\n") # this is specifically for filtering to the top hit per genome
+
 
 # make the outdir for the output file if necessary
 print("Making outdir if necessary:")
@@ -136,12 +161,22 @@ colnames(filtered_df)
 head(filtered_df, n=1)
 
 # Take the top hit per genome in this intersected df; write to file
-top_df <- take_top_hit_per_genome(filtered_df)
-glue("Number of rows in top_df: {nrow(top_df)}")
-
-print("Postprocessing...")
-top_df <- postprocess(top_df)
+if (!is.na(filter_flag)) {
+  if (filter_flag == "y") { # if I want to add other filtering options, e.g. top per organism, I can use other strings
+    print("Taking the top hit per genome.")
+    top_df <- take_top_hit_per_genome(filtered_df)
+    glue("Number of rows in top_df: {nrow(top_df)}")
+    
+    print("Postprocessing...")
+    postprocessed_df <- postprocess(top_df)
+  }
+} else {
+  print("Postprocessing...")
+  postprocessed_df <- postprocess(filtered_df)
+}
 
 # write to tsv file (no row names; I've just modified it to include column names)
-write.table(top_df, file=outname, sep='\t', row.names=FALSE, col.names=TRUE, quote=FALSE)
+write.table(postprocessed_df, file=outname, sep='\t', row.names=FALSE, col.names=TRUE, quote=FALSE)
 print(glue("File written to {outname}"))
+
+

@@ -5,24 +5,6 @@
 # for testing:
 # bash find_synteny_hits.sh -g "${HOME}/data/genbank_toy/bacteria/" -i "${HOME}/data/synteny_input_example.tsv" -L "${HOME}/data/hmms_of_interest.txt"
 
-# Old example run:
-# a run with actual data, submitted as a job with &
-# bash find_synteny_hits.sh "${HOME}/data/genome_db" "${HOME}/data/synteny_input.tsv" "${HOME}/data/hmms_of_interest.txt" &
-# for testing:
-# bash find_synteny_hits.sh "${HOME}/data/genbank_toy/bacteria/" "${HOME}/data/synteny_input_example.tsv" "${HOME}/data/hmms_of_interest.txt"
-
-
-#outfile="${1%/}/synteny_summary.tsv"
-
-# Create output file once- no headers, to make it easier to parse later
-# If there were header names, they would be:
-# Genome ID, Contig ID, Organism, Isolation source list, Title list, Locus tag, Protein ID, Protein sequence
-# The last two columns pertain to an individual protein from synteny_matched.tsv that matches 
-# NEW: as the very last column (after protein sequence), added a column for the sequencing technology
-
-#> "$outfile"
-
-#!/bin/bash
 
 # CLIs:
 # $1 - genome_db: absolute path to directory whose subdirectories contain .gbff files
@@ -200,7 +182,6 @@ write_metadata() {
         #echo "$genome_id	$contig	$organism	$isolation_source	$title	$locus	$protein_id	$sequence"
         #echo "Should write to ${outdir}/synteny_summary.tsv"
         echo "$genome_id	$contig	$organism	$isolation_source	$titles	$locus	$protein_id	$sequence	$seq_tech	$isolation_site" >> "${outdir}/synteny_summary.tsv"
-        #echo "$genome_id	$contig	$organism	$isolation_source	$titles	$locus	$protein_id	$sequence	$seq_tech" >> "${outdir}/synteny_summary.tsv"
       done
     #else
       #echo "No hits found for ${output_genome}"
@@ -220,8 +201,8 @@ write_metadata() {
 # Iterate over column 2 of the input file and parallelize metadata extraction
 cut -f2 "$input_file" | while read -r outdir; do
   outdir=${outdir%/}
-  echo "genome_id	contig	organism	isolation_source	titles	locus	protein_id	sequence	seq_tech	isolation_site" > "${outdir}/synteny_summary.tsv"  # Create a blank summary file for this synteny structure
-  
+  echo "genome_id	contig	organism	isolation_source	titles	locus_tag	protein_id	sequence	seq_tech	isolation_site" > "${outdir}/synteny_summary.tsv"  # Create a blank summary file for this synteny structure
+  # renaming the "locus" column to "locus_tag" for consistency with blast2gen.py, which has been updated to include a locus tag column.
   export -f write_metadata
   
   # Go through directories two levels down from the Pynteny output directory to access outputs for each genome,
