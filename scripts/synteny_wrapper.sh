@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source activate pynteny_env # activate the conda environment for Pynteny
+#source activate pynteny_env # activate the conda environment for Pynteny
+# Decided to comment this line out so that the user isn't restricted to using an environment called "pynteny_env" for their run
 
 ### Inputs:
 # $1: a genome database directory in which to perform the synteny searches.

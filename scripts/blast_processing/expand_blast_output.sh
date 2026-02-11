@@ -8,43 +8,32 @@
 # without organisms column, with a specified outname: 
 # bash "/home/kcw2/ortholog-comparison-pipeline/scripts/blast_processing/expand_blast_output.sh" -b "/home/kcw2/data/testing/PA3565_nr_small.txt" -o "/home/kcw2/data/testing/PA3565_nr_small_foo.txt"
 
-# Parse flags
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    -b|--blast)
-      blast="$2"
-      shift 2
-      ;;
-    -o|--outfile)
-      output="$2"
-      shift 2
-      ;;
-    -h|--help)
+
+print_help() {
       echo "Usage: $0 -b <blast_file> [-o <output_file>]"
-      echo "  -b, --blast     Mandatory input BLAST file."
-      echo "Expected to have 6 columns, e.g. -outfmt 6 with arguments sallgi sallseqid sseq evalue salltitles."
-      echo "May have organism column from add_organism_column.sh"
-      echo "  -o, --outfile   Optional output file (default: <blast>_long.blast)"
+      echo "  -b     Mandatory: input BLAST file with 5 or 6 columns."
+      echo "-outfmt 6 with arguments sallgi sallseqid sseq evalue salltitles (may have organisms column appended)."
+      echo "  -o     Optional: output filename (default: <blast>_long.blast)"
       exit 0
-      ;;
-    *)
-      echo "Unknown option: $1" >&2
-      exit 1
-      ;;
+}
+
+
+# Parse options
+while getopts "b:o:" opt; do
+  case $opt in
+    b) blast="$OPTARG" ;;
+    o) output="$OPTARG" ;;
+    h) print_help; exit 0 ;;
+    *) print_help; exit 1 ;;
   esac
 done
 
-# Check mandatory argument
-if [[ -z "$blast" ]]; then
-  echo "Error: -b|--blast argument is required." >&2
-  exit 1
-fi
-
-# Assign default outfile only if not set
+# Set default filename only if not set
 outfile="${output:-${blast/.*}_long.blast}"
 mkdir -p $(dirname $outfile) # make the outdir if it doesn't exist already
 
 echo "Saving to $outfile..."
+
 
 # handle file differently if organisms column is or isn't present
 awk -F'\t' '
