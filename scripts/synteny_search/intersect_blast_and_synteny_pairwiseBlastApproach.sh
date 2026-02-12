@@ -1,52 +1,61 @@
 #!/bin/bash
 
-##### TODO:
-### 0: Important!!!: update tempBlastFasta and tempSyntenyFasta to use mktemp; I don't want to overwrite these temp files
-# 1: reverse the direction of the blast: the blast DB should be built from $blast, and the query should be syntenyFasta
-# 2: --num-threads should be calculated based on num cores
-# 3: make a text file of list of IDs from the output of the pairwise BLAST for which pident ($5) >= 80
-### e.g., awk '$5 >= 80' /home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_intersectBlastSynteny_syntenyQuery_blastOutputSubject.blast | cut -f 1 | sort | uniq > /home/kcw2/data/blast_outputs/ids_from_pairwiseBlast_pidentThreshold80.txt 
-# 4: filter the syntenyFasta using seqtk subseq and that text file (#3 in TODO list)
-### So, don't delete syntenyFasta until the very end.
-# That filtered FASTA is the final output of this script. You can still left join the synteny metadata to the seq IDs in that filtered FASTA; it's a subset.
-
-
 # To find sequences that appear in both the blast dataset and synteny hit dataset without relying on consistent protein IDs,
-# perform a pairwise BLAST of the former against the latter, and filter the output to hits with >=99 pident.
-# We have to use the blast dataset as the query and the synteny hit dataset as the subject, because the blast dataset features
-# aligned sequences that are as a result shorter. 100 pident is possible if a shorter sequence is aligned against a longer sequence
-# (and would indicate a perfect match between the blast dataset sequence and a sequence in the synteny hit dataset),
-# but 100 pident is not achievable if a longer sequence (i.e. from the synteny hit dataset) is aligned against a shorter sequence.
-
-# Input:
-# $1: BLAST hits file (-outfmt "6 sallgi sallseqid sseq evalue salltitles")
-# $2: synteny hits file from synteny pipeline
-# $3: output filename
+# perform a pairwise BLAST of the latter against the former, and filter the output to hits with >=99 pident.
+# We have to use the synteny hit dataset as the query and the blast hit dataset as the subject, because we're taking a subset of the former
+# (i.e. appears in the synteny context) based on which of its sequences resembles sequences that appear in the latter (i.e. actually looks like the query sequence).
+# The question is "does this sequence from the synteny hits dataset look anything like any sequence from the dataset I got from blasting my protein of interest against a large database?"
 
 # Output:
-# To the specified output filename, save a version of the output from the pairwise BLAST (i.e. intersection) which has been filtered to exclude <99 pident.
-# Also save the full pairwise BLAST output to ""${outname%.*}"_full.blast"
+# To the specified output filename, save a version of the full output from the pairwise BLAST (i.e. intersection)
+# Also, saves a fasta which has been filtered to exclude sequences with <$pident.
 
 # Example run:
 # TODO
 # for testing:
-# bash "/home/kcw2/ortholog-comparison-pipeline/scripts/synteny_search/intersect_blast_and_synteny_pairwiseBlastApproach.sh" /home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_orgs.blast /home/kcw2/data/results_65_67/synteny_summary.tsv foo
+# bash "/home/kcw2/ortholog-comparison-pipeline/scripts/synteny_search/intersect_blast_and_synteny_pairwiseBlastApproach.sh" -b /home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_orgs.blast -s /home/kcw2/data/results_65_67/synteny_summary.tsv -o /home/kcw2/data/example_run/foo.blast
 
-blast=$1
-synteny=$2
-outname=$3
+
+
+print_help() {
+    echo "Usage: $0 -b <blast> -s <synteny> -p <pident> -o <outname> -h"
+    echo "        Outputs: to $outname, writes the output of the pairwise BLAST of $synteny as query against $blast as subject."
+    echo "                 Rationale for this direction of BLAST is explained in comments at the top of this script."
+    echo "                 Also writes a fasta with $pident cutoff- look for a file with a name similar to outname."
+    echo "  -b    Required. Path to BLAST file in which the first five columns are sgi sseqid sseq evalue stitle."
+    echo "  -s    Required. Path to summary file from synteny search via synteny_wrapper.sh (which calls find_synteny_hits.sh)."
+    echo "  -p    Optional. Pident threshold for filtering (default = 99)."
+    echo "  -o    Required. Name of output file."
+    echo "  -h    Show help message and exit"
+}
+
+# set default values for optional arguments
+pident="99"
+
+# Parse options
+while getopts "b:s:p:o:h" opt; do
+  case $opt in
+    b) blast="$OPTARG" ;;
+    s) synteny="$OPTARG" ;;
+    p) pident="$OPTARG" ;;
+    o) outname="$OPTARG" ;;
+    h) print_help; exit 0 ;;
+    *) print_help; exit 1 ;; #echo "Invalid option"; exit 1 ;;
+  esac
+done
 
 currdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) # get location of current script
 scriptsdir="${currdir}/../blast_processing" # this is where I put the scripts that this script calls
+
+mkdir -p $(dirname $outname) # make the outdir if it doesn't exist already
 
 ### Convert to FASTA
 echo "Converting input files to FASTA after preprocessing..."
 
 echo "Processing $blast"
 tempBlast=$(mktemp)
-
-# eventually replace this with $(mktemp) and delete it afterward, but for now I want to check the FASTAs
-tempBlastFasta="/home/kcw2/data/temp/blastFasta.fasta"
+tempBlastFasta=$(mktemp)
+echo "Saving tempBlastFasta to ${tempBlastFasta}..."
 
 # remove gap characters "-" because command line BLAST doesn't recognize them.
 # only write a line if the sequence hasn't been encountered before; this ensures the FASTA only contains unique seqs
@@ -61,13 +70,13 @@ pid1=$!
 
 echo "Processing $synteny"
 tempSynteny=$(mktemp)
-
-# eventually replace this with $(mktemp) and delete it afterward, but for now I want to check the FASTAs
-tempSyntenyFasta="/home/kcw2/data/temp/syntenyFasta.fasta"
+tempSyntenyFasta=$(mktemp)
+echo "Saving tempSyntenyFasta to ${tempSyntenyFasta}..."
 
 # need to reorder columns so it's compatible with convert_blast_to_fasta.sh
-awk -F'\t' 'BEGIN {OFS="\t"} {print $1, $7, $8, "na", $5}' "$synteny" > "$tempSynteny"
-bash "${scriptsdir}/convert_blast_to_fasta.sh" -b "$tempSynteny" -o "$tempSyntenyFasta" -g &
+# or rather, I think the awk command just selects the columns specified
+awk -F'\t' 'BEGIN {OFS="\t"} {print $1, $7, $8, "na", $5, $6}' "$synteny" > "$tempSynteny"
+bash "${scriptsdir}/convert_blast_to_fasta.sh" -b "$tempSynteny" -o "$tempSyntenyFasta" -c "locus" -r & # -r to remove header
 pid2=$!
 
 
@@ -75,38 +84,48 @@ wait $pid1 $pid2
 yes | rm $tempBlast
 yes | rm $tempSynteny
 
-### Make blast db from synteny file
+### Make blast db from $blast file
 # Though it is possible to blast two fastas against each other, making a db allows for use of the -num_threads argument.
-source activate blast_env # TODO: need to change this for the final pipeline
+# source activate blast_env # for the final pipeline, have the user activate their own blast environment prior to running this script
 
 # assume it's a protein sequence database
-mkdir -p ~/temp_db # sorry, I'll clean my code up later
-cd ~
-
-makeblastdb -in "$tempSyntenyFasta" -input_type fasta -dbtype prot -title temp_db -out /home/kcw2/temp_db/temp_db &
+temp_dir=$(mktemp -d)
+echo "Temporary directory for blast db created at: $temp_dir"
+mkdir -p "${temp_dir}/temp_db"
+cd $temp_dir # need to be one directory above the blast db being made
+makeblastdb -in "$tempBlastFasta" -input_type fasta -dbtype prot -title temp_db -out "${temp_dir}/temp_db" &
 pid3=$!
 wait $pid3
-yes | rm -f $tempSyntenyFasta
+yes | rm -f $tempBlastFasta
 
-### Run local blast
-conda deactivate # currently, local blast is in the base conda environment away from blast_env
+### Perform the pairwise BLAST
+# conda deactivate # currently, local blast is in the base conda environment away from blast_env
+# edit: local blast IS in blast_env???
+echo "Saving pairwise blast outputs..."
 
-
-#cd ~/temp_db # so that local blast can find the database
-
-# NOTE: for now, I'm not using $outname. I'll incorporate it once I decide on a value of -max_target_seqs.
-# I'll also calculate the number of processors to use for -num_threads instead of hard-coding it.
-
+tempBlastOutputs=$(mktemp) # going to be using awk to add a header later, so for now I'm saving it to a temp file
+procs_to_use=$(( $(nproc) / 4 ))
 max=10
-blastp -query "$tempBlastFasta" -db /home/kcw2/temp_db/temp_db -max_target_seqs "$max" -num_threads 9 -outfmt "6 qseqid qseq sallseqid sseq pident evalue bitscore" -out "$outname" &
+blastp -query "$tempSyntenyFasta" -db "${temp_dir}/temp_db" -max_target_seqs "$max" -num_threads "$procs_to_use" -outfmt "6 qseqid qseq sallseqid sseq pident evalue bitscore" -out "$tempBlastOutputs" &
 pid4=$!
 
 wait $pid4
-yes | rm -f $tempBlastFasta
-#cd .. # out of temp_db directory
 
 ### Delete the blast db that was created
 #cleanup-blastdb-volumes.py -db temp_db -dbtype prot
-rm /home/kcw2/temp_db/temp_db.*
+rm -rf "$temp_dir"
 
-### TODO: filter the single output file to >=99 pident or an otherwise appropriate threshold.
+### Filter the output file from the pairwise blast to only include lines with >=$pident
+tempFilteredIDs=$(mktemp)
+awk -v p="$pident" '$5 >= p' "$tempBlastOutputs" | cut -f 1 | sort | uniq > "$tempFilteredIDs" # IDs were in column 1 of the blast that was just done, pident was in column 5
+
+### Filter the synteny fasta to only include the lines from the filtered IDs list
+# This filtered FASTA is the final output of this script. You can still left join the synteny metadata to the seq IDs in that filtered FASTA; it's a subset.
+fastaname="${outname%.*}_pident${pident}.fasta"
+seqtk subseq "$tempSyntenyFasta" "$tempFilteredIDs" > "$fastaname"
+echo "Saved filtered FASTA to $fastaname"
+
+# Add colnames to the file saved to $outname
+awk 'BEGIN { OFS="\t"; print "qseqid", "qseq", "sallseqid", "sseq", "pident", "evalue", "bitscore" } { print }' "$tempBlastOutputs" > "$outname"
+
+yes | rm -f $tempSyntenyFasta 

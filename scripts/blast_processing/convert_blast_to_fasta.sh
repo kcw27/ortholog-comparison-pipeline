@@ -44,6 +44,7 @@ fi
 
 # Assign default outfile only if not set
 output="${outfile:-${blast%.*}.fasta}"
+mkdir -p $(dirname $output) # make the outdir if it doesn't exist already
 
 > "$output"
 

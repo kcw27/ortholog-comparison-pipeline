@@ -91,8 +91,13 @@ postprocess <- function(df) {
   cols <- names(df)
   swap_idx <- match(c("sequence.x", "sequence.y"), cols)
   cols[swap_idx] <- rev(cols[swap_idx])
+  df <- df[cols]
+  
+  # also swap the locus_tag col into col 6 (where the organism col was) to facilitate conversion to fasta with -c "locus" option
+  swap_idx <- match(c("organism", "locus_tag"), cols)
+  cols[swap_idx] <- rev(cols[swap_idx])
   df <- df[cols] |>
-    rename(sequence_from_genbank = sequence.y, sequence_from_blast = sequence.x)
+    rename(sequence_from_genbank = sequence.y, sequence_from_blast = sequence.x) # also give more descriptive names
 
 
 #  # remove genome_id.x because it's all 0's, move genome_id.y to the front, and rename to genome_id
