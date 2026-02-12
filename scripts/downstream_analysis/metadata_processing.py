@@ -311,7 +311,7 @@ def rescue_source(metadata_file, metadata_origin, outname = ""):
 def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 	'''
 	Source categorization function.
-	Inputs: processed metadata file which may or may not have a rescued_source column,
+	Inputs: processed metadata file which may or may not have a rescued_source column and isolation_site column,
 	keyword file for category terms, keyword file for subcategory terms,
 	and optionally an output filename (will overwrite the input metadata file if none provided).
 	Keyword file format: a newline-separated file in which sections are delimited by "***",
@@ -328,11 +328,16 @@ def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 	if outname == "":
 		outname = metadata_file
 
-	# if rescued_source column exists, assume that it should be sed to categorize
+	# if rescued_source column exists, assume that it should be used to categorize
 	# in the case that isolation_source is empty for that row
 	rescue = hasattr(df, "rescued_source") # Boolean- does df have a rescued_source column?
 	if rescue:
 		print(f"Will rescue missing categories and subcategories for {metadata_file} using rescued_source column.")
+
+	# similar logic for the isolation_site column
+	isosite = hasattr(df, "isolation_site") # Boolean- does df have an isolation_site column?
+	if isosite:
+		print(f"Will rescue missing categories and subcategories for {metadata_file} using isolation_site column.")
 
 	# get dictionaries for category and subcategory
 	cat_dict = parse_keywords(category_file)
@@ -369,10 +374,16 @@ def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 			cat_rescue = cat_pattern.search(rescued_str)
 
 			if cat_rescue: # successfully rescued category from rescued_str
-				category[i] = cat_dict[cat_rescue.group()] # overwrite the empty string
+				category[i] = cat_dict[cat_rescue.group()] # overwrite the "no category"
 				#print(f"\tRescued category '{category[i]}' from '{rescued_str}'; isolation_source was {source}.")
+		if (isosite and category[i] == "no category"): # try to rescue category with isolation_site, including the case in which no category was found from isolation_source or rescued_source
+			rescued_str = safe_str(df["isolation_site"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
+			cat_rescue = cat_pattern.search(rescued_str)
 
-		# update the specific category
+			if cat_rescue: # successfully rescued category from rescued_str
+				category[i] = cat_dict[cat_rescue.group()] # overwrite the "no category"
+
+		# update the subcategory
 		subcat_match = subcat_pattern.search(source)
 
 		if subcat_match:
@@ -382,8 +393,15 @@ def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 			subcat_rescue = subcat_pattern.search(rescued_str)
 
 			if subcat_rescue: # successfully rescued subcategory from rescued_str
-				subcategory[i] = subcat_dict[subcat_rescue.group()] # overwrite the empty string
+				subcategory[i] = subcat_dict[subcat_rescue.group()] # overwrite the "no subcategory"
 				#print(f"\tRescued subcategory '{subcategory[i]}' from '{rescued_str}'; isolation_source was {source}.")
+		if (isosite and subcategory[i] == "no subcategory"): # try to rescue subcategory with rescued_source
+			rescued_str = safe_str(df["isolation_site"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
+			subcat_rescue = subcat_pattern.search(rescued_str)
+
+			if subcat_rescue: # successfully rescued subcategory from rescued_str
+				subcategory[i] = subcat_dict[subcat_rescue.group()] # overwrite the "no subcategory"
+
 
 	# add new columns to df
 	df["category"] = category

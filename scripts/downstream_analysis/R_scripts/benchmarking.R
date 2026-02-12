@@ -39,7 +39,7 @@ benchmark <- function(metadata_file) {
     filter(rescued_source != "") |>
     nrow()
     
-  print(glue("Among the {nrow(df) - n_isosource} rows without isolation source, {n_rescue} isolation sources were rescued from the titles column, making {n_isosource + n_rescue} rows eligible for categorization."))
+  print(glue("Among the {nrow(df) - n_isosource} rows without isolation source, {n_rescue} isolation sources were rescued from the titles or isolation_site column, making {n_isosource + n_rescue} rows eligible for categorization."))
   
   n_cat <- df |>
     filter(!category %in% c("", "no category")) |>

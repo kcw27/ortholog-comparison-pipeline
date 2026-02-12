@@ -23,24 +23,11 @@ while getopts ":f:o:c:s:h" opt; do
   esac
 done
 
-# --- Validate required arguments ---
-#if [[ -z "$metadata_file" || -z "$metadata_origin" || -z "$category_file" || -z "$subcategory_file" ]]; then
-#    echo "Error: All four flags -f, -o, -c, and -s are required." >&2
-#    print_help
-#    exit 1
-#fi
-
 if [[ -z "$metadata_file" || -z "$category_file" || -z "$subcategory_file" ]]; then
     echo "Error: Flags -f, -c, and -s are required." >&2
     print_help
     exit 1
 fi
-
-# --- Validate metadata_origin ---
-#if [[ "$metadata_origin" != "synteny_summary" && "$metadata_origin" != "fetched" ]]; then
-#    echo "Error: -o must be either 'synteny_summary' or 'fetched'" >&2
-#    exit 1
-#fi
 
 # --- Run embedded Python ---
 wrapperdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) # get location of current script
@@ -70,4 +57,5 @@ EOF
 
 
 # --- Run R script for benchmarking ---
-Rscript "$scriptsdir/R_scripts/benchmarking.R" "$metadata_file"
+# Rscript "$scriptsdir/R_scripts/benchmarking.R" "$metadata_file"
+Rscript -e "source('$scriptsdir/R_scripts/benchmarking.R'); benchmark('$metadata_file')"
