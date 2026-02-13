@@ -1,0 +1,23 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACFZOE.06980__CP171926_1368_1493283_1493577_neg -          ABM                  PF03992.22   1.7e-25   87.4   0.2     2e-25   87.2   0.2   1.1   1   0   0   1   1   1   1 -
+ACFZOE.14415__CP171926_2819_3108049_3108394_neg -          ABM                  PF03992.22   3.9e-24   83.0   0.3   5.3e-24   82.6   0.3   1.2   1   0   0   1   1   1   1 -
+ACFZOE.07780__CP171926_1526_1671614_1671917_pos -          ABM                  PF03992.22   4.5e-23   79.6   0.0   6.1e-23   79.2   0.0   1.1   1   0   0   1   1   1   1 -
+ACFZOE.18985__CP171926_3717_4066171_4066468_neg -          ABM                  PF03992.22   5.6e-18   63.3   0.1   6.4e-18   63.1   0.1   1.1   1   0   0   1   1   1   1 -
+ACFZOE.15180__CP171926_2969_3274522_3274819_neg -          ABM                  PF03992.22   1.4e-16   58.9   0.1   1.7e-16   58.5   0.1   1.1   1   0   0   1   1   1   1 -
+ACFZOE.01340__CP171926_263_297180_297465_pos    -          ABM                  PF03992.22   7.3e-15   53.3   0.0   1.1e-14   52.7   0.0   1.3   1   1   0   1   1   1   1 -
+ACFZOE.13980__CP171926_2732_3017974_3019045_neg -          ABM                  PF03992.22   9.8e-11   40.1   0.2   1.9e-10   39.1   0.2   1.5   1   0   0   1   1   1   1 -
+ACFZOE.07540__CP171926_1480_1622499_1623057_neg -          ABM                  PF03992.22   2.5e-05   22.8   0.1   3.4e-05   22.3   0.1   1.2   1   0   0   1   1   1   1 -
+ACFZOE.13950__CP171926_2726_3012793_3013171_neg -          ABM                  PF03992.22   8.9e-05   21.0   0.1   0.00012   20.6   0.1   1.2   1   0   0   1   1   1   1 -
+ACFZOE.07390__CP171926_1450_1589760_1591476_neg -          ABM                  PF03992.22     0.034   12.7   0.0      0.06   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/b_test/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/data/example_run/path2/synteny_search_outputs/results_65_66_67/genomes/b_test/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF03992.HMM /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/b_test/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Feb 10 16:21:19 2026
+# [ok]

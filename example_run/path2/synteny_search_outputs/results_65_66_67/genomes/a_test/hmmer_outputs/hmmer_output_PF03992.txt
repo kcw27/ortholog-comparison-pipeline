@@ -1,0 +1,17 @@
+#                                                                                             --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                      accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                              ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+QJR55.RS02790__NZCP124253_517_604842_605133_neg    -          ABM                  PF03992.22     8e-22   75.1   0.1     9e-22   75.0   0.1   1.0   1   0   0   1   1   1   1 -
+QJR55.RS12720__NZCP124253_2429_2750264_2750552_neg -          ABM                  PF03992.22   2.8e-21   73.4   1.4   3.3e-21   73.2   1.4   1.1   1   0   0   1   1   1   1 -
+QJR55.RS06080__NZCP124253_1144_1353031_1353319_neg -          ABM                  PF03992.22   1.2e-16   58.6   0.0   1.3e-16   58.4   0.0   1.1   1   0   0   1   1   1   1 -
+QJR55.RS18245__NZCP124253_3490_3946574_3946880_pos -          ABM                  PF03992.22   9.9e-14   49.2   0.2   1.5e-13   48.6   0.2   1.3   1   1   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/a_test/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/data/example_run/path2/synteny_search_outputs/results_65_66_67/genomes/a_test/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF03992.HMM /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/a_test/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Feb 10 16:21:19 2026
+# [ok]

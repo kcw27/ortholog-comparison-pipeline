@@ -1,0 +1,19 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACT504.07215__CP199221_1402_1540997_1541291_neg -          ABM                  PF03992.22   4.8e-26   89.2   0.2   5.7e-26   89.0   0.2   1.1   1   0   0   1   1   1   1 -
+ACT504.07930__CP199221_1544_1701824_1702127_pos -          ABM                  PF03992.22   1.6e-22   77.9   0.0   2.2e-22   77.5   0.0   1.1   1   0   0   1   1   1   1 -
+ACT504.15680__CP199221_3031_3377592_3377889_neg -          ABM                  PF03992.22     2e-15   55.2   0.0   2.4e-15   54.9   0.0   1.1   1   0   0   1   1   1   1 -
+ACT504.01335__CP199221_258_279759_280044_pos    -          ABM                  PF03992.22     1e-11   43.3   0.0   1.7e-11   42.6   0.0   1.4   1   1   1   2   2   2   1 -
+ACT504.13970__CP199221_2702_3002287_3002665_neg -          ABM                  PF03992.22   0.00017   20.2   0.1   0.00022   19.8   0.1   1.2   1   0   0   1   1   1   1 -
+ACT504.07585__CP199221_1475_1628564_1630283_neg -          ABM                  PF03992.22     0.035   12.7   0.0     0.063   11.9   0.0   1.4   1   0   0   1   1   1   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF03992.HMM
+# Target file:     /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/GCA_054130235.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/data/example_run/path2/synteny_search_outputs/results_65_66_67/genomes/GCA_054130235.1/hmmer_outputs/hmmer_output_PF03992.txt --cpu 47 /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF03992.HMM /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/GCA_054130235.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Feb 10 16:21:18 2026
+# [ok]

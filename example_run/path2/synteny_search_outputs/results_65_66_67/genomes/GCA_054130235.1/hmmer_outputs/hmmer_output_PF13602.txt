@@ -1,0 +1,29 @@
+#                                                                                          --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                   accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                           ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACT504.29090__CP199221_5612_6193200_6194178_pos -          ADH_zinc_N_2         PF13602.12   3.6e-24   84.6   0.0   6.7e-24   83.8   0.0   1.5   1   0   0   1   1   1   1 -
+ACT504.00120__CP199221_21_23963_24941_neg       -          ADH_zinc_N_2         PF13602.12   9.2e-20   70.4   0.0   1.5e-19   69.7   0.0   1.4   1   0   0   1   1   1   1 -
+ACT504.07210__CP199221_1401_1539962_1540976_neg -          ADH_zinc_N_2         PF13602.12   7.9e-19   67.4   0.2   1.7e-18   66.3   0.2   1.6   1   0   0   1   1   1   1 -
+ACT504.13135__CP199221_2542_2765758_2766778_pos -          ADH_zinc_N_2         PF13602.12   2.5e-16   59.3   0.0   3.8e-16   58.7   0.0   1.3   1   0   0   1   1   1   1 -
+ACT504.03870__CP199221_746_806043_807030_neg    -          ADH_zinc_N_2         PF13602.12   2.3e-15   56.1   0.0   6.4e-15   54.7   0.0   1.7   2   0   0   2   2   2   1 -
+ACT504.08845__CP199221_1721_1888371_1889334_pos -          ADH_zinc_N_2         PF13602.12   5.3e-15   55.0   0.1     1e-14   54.0   0.1   1.5   1   0   0   1   1   1   1 -
+ACT504.17910__CP199221_3461_3835494_3836499_pos -          ADH_zinc_N_2         PF13602.12   9.9e-14   50.9   0.0     2e-13   49.9   0.0   1.5   1   0   0   1   1   1   1 -
+ACT504.15020__CP199221_2901_3239519_3240557_neg -          ADH_zinc_N_2         PF13602.12   3.1e-13   49.2   0.0   5.3e-13   48.5   0.0   1.4   1   0   0   1   1   1   1 -
+ACT504.21410__CP199221_4145_4570572_4571475_neg -          ADH_zinc_N_2         PF13602.12   2.4e-12   46.4   0.0   7.3e-12   44.8   0.0   1.8   2   0   0   2   2   2   1 -
+ACT504.15455__CP199221_2988_3325916_3327017_pos -          ADH_zinc_N_2         PF13602.12   9.5e-11   41.2   0.0   1.5e-10   40.6   0.0   1.3   1   0   0   1   1   1   1 -
+ACT504.06885__CP199221_1338_1472779_1473892_pos -          ADH_zinc_N_2         PF13602.12   1.5e-07   30.8   0.0   2.7e-07   30.0   0.0   1.4   1   0   0   1   1   1   1 -
+ACT504.13965__CP199221_2701_3001201_3002263_pos -          ADH_zinc_N_2         PF13602.12     3e-06   26.6   0.0   5.7e-06   25.7   0.0   1.5   1   0   0   1   1   1   1 -
+ACT504.04175__CP199221_806_877268_878327_neg    -          ADH_zinc_N_2         PF13602.12   2.3e-05   23.8   0.1   3.9e-05   23.0   0.1   1.3   1   0   0   1   1   1   1 -
+ACT504.21405__CP199221_4144_4569399_4570512_neg -          ADH_zinc_N_2         PF13602.12   4.5e-05   22.8   0.0   0.00011   21.6   0.0   1.6   1   0   0   1   1   1   1 -
+ACT504.03890__CP199221_750_809613_810675_neg    -          ADH_zinc_N_2         PF13602.12   0.00024   20.5   0.0   0.00044   19.6   0.0   1.4   1   0   0   1   1   1   1 -
+ACT504.30225__CP199221_5830_6447431_6448460_pos -          ADH_zinc_N_2         PF13602.12   0.00059   19.2   0.1     0.001   18.4   0.1   1.4   1   0   0   1   1   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/GCA_054130235.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/data/example_run/path2/synteny_search_outputs/results_65_66_67/genomes/GCA_054130235.1/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF13602.HMM /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/GCA_054130235.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Feb 10 16:21:19 2026
+# [ok]

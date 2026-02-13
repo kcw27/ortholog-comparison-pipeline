@@ -1,0 +1,31 @@
+#                                                                                              --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                       accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                               ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACT52M.RS04380__NZCP199184_859_935960_937019_neg    -          ADH_N                PF08240.17   2.5e-31  106.4   0.2   4.4e-31  105.6   0.2   1.4   1   0   0   1   1   1   1 -
+ACT52M.RS28755__NZCP199184_5635_6160077_6161106_pos -          ADH_N                PF08240.17   2.9e-31  106.2   1.2   2.9e-31  106.2   1.2   2.0   2   0   0   2   2   2   1 -
+ACT52M.RS04090__NZCP199184_801_868729_869791_neg    -          ADH_N                PF08240.17   3.7e-29   99.5   0.2   9.7e-29   98.1   0.2   1.7   1   0   0   1   1   1   1 -
+ACT52M.RS14520__NZCP199184_2849_3104922_3106089_pos -          ADH_N                PF08240.17   2.1e-26   90.6   0.2   5.7e-26   89.2   0.2   1.8   1   0   0   1   1   1   1 -
+ACT52M.RS06750__NZCP199184_1329_1442697_1443810_pos -          ADH_N                PF08240.17   4.3e-26   89.6   1.2   1.5e-25   87.9   1.2   1.9   1   0   0   1   1   1   1 -
+ACT52M.RS14105__NZCP199184_2767_3014036_3015098_pos -          ADH_N                PF08240.17   4.7e-26   89.5   0.3   8.9e-26   88.6   0.3   1.5   1   0   0   1   1   1   1 -
+ACT52M.RS14685__NZCP199184_2881_3135036_3136284_pos -          ADH_N                PF08240.17   3.2e-24   83.6   0.6   7.9e-24   82.3   0.6   1.7   1   0   0   1   1   1   1 -
+ACT52M.RS28725__NZCP199184_5629_6154850_6156050_pos -          ADH_N                PF08240.17   4.8e-24   83.0   2.4   9.2e-24   82.1   2.4   1.5   1   0   0   1   1   1   1 -
+ACT52M.RS27745__NZCP199184_5438_5943639_5944617_pos -          ADH_N                PF08240.17   7.4e-19   66.4   0.1   1.8e-18   65.1   0.1   1.7   1   0   0   1   1   1   1 -
+ACT52M.RS00115__NZCP199184_21_24086_25064_neg       -          ADH_N                PF08240.17   1.3e-17   62.3   0.1   4.4e-17   60.6   0.0   1.9   2   0   0   2   2   2   1 -
+ACT52M.RS19905__NZCP199184_3911_4276265_4277252_pos -          ADH_N                PF08240.17   6.3e-17   60.1   0.2   1.8e-16   58.7   0.2   1.8   1   0   0   1   1   1   1 -
+ACT52M.RS16320__NZCP199184_3206_3512472_3513465_neg -          ADH_N                PF08240.17   5.2e-16   57.2   1.1   3.5e-15   54.5   0.1   2.3   2   0   0   2   2   2   1 -
+ACT52M.RS08600__NZCP199184_1695_1844713_1845676_pos -          ADH_N                PF08240.17   1.9e-15   55.4   0.4   1.9e-15   55.4   0.4   1.9   2   0   0   2   2   2   1 -
+ACT52M.RS11660__NZCP199184_2287_2458215_2459190_neg -          ADH_N                PF08240.17   3.9e-14   51.2   0.1   1.5e-13   49.3   0.0   2.0   2   0   0   2   2   2   1 -
+ACT52M.RS07065__NZCP199184_1392_1510825_1511839_neg -          ADH_N                PF08240.17   6.7e-13   47.2   0.0   1.4e-12   46.2   0.0   1.5   1   0   0   1   1   1   1 -
+ACT52M.RS04020__NZCP199184_787_853626_854613_neg    -          ADH_N                PF08240.17   3.9e-12   44.8   0.1     7e-12   43.9   0.1   1.4   1   0   0   1   1   1   1 -
+ACT52M.RS21820__NZCP199184_4287_4637373_4638333_pos -          ADH_N                PF08240.17   3.8e-11   41.6   0.0   1.3e-10   39.8   0.0   2.0   2   0   0   2   2   2   1 -
+ACT52M.RS13035__NZCP199184_2554_2730789_2731809_pos -          ADH_N                PF08240.17   6.1e-11   40.9   0.0   2.2e-10   39.1   0.0   2.0   2   0   0   2   2   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/GCF_054126005.1/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/data/example_run/path2/synteny_search_outputs/results_65_67/genomes/GCF_054126005.1/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF08240.HMM /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/GCF_054126005.1/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Feb 10 16:21:24 2026
+# [ok]

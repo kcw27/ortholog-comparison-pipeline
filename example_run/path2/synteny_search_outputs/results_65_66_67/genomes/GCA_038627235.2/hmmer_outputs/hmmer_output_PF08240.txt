@@ -1,0 +1,33 @@
+#                                                                                           --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                    accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                            ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+AAH671.028770__CM130304_5591_6110315_6111374_pos -          ADH_N                PF08240.17   1.2e-31  107.6   0.3     2e-31  106.9   0.3   1.4   1   0   0   1   1   1   1 -
+AAH671.001350__CM130304_261_282321_283350_neg    -          ADH_N                PF08240.17   1.9e-31  107.0   1.1   1.9e-31  107.0   1.1   2.0   2   0   0   2   2   2   1 -
+AAH671.029060__CM130304_5649_6177543_6178605_pos -          ADH_N                PF08240.17   3.6e-29   99.6   0.2   1.1e-28   98.1   0.2   1.8   1   0   0   1   1   1   1 -
+AAH671.019190__CM130304_3725_4156347_4157394_neg -          ADH_N                PF08240.17   2.2e-28   97.1   1.2   2.2e-28   97.1   1.2   2.1   2   0   0   2   2   2   1 -
+AAH671.026345__CM130304_5112_5595502_5596615_neg -          ADH_N                PF08240.17   4.8e-26   89.6   1.2   1.7e-25   87.9   1.2   1.9   1   0   0   1   1   1   1 -
+AAH671.017275__CM130304_3350_3685396_3686458_neg -          ADH_N                PF08240.17   1.4e-25   88.1   0.3   2.5e-25   87.3   0.3   1.5   1   0   0   1   1   1   1 -
+AAH671.021635__CM130304_4189_4632648_4633758_neg -          ADH_N                PF08240.17   5.2e-24   83.1   4.0   5.2e-24   83.1   4.0   2.7   2   1   1   3   3   3   1 -
+AAH671.001380__CM130304_267_287376_288576_neg    -          ADH_N                PF08240.17   5.4e-24   83.0   2.4     1e-23   82.1   2.4   1.5   1   0   0   1   1   1   1 -
+AAH671.021680__CM130304_4198_4642221_4643388_pos -          ADH_N                PF08240.17   1.3e-21   75.4   0.6   2.4e-21   74.5   0.6   1.5   1   0   0   1   1   1   1 -
+AAH671.027485__CM130304_5336_5838750_5839743_pos -          ADH_N                PF08240.17   7.6e-19   66.5   0.6   1.4e-18   65.6   0.2   1.7   1   1   1   2   2   2   1 -
+AAH671.002350__CM130304_456_498670_499648_neg    -          ADH_N                PF08240.17   8.3e-19   66.3   0.1     2e-18   65.1   0.1   1.7   1   0   0   1   1   1   1 -
+AAH671.000115__CM130304_21_24085_25063_neg       -          ADH_N                PF08240.17   1.5e-17   62.3   0.1   4.9e-17   60.6   0.0   1.9   2   0   0   2   2   2   1 -
+AAH671.010850__CM130304_2100_2314694_2315681_neg -          ADH_N                PF08240.17   7.7e-17   60.0   0.2     2e-16   58.7   0.2   1.7   1   0   0   1   1   1   1 -
+AAH671.014690__CM130304_2852_3126958_3127951_pos -          ADH_N                PF08240.17   5.8e-16   57.2   1.1     4e-15   54.5   0.1   2.3   2   0   0   2   2   2   1 -
+AAH671.024045__CM130304_4657_5128502_5129465_neg -          ADH_N                PF08240.17   1.1e-15   56.3   0.4   1.1e-15   56.3   0.4   1.9   2   0   0   2   2   2   1 -
+AAH671.019815__CM130304_3845_4286000_4286975_pos -          ADH_N                PF08240.17   4.8e-14   51.1   0.1   1.7e-13   49.3   0.0   2.0   2   0   0   2   2   2   1 -
+AAH671.026035__CM130304_5050_5529664_5530678_pos -          ADH_N                PF08240.17   6.9e-13   47.3   0.0   1.4e-12   46.3   0.0   1.5   1   0   0   1   1   1   1 -
+AAH671.029130__CM130304_5663_6192707_6193694_pos -          ADH_N                PF08240.17   4.3e-12   44.8   0.1   7.8e-12   43.9   0.1   1.4   1   0   0   1   1   1   1 -
+AAH671.008795__CM130304_1707_1911688_1912648_neg -          ADH_N                PF08240.17   4.6e-11   41.5   0.0   1.6e-10   39.7   0.0   2.0   2   0   0   2   2   2   1 -
+AAH671.018335__CM130304_3557_3978493_3979513_neg -          ADH_N                PF08240.17   6.8e-11   40.9   0.0   2.5e-10   39.1   0.0   2.0   2   0   0   2   2   1   1 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF08240.HMM
+# Target file:     /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/GCA_038627235.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/data/example_run/path2/synteny_search_outputs/results_65_66_67/genomes/GCA_038627235.2/hmmer_outputs/hmmer_output_PF08240.txt --cpu 47 /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF08240.HMM /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/GCA_038627235.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Feb 10 16:21:20 2026
+# [ok]

@@ -1,0 +1,31 @@
+#                                                                                           --- full sequence ---- --- best 1 domain ---- --- domain number estimation ----
+# target name                                    accession  query name           accession    E-value  score  bias   E-value  score  bias   exp reg clu  ov env dom rep inc description of target
+#                            ------------------- ---------- -------------------- ---------- --------- ------ ----- --------- ------ -----   --- --- --- --- --- --- --- --- ---------------------
+ACVS39.006700__CM133331_1308_1396191_1397184_neg -          ADH_zinc_N_2         PF13602.12   4.2e-27   94.3   1.2   6.6e-27   93.6   0.0   1.9   3   0   0   3   3   2   1 -
+ACVS39.022855__CM133331_4470_4844536_4845523_pos -          ADH_zinc_N_2         PF13602.12   1.1e-26   92.9   0.8   1.9e-26   92.1   0.4   1.6   2   0   0   2   2   2   1 -
+ACVS39.031280__CM133331_6101_6611278_6612256_pos -          ADH_zinc_N_2         PF13602.12     7e-25   87.1   0.0   1.3e-24   86.2   0.0   1.4   1   0   0   1   1   1   1 -
+ACVS39.000115__CM133331_20_24106_25084_neg       -          ADH_zinc_N_2         PF13602.12   3.6e-19   68.6   0.0   5.9e-19   67.9   0.0   1.3   1   0   0   1   1   1   1 -
+ACVS39.008535__CM133331_1671_1771327_1772341_neg -          ADH_zinc_N_2         PF13602.12     4e-19   68.4   0.3   8.5e-19   67.4   0.3   1.6   1   0   0   1   1   1   1 -
+ACVS39.014720__CM133331_2880_3051301_3052321_pos -          ADH_zinc_N_2         PF13602.12   6.4e-17   61.3   0.0     1e-16   60.7   0.0   1.3   1   0   0   1   1   1   1 -
+ACVS39.013515__CM133331_2643_2787624_2788599_neg -          ADH_zinc_N_2         PF13602.12   5.2e-16   58.3   0.1   8.1e-16   57.7   0.1   1.3   1   0   0   1   1   1   1 -
+ACVS39.010190__CM133331_1999_2131758_2132721_pos -          ADH_zinc_N_2         PF13602.12   1.4e-14   53.7   0.0   2.7e-14   52.8   0.0   1.5   1   0   0   1   1   1   1 -
+ACVS39.019965__CM133331_3904_4236788_4237793_pos -          ADH_zinc_N_2         PF13602.12   9.1e-14   51.1   0.0   2.2e-13   49.9   0.0   1.6   2   0   0   2   2   2   1 -
+ACVS39.000635__CM133331_121_126289_127303_neg    -          ADH_zinc_N_2         PF13602.12   1.3e-12   47.4   0.0   2.2e-12   46.6   0.0   1.4   1   0   0   1   1   1   1 -
+ACVS39.007185__CM133331_1404_1498400_1499396_pos -          ADH_zinc_N_2         PF13602.12   3.4e-12   46.0   0.0   9.3e-12   44.6   0.0   1.8   2   0   0   2   2   1   1 -
+ACVS39.017160__CM133331_3355_3624218_3625256_neg -          ADH_zinc_N_2         PF13602.12   3.8e-12   45.9   0.0     6e-12   45.2   0.0   1.3   1   0   0   1   1   1   1 -
+ACVS39.008225__CM133331_1609_1705124_1706237_pos -          ADH_zinc_N_2         PF13602.12     7e-08   32.0   0.0   1.3e-07   31.2   0.0   1.4   1   0   0   1   1   1   1 -
+ACVS39.016130__CM133331_3158_3402973_3404035_pos -          ADH_zinc_N_2         PF13602.12   2.3e-06   27.1   0.0   4.3e-06   26.2   0.0   1.4   1   0   0   1   1   1   1 -
+ACVS39.005120__CM133331_996_1082898_1083957_neg  -          ADH_zinc_N_2         PF13602.12   5.4e-05   22.7   0.1     9e-05   22.0   0.1   1.3   1   0   0   1   1   1   1 -
+ACVS39.004555__CM133331_883_979319_980381_neg    -          ADH_zinc_N_2         PF13602.12   0.00023   20.6   0.0   0.00043   19.8   0.0   1.4   1   0   0   1   1   1   1 -
+ACVS39.032455__CM133331_6326_6872800_6873829_pos -          ADH_zinc_N_2         PF13602.12   0.00075   19.0   0.1    0.0013   18.2   0.1   1.4   1   0   0   1   1   1   1 -
+ACVS39.006960__CM133331_1359_1452184_1453135_neg -          ADH_zinc_N_2         PF13602.12     0.023   14.2   0.0       1.6    8.2   0.0   2.3   2   0   0   2   2   2   0 -
+#
+# Program:         hmmsearch
+# Version:         3.4 (Aug 2023)
+# Pipeline mode:   SEARCH
+# Query file:      /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF13602.HMM
+# Target file:     /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/GCA_053157655.2/labelled_peptides.faa
+# Option settings: hmmsearch --tblout /home/kcw2/data/example_run/path2/synteny_search_outputs/results_65_67/genomes/GCA_053157655.2/hmmer_outputs/hmmer_output_PF13602.txt --cpu 47 /home/kcw2/data/example_run/path2/synteny_search_inputs/hmm_db/hmms/PF13602.HMM /home/kcw2/data/example_run/path2/synteny_search_inputs/genome_db/GCA_053157655.2/labelled_peptides.faa 
+# Current dir:     /home/kcw2
+# Date:            Tue Feb 10 16:21:24 2026
+# [ok]

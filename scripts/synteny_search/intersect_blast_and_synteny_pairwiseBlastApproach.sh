@@ -18,26 +18,29 @@
 
 
 print_help() {
-    echo "Usage: $0 -b <blast> -s <synteny> -p <pident> -o <outname> -h"
+    echo "Usage: $0 -b <blast> -s <synteny> -p <pident> -c<'genome'|> -o <outname> -h"
     echo "        Outputs: to $outname, writes the output of the pairwise BLAST of $synteny as query against $blast as subject."
     echo "                 Rationale for this direction of BLAST is explained in comments at the top of this script."
     echo "                 Also writes a fasta with $pident cutoff- look for a file with a name similar to outname."
     echo "  -b    Required. Path to BLAST file in which the first five columns are sgi sseqid sseq evalue stitle."
     echo "  -s    Required. Path to summary file from synteny search via synteny_wrapper.sh (which calls find_synteny_hits.sh)."
     echo "  -p    Optional. Pident threshold for filtering (default = 99)."
+    echo "  -c    Optional. Concatenation mode for convert_blast_to_fasta.sh (default = 'no')."
     echo "  -o    Required. Name of output file."
     echo "  -h    Show help message and exit"
 }
 
 # set default values for optional arguments
 pident="99"
+concat="no"
 
 # Parse options
-while getopts "b:s:p:o:h" opt; do
+while getopts "b:s:p:c:o:h" opt; do
   case $opt in
     b) blast="$OPTARG" ;;
     s) synteny="$OPTARG" ;;
     p) pident="$OPTARG" ;;
+    c) concat="$OPTARG" ;;
     o) outname="$OPTARG" ;;
     h) print_help; exit 0 ;;
     *) print_help; exit 1 ;; #echo "Invalid option"; exit 1 ;;
@@ -76,7 +79,7 @@ echo "Saving tempSyntenyFasta to ${tempSyntenyFasta}..."
 # need to reorder columns so it's compatible with convert_blast_to_fasta.sh
 # or rather, I think the awk command just selects the columns specified
 awk -F'\t' 'BEGIN {OFS="\t"} {print $1, $7, $8, "na", $5, $6}' "$synteny" > "$tempSynteny"
-bash "${scriptsdir}/convert_blast_to_fasta.sh" -b "$tempSynteny" -o "$tempSyntenyFasta" -c "locus" -r & # -r to remove header
+bash "${scriptsdir}/convert_blast_to_fasta.sh" -b "$tempSynteny" -o "$tempSyntenyFasta" -c "$concat" -r & # -r to remove header
 pid2=$!
 
 
