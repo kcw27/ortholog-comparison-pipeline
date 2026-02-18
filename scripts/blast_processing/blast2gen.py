@@ -109,7 +109,7 @@ def fetch_info(accessions, outdir):
             protein_seq = str(record.seq)
 
             # protein_id and locus_tag
-            protein_id = "NA"
+            #protein_id = "NA"
             locus_tag = "NA"
             
             for feature in record.features:
@@ -118,7 +118,7 @@ def fetch_info(accessions, outdir):
                     #protein_id = q.get("protein_id", ["NA"])[0]
                     #protein_id = record.id
                     # or
-                    protein_id = record.annotations.get("accessions", ["NA"])[0]
+                    #protein_id = record.annotations.get("accessions", ["NA"])[0]
 
                     locus_tag = q.get("locus_tag", ["NA"])[0]
                     break
@@ -199,7 +199,7 @@ def fetch_info(accessions, outdir):
             'assembly_method': assembly_method,
             'genome_coverage': genome_coverage,
             'protein_seq': protein_seq,
-            'protein_id': protein_id,
+            #'protein_id': protein_id,
             'locus_tag': locus_tag,
             'isolation_site': isolation_site
         }
@@ -216,7 +216,7 @@ def fetch_info(accessions, outdir):
 def main(input_blast, output_tsv):
     outdir = os.path.dirname(output_tsv)
 
-    cols = ['genome_id', 'subject', 'sequence', 'evalue', 'title_old', 'organism_old'] # I believe 'subject' is meant to be the protein accession
+    cols = ['genome_id_old', 'subject', 'sequence_old', 'evalue', 'title_old', 'organism_old'] # I believe 'subject' is meant to be the protein accession
 
     blast_df = pd.read_csv(input_blast, sep='\t', header=None, names=cols, engine='python')
     blast_df['clean_accession'] = blast_df['subject'].apply(extract_accession)
@@ -237,15 +237,20 @@ def main(input_blast, output_tsv):
     blast_df['assembly_method'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['assembly_method'])
     blast_df['genome_coverage'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['genome_coverage'])
     blast_df['protein_seq'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['protein_seq'])
-    blast_df['protein_id'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['protein_id'])
+    #blast_df['protein_id'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['protein_id'])
     blast_df['locus_tag'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['locus_tag'])
     blast_df['isolation_site'] = blast_df['clean_accession'].map(lambda x: info_dict[x]['isolation_site'])
 
     # Columns: same set of columns as the original, with new info written at the end
-    final_df = blast_df[['genome_id', 'subject', 'sequence', 'evalue', 'title_old', 'organism_old',
-                         'nucleotide_accession', 'bioproject_accession', 'assembly_accession', 'organism',
+    # Update: swap some old columns with columns obtained from metadata retrieval
+    # and place them such that the output can be plugged directly into convert_blast_to_fasta.sh
+    final_df = blast_df[['assembly_accession', 'subject', 'protein_seq', 'evalue', 'title_old', 'locus_tag', 'organism',
+                         'nucleotide_accession', 'bioproject_accession', 'genome_id_old', 'organism_old',
                          'isolation_source', 'sequencing_technology', 'titles', 'assembly_method',
-                         'genome_coverage', 'protein_seq', 'protein_id', 'locus_tag', 'isolation_site']]
+                         'genome_coverage', 'sequence_old', 'isolation_site']] # removed 'protein_id' because it was redundant
+                         
+    # rename columns for compatibility with downstream analysis functions in the GUI
+    final_df.rename(columns={'assembly_accession': 'genome_id', 'protein_seq': 'sequence'}, inplace=True)
 
     final_df.to_csv(output_tsv, sep='\t', index=False)
     print(f"Annotated output saved to {output_tsv}")

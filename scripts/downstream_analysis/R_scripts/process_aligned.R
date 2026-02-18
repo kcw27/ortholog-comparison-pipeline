@@ -132,18 +132,23 @@ process_aligned_shiny <- function(alignment_file, metadata_file, outdir, script_
   
   df_raw <- process_alignment_and_metadata(alignment_file, alignment_type, metadata, sequence_name_col, name_map_file)
   
-  df <- df_raw |>
-    filter(!is.na(category)) |>
-    filter(category != "no category")
-
-  log_fn(glue("Benchmarking: {nrow(df_raw)} sequences in input BLAST file; {nrow(df)} were successfully categorized."))
-  
-  log_output <- df_raw |>
-    group_by(category) |>
-    summarize(n = n()) |>
-    capture.output()
-  
-  lapply(log_output, log_fn)
+  if ("category" %in% names(df_raw)) {
+    df <- df_raw |>
+      filter(!is.na(category)) |>
+      filter(category != "no category")
+    
+    log_fn(glue("Benchmarking: {nrow(df_raw)} sequences in input BLAST file; {nrow(df)} were successfully categorized."))
+    
+    log_output <- df_raw |>
+      group_by(category) |>
+      summarize(n = n()) |>
+      capture.output()
+    
+    lapply(log_output, log_fn)
+  } else {
+    df <- df_raw
+    log_fn(glue("Benchmarking: {nrow(df_raw)} sequences in input BLAST file"))
+  }
 
    
   stats_dir <- glue("{script_dir}/hypothesis_testing")

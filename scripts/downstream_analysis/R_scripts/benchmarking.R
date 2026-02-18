@@ -34,22 +34,27 @@ benchmark <- function(metadata_file) {
     
   print(glue("{n_isosource} rows were associated with isolation source metadata."))
   
-  n_rescue <- df |> # how many didn't have isosource but did have rescue?
-    filter(isolation_source %in% c("", "NA")) |>
-    filter(rescued_source != "") |>
-    nrow()
-    
-  print(glue("Among the {nrow(df) - n_isosource} rows without isolation source, {n_rescue} isolation sources were rescued from the titles or isolation_site column, making {n_isosource + n_rescue} rows eligible for categorization."))
+  if ("rescued_source" %in% names(df)) {
+    n_rescue <- df |> # how many didn't have isosource but did have rescue?
+      filter(isolation_source %in% c("", "NA")) |>
+      filter(rescued_source != "") |>
+      nrow()
+      
+    print(glue("Among the {nrow(df) - n_isosource} rows without isolation source, {n_rescue} isolation sources were rescued from the titles or isolation_site column, making {n_isosource + n_rescue} rows eligible for categorization."))
+  }
   
-  n_cat <- df |>
-    filter(!category %in% c("", "no category")) |>
-    nrow()
-  n_subcat <- df |>
-    filter(!subcategory %in% c("", "no subcategory")) |>
-    nrow()
-    
-  print(glue("{n_cat} rows were successfully assigned a category, and {n_subcat} rows were successfully assigned a subcategory."))
+  if ("category" %in% names(df) & "subcategory" %in% names(df)) {
+    n_cat <- df |>
+      filter(!category %in% c("", "no category")) |>
+      nrow()
+    n_subcat <- df |>
+      filter(!subcategory %in% c("", "no subcategory")) |>
+      nrow()
+      
+    print(glue("{n_cat} rows were successfully assigned a category, and {n_subcat} rows were successfully assigned a subcategory."))
+  }
 }
+
 
 
 ## Only run as standalone script if called via Rscript with CLI arguments

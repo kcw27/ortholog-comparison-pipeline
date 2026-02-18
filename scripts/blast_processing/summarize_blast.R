@@ -3,6 +3,9 @@
 # Note: if the optional outdir argument is provided, it will make that directory and save to a
 # "blast_summary" subdirectory.
 
+# This is intended for preliminary, exploratory visualization. To make figures with better-scaled axes,
+# please manually generate them.
+
 ### Import packages
 library(tidyverse)
 library(glue)
@@ -69,7 +72,7 @@ seqlen_hist <- function(df, outdir) {
     mutate(sequence_length = nchar(sequence)) |> 
     ggplot() +
     geom_histogram(aes(x=sequence_length)) +
-    labs(y="Count", x="Sequence length (bp)", title=glue("Sequence length frequencies (n={nrow(df)} BLAST hits)"))
+    labs(y="Count", x="Sequence length (# amino acids)", title=glue("Sequence length frequencies (n={nrow(df)} BLAST hits)"))
   
   ggsave(fname)
 }
@@ -81,7 +84,8 @@ evalue_hist <- function(df, outdir) {
   df |>
     ggplot() +
     geom_histogram(aes(x=evalue)) +
-    labs(y="Count", x="Evalue", title=glue("Evalue frequencies (n={nrow(df)} BLAST hits)"))
+    labs(y="Count", x="Evalue", title=glue("Evalue frequencies (n={nrow(df)} BLAST hits)")) +
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) # scales package, part of ggplot2 https://stackoverflow.com/questions/49723196/is-scales-package-included-in-tidyverse
   
   ggsave(fname)
 }
@@ -93,8 +97,8 @@ evalue_seqlen_plot <- function(df, outdir) {
   df |> 
     mutate(sequence_length = nchar(sequence)) |> 
     ggplot() +
-    geom_point(aes(x=sequence_length, y=evalue)) + #, alpha=0.4)) +
-    labs(y="Evalue", x="Sequence length (bp)", title=glue("Sequence length vs evalue plot (n={nrow(df)} BLAST hits)"))
+    geom_point(aes(x=sequence_length, y=evalue), alpha=0.4) +
+    labs(y="Evalue", x="Sequence length (# amino acids)", title=glue("Sequence length vs evalue plot (n={nrow(df)} BLAST hits)"))
   
   ggsave(fname)
 }
