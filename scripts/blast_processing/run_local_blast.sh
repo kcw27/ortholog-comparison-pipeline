@@ -55,3 +55,7 @@ bash "${scriptsdir}/add_organism_column.sh" "$tempBlast" "$tempBlastOrgs"
 # save BLAST output as long format
 echo "Expanding BLAST output file to long format..."
 bash "${scriptsdir}/expand_blast_output.sh" -b "$tempBlastOrgs" -o "$outfile"
+
+# remove temp files
+rm -f $tempBlast
+rm -f $tempBlastOrgs

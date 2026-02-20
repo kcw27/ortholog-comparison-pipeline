@@ -250,7 +250,7 @@ def process_raw_metadata(locus_tags_file, outname, raw_metadata_file):
 	print(f"Saved file to {outname}")
 
 
-def rescue_source(metadata_file, metadata_origin, outname = ""):
+def rescue_source(metadata_file, metadata_origin, outname = "", use_all = False):
 	'''
 	Isolation source rescue function.
 	Inputs: tab-separated processed metadata file (obtained either from process_raw_metadata() 
@@ -261,6 +261,7 @@ def rescue_source(metadata_file, metadata_origin, outname = ""):
 	Output: adds a rescued_source column to the metadata, using string following "isolated from"
 	in the titles column of the metadata.
 	'''
+
 	# check if value of metadata_origin is legitimate
 	if metadata_origin not in ["synteny_summary", "fetched"]:
 		sys.exit("metadata_origin must be either 'synteny_summary' or 'fetched'. Exiting rescue_source().")
@@ -268,11 +269,18 @@ def rescue_source(metadata_file, metadata_origin, outname = ""):
 	# if no outname provided, overwrite the input metadata file
 	if outname == "":
 		outname = metadata_file
+   
+	df = pd.read_csv(metadata_file, sep="\t") #
+
+
+	if use_all:
+		df["rescued_source"] = df["titles"]
+		df.to_csv(outname, sep="\t", index=False)
+		print("Metadata with rescued isolation sources written to file", outname)
+		return # use a return statement to break the function just so I don't have to add tabs in front of the rest of it
 
 	# initialize rescued_source column
-	df = pd.read_csv(metadata_file, sep="\t") #
 	rescued_source = [""] * len(df.index) # give it the same number of elements as rows in df
-
 	# The string may be either "Isolated from" or "isolated from"
 	# so start the match with a case-insensitive match to these strings
 	if metadata_origin == "synteny_summary":
@@ -360,7 +368,10 @@ def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 
 	# iterate thru df to determine categories and subcategories
 	for i in range(len(df)):
-		source = safe_str(df["isolation_source"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
+		if isosite: # then scan both the isolation source and isolation site, prioritizing the former
+			source = safe_str(f'{df["isolation_source"][i]} - {df["isolation_site"][i]}').lower() # join the two pieces of metadata together as a string
+		else:
+			source = safe_str(df["isolation_source"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
 
 		# update the category
 		# if you want this to be more accurate, you could get the whole list and assign whichever associated
@@ -376,12 +387,12 @@ def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 			if cat_rescue: # successfully rescued category from rescued_str
 				category[i] = cat_dict[cat_rescue.group()] # overwrite the "no category"
 				#print(f"\tRescued category '{category[i]}' from '{rescued_str}'; isolation_source was {source}.")
-		if (isosite and category[i] == "no category"): # try to rescue category with isolation_site, including the case in which no category was found from isolation_source or rescued_source
-			rescued_str = safe_str(df["isolation_site"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
-			cat_rescue = cat_pattern.search(rescued_str)
-
-			if cat_rescue: # successfully rescued category from rescued_str
-				category[i] = cat_dict[cat_rescue.group()] # overwrite the "no category"
+#		if (isosite and category[i] == "no category"): # try to rescue category with isolation_site, including the case in which no category was found from isolation_source or rescued_source
+#			rescued_str = safe_str(df["isolation_site"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
+#			cat_rescue = cat_pattern.search(rescued_str)
+#
+#			if cat_rescue: # successfully rescued category from rescued_str
+#				category[i] = cat_dict[cat_rescue.group()] # overwrite the "no category"
 
 		# update the subcategory
 		subcat_match = subcat_pattern.search(source)
@@ -395,12 +406,12 @@ def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 			if subcat_rescue: # successfully rescued subcategory from rescued_str
 				subcategory[i] = subcat_dict[subcat_rescue.group()] # overwrite the "no subcategory"
 				#print(f"\tRescued subcategory '{subcategory[i]}' from '{rescued_str}'; isolation_source was {source}.")
-		if (isosite and subcategory[i] == "no subcategory"): # try to rescue subcategory with rescued_source
-			rescued_str = safe_str(df["isolation_site"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
-			subcat_rescue = subcat_pattern.search(rescued_str)
-
-			if subcat_rescue: # successfully rescued subcategory from rescued_str
-				subcategory[i] = subcat_dict[subcat_rescue.group()] # overwrite the "no subcategory"
+#		if (isosite and subcategory[i] == "no subcategory"): # try to rescue subcategory with rescued_source
+#			rescued_str = safe_str(df["isolation_site"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
+#			subcat_rescue = subcat_pattern.search(rescued_str)
+#
+#			if subcat_rescue: # successfully rescued subcategory from rescued_str
+#				subcategory[i] = subcat_dict[subcat_rescue.group()] # overwrite the "no subcategory"
 
 
 	# add new columns to df
