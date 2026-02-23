@@ -250,7 +250,7 @@ def process_raw_metadata(locus_tags_file, outname, raw_metadata_file):
 	print(f"Saved file to {outname}")
 
 
-def rescue_source(metadata_file, metadata_origin, outname = "", use_all = False):
+def rescue_source(metadata_file, metadata_origin, outname = ""):
 	'''
 	Isolation source rescue function.
 	Inputs: tab-separated processed metadata file (obtained either from process_raw_metadata() 
@@ -270,14 +270,7 @@ def rescue_source(metadata_file, metadata_origin, outname = "", use_all = False)
 	if outname == "":
 		outname = metadata_file
    
-	df = pd.read_csv(metadata_file, sep="\t") #
-
-
-	if use_all:
-		df["rescued_source"] = df["titles"]
-		df.to_csv(outname, sep="\t", index=False)
-		print("Metadata with rescued isolation sources written to file", outname)
-		return # use a return statement to break the function just so I don't have to add tabs in front of the rest of it
+	df = pd.read_csv(metadata_file, sep="\t")
 
 	# initialize rescued_source column
 	rescued_source = [""] * len(df.index) # give it the same number of elements as rows in df
@@ -316,7 +309,7 @@ def rescue_source(metadata_file, metadata_origin, outname = "", use_all = False)
 
 
 
-def categorize(metadata_file, category_file, subcategory_file, outname = ""):
+def categorize(metadata_file, category_file, subcategory_file, outname = "", use_all = False):
 	'''
 	Source categorization function.
 	Inputs: processed metadata file which may or may not have a rescued_source column and isolation_site column,
@@ -373,6 +366,13 @@ def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 		else:
 			source = safe_str(df["isolation_source"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
 
+		if rescue:
+			if pd.isna(df["rescued_source"][i]) and use_all: # if rescuing from "isolated from..." failed, and use_all is allowed, use the entire title
+				rescued_str = safe_str(df["titles"][i]).lower()
+			else:
+				rescued_str = safe_str(df["rescued_source"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
+				
+
 		# update the category
 		# if you want this to be more accurate, you could get the whole list and assign whichever associated
 		# category is most abundant among these keywords as the new value at category[i]
@@ -381,7 +381,10 @@ def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 		if cat_match: # if a match was found
 			category[i] = cat_dict[cat_match.group()] # general category corresponding to the keyword found
 		elif rescue: # try to rescue category with rescued_source
-			rescued_str = safe_str(df["rescued_source"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
+#			if pd.isna(df["rescued_source"][i]) and use_all: # if rescuing from "isolated from..." failed, and use_all is allowed, use the entire title
+#				rescued_str = safe_str(df["titles"][i]).lower()
+#			else:
+#				rescued_str = safe_str(df["rescued_source"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
 			cat_rescue = cat_pattern.search(rescued_str)
 
 			if cat_rescue: # successfully rescued category from rescued_str
@@ -400,7 +403,10 @@ def categorize(metadata_file, category_file, subcategory_file, outname = ""):
 		if subcat_match:
 			subcategory[i] = subcat_dict[subcat_match.group()] # specific category corresponding to the keyword found
 		elif rescue: # try to rescue subcategory with rescued_source
-			rescued_str = safe_str(df["rescued_source"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
+#			if pd.isna(df["rescued_source"][i]) and use_all: # if rescuing from "isolated from..." failed, and use_all is allowed, use the entire title
+#				rescued_str = safe_str(df["titles"][i]).lower()
+#			else:
+#				rescued_str = safe_str(df["rescued_source"][i]).lower() # must convert to lowercase since all keys in the dict are lowercase
 			subcat_rescue = subcat_pattern.search(rescued_str)
 
 			if subcat_rescue: # successfully rescued subcategory from rescued_str
