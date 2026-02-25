@@ -36,13 +36,37 @@ process_data <- function(multifasta_file, metadata, metadata_type, sequence_name
   df <- data.frame(sequence_id = sequence_names, sequence = seqs) |>
     mutate(sequence_length = nchar(gsub("-", "", sequence))) # exclude gap characters from sequence length
   
-  if (length(intersect(metadata$sequence_id, df$sequence_id)) == 0) { # maybe the sequence names are just protein IDs?
-    if (metadata_type == "synteny_summary") {
-      sequence_name_col <- "protein_id"
-    } else if (metadata_type == "fetched") {
-      sequence_name_col <- "subject"
-    }
-  } 
+  # previously, the only types of sequence id were protein_id and genome_id-protein_id
+#  if (length(intersect(metadata$sequence_id, df$sequence_id)) == 0) { # maybe the sequence names are just protein IDs?
+#    if (metadata_type == "synteny_summary") {
+#      sequence_name_col <- "protein_id"
+#    } else if (metadata_type == "fetched") {
+#      sequence_name_col <- "subject"
+#    }
+#  } 
+  
+  # updated approach accounts for genome_id-protein_id-locus_id sequence IDs. Counts "-" characters.
+  # make whatever will serve as sequence_name_col in the metadata file
+  if (metadata_type == "synteny_summary") {
+    protein_col <- "protein_id"
+  } else if (metadata_type == "fetched") {
+    protein_col <- "subject"
+  }
+  
+  num_dashes <- str_count(sequence_names[1], "-")
+  
+  if (num_dashes == 0) { # just the protein_id
+    sequence_name_col <- protein_col
+  } else if (num_dashes == 1) { # genome_id-protein_id
+    metadata <- metadata |>
+      mutate(gp_id = paste(genome_id, !!sym(protein_col), sep="-"))
+    sequence_name_col <- "gp_id"
+  } else { # assume there are two... if there are more, maybe they're part of the locus tag
+    metadata <- metadata |>
+      mutate(gpl_id = paste(genome_id, !!sym(protein_col), locus_tag, sep="-"))
+    sequence_name_col <- "gpl_id"
+  }
+  print(glue("Sequence name col: {sequence_name_col}"))
   
   # if the metadata has multiple records under the same sequence_name_col, take only the first so that we don't duplicate sequences in the left join.
   # Filter to keep the first row for each unique value in the 'group' column
@@ -88,13 +112,13 @@ process_metadata <- function(metadata_file, metadata_type) {
   cat("Successfully read", nrow(metadata), "rows (some lines may have been skipped)\n")
   
   # Rest of your processing code remains the same...
-  if (metadata_type == "synteny_summary") {
-    metadata <- metadata |>
-      mutate(sequence_id = paste(genome_id, protein_id, sep = "-"))
-  } else if (metadata_type == "fetched") {
-    metadata <- metadata |>
-      mutate(sequence_id = paste(genome_id, subject, sep = "-"))
-  }
+#  if (metadata_type == "synteny_summary") {
+#    metadata <- metadata |>
+#      mutate(sequence_id = paste(genome_id, protein_id, sep = "-"))
+#  } else if (metadata_type == "fetched") {
+#    metadata <- metadata |>
+#      mutate(sequence_id = paste(genome_id, subject, sep = "-"))
+#  }
   
   if ("organism" %in% colnames(metadata)) {
     metadata <- metadata |>

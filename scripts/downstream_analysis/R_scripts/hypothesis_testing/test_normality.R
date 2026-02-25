@@ -21,6 +21,11 @@ test_normality <- function(df, colname, fig_dir, group_var = NA) {
 #  dev.off()
 #  print(glue("QQ plot saved to {pngfile}"))
 
+  if (length(unique(lengths(df[[colname]]))) == 1) { # shapiro.test doesn't work if all x values are identical
+    print(glue("Cannot test for normality, as all {colname} values are equal"))
+    return("non-parametric")
+  }
+
   set.seed(42)
   if (length(df[[colname]]) > 5000) { # shapiro.test() doesn't work on datasets larger than 5000 values
     subset <- sample(df[[colname]], size = 5000)

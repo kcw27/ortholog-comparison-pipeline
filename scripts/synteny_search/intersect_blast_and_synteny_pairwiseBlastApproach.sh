@@ -18,7 +18,7 @@
 
 
 print_help() {
-    echo "Usage: $0 -b <blast> -s <synteny> -p <pident> -c<'genome'|> -o <outname> -h"
+    echo "Usage: $0 -b <blast> -s <synteny> -p <pident> -c<'genome'|'locus'> -o <outname> -h"
     echo "        Outputs: to $outname, writes the output of the pairwise BLAST of $synteny as query against $blast as subject."
     echo "                 Rationale for this direction of BLAST is explained in comments at the top of this script."
     echo "                 Also writes a fasta with $pident cutoff- look for a file with a name similar to outname."
