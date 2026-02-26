@@ -21,7 +21,7 @@ test_normality <- function(df, colname, fig_dir, group_var = NA) {
 #  dev.off()
 #  print(glue("QQ plot saved to {pngfile}"))
 
-  if (length(unique(lengths(df[[colname]]))) == 1) { # shapiro.test doesn't work if all x values are identical
+  if (length(unique(df[[colname]])) == 1) { # shapiro.test doesn't work if all x values are identical
     print(glue("Cannot test for normality, as all {colname} values are equal"))
     return("non-parametric")
   }

@@ -26,6 +26,7 @@ print_help() {
     echo "  -s    Required. Path to summary file from synteny search via synteny_wrapper.sh (which calls find_synteny_hits.sh)."
     echo "  -p    Optional. Pident threshold for filtering (default = 99)."
     echo "  -c    Optional. Concatenation mode for convert_blast_to_fasta.sh (default = 'no')."
+    echo "  -k    Optional. Keep FASTA of all sequences in $synteny (default = 'false')."
     echo "  -o    Required. Name of output file."
     echo "  -h    Show help message and exit"
 }
@@ -33,14 +34,16 @@ print_help() {
 # set default values for optional arguments
 pident="99"
 concat="no"
+keep="false"
 
 # Parse options
-while getopts "b:s:p:c:o:h" opt; do
+while getopts "b:s:p:c:ko:h" opt; do
   case $opt in
     b) blast="$OPTARG" ;;
     s) synteny="$OPTARG" ;;
     p) pident="$OPTARG" ;;
     c) concat="$OPTARG" ;;
+    k) keep="true" ;;
     o) outname="$OPTARG" ;;
     h) print_help; exit 0 ;;
     *) print_help; exit 1 ;; #echo "Invalid option"; exit 1 ;;
@@ -109,7 +112,7 @@ echo "Saving pairwise blast outputs..."
 tempBlastOutputs=$(mktemp) # going to be using awk to add a header later, so for now I'm saving it to a temp file
 procs_to_use=$(( $(nproc) / 4 ))
 max=10
-blastp -query "$tempSyntenyFasta" -db "${temp_dir}/temp_db" -max_target_seqs "$max" -num_threads "$procs_to_use" -outfmt "6 qseqid qseq sallseqid sseq pident evalue bitscore" -out "$tempBlastOutputs" &
+blastp -query "$tempSyntenyFasta" -db "${temp_dir}/temp_db" -max_target_seqs "$max" -num_threads "$procs_to_use" -outfmt "6 qseqid qseq sallseqid sseq pident evalue bitscore qcovs" -out "$tempBlastOutputs" &
 pid4=$!
 
 wait $pid4
@@ -131,4 +134,10 @@ echo "Saved filtered FASTA to $fastaname"
 # Add colnames to the file saved to $outname
 awk 'BEGIN { OFS="\t"; print "qseqid", "qseq", "sallseqid", "sseq", "pident", "evalue", "bitscore" } { print }' "$tempBlastOutputs" > "$outname"
 
-yes | rm -f $tempSyntenyFasta 
+if [[ $keep = "true" ]]; then
+  syntenyFastaName="${synteny%.*}.fasta"
+  mv $tempSyntenyFasta $syntenyFastaName
+  echo "Saved synteny summary as FASTA to $syntenyFastaName"
+else
+  yes | rm -f $tempSyntenyFasta 
+fi
