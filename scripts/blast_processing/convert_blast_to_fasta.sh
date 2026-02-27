@@ -59,47 +59,74 @@ else
   tail_input=$(cat "$blast")
 fi
 
-# define the write_fasta() function differently depending on concatenation mode
-if [[ "$concat" = "genome" ]]; then
-  echo "Concatenating genome to subject ID"
-  write_fasta() {
-    printf ">%s-%s %s|%s\n%s\n" "$1" "$2" "$3" "$4" "$5" >> "$output"
-  }
-elif [[ "$concat" = "locus" ]]; then
-  echo "Concatenating genome and locus tag to subject ID"
-  write_fasta() {
-    printf ">%s-%s-%s %s|%s\n%s\n" "$1" "$2" "$6" "$3" "$4" "$5" >> "$output"
-  }
-else
-  echo "Not concatenating genome to subject ID"
-  write_fasta() {
-    printf ">%s %s|%s\n%s\n" "$2" "$3" "$4" "$5" >> "$output"
-  }
-fi
+## define the write_fasta() function differently depending on concatenation mode
+#if [[ "$concat" = "genome" ]]; then
+#  echo "Concatenating genome to subject ID"
+#  write_fasta() {
+#    printf ">%s-%s %s|%s\n%s\n" "$1" "$2" "$3" "$4" "$5" >> "$output"
+#  }
+#elif [[ "$concat" = "locus" ]]; then
+#  echo "Concatenating genome and locus tag to subject ID"
+#  write_fasta() {
+#    printf ">%s-%s-%s %s|%s\n%s\n" "$1" "$2" "$6" "$3" "$4" "$5" >> "$output"
+#  }
+#else
+#  echo "Not concatenating genome to subject ID"
+#  write_fasta() {
+#    printf ">%s %s|%s\n%s\n" "$2" "$3" "$4" "$5" >> "$output"
+#  }
+#fi
 
-while read -r next; do
-  # Extract columnsin one go
-  #read id title evalue sequence < <(awk -F '\t' '{print $2, $5, $4, $3}' <<< "$next")
-  #IFS=$'\t' read -r col1 col2 col3 col4 col5 <<< "$next"
-  IFS=$'\t' read -r col1 col2 col3 col4 col5 col6 col_rest <<< "$next"
-  # there may be more than 5 columns, so if there are, they get dumped into col_rest. (If there aren't, col_rest will just be empty.)
-  
-  genome="$col1"
-  id="$col2"
-  title="$col5"
-  evalue="$col4"
-  sequence="$col3"
-  locus="$col6" # no harm if there's no 6th column in the file
+#while read -r next; do
+#  # Extract columnsin one go
+#  #read id title evalue sequence < <(awk -F '\t' '{print $2, $5, $4, $3}' <<< "$next")
+#  #IFS=$'\t' read -r col1 col2 col3 col4 col5 <<< "$next"
+#  IFS=$'\t' read -r col1 col2 col3 col4 col5 col6 col_rest <<< "$next"
+#  # there may be more than 5 columns, so if there are, they get dumped into col_rest. (If there aren't, col_rest will just be empty.)
+#  
+#  genome="$col1"
+#  id="$col2"
+#  title="$col5"
+#  evalue="$col4"
+#  sequence="$col3"
+#  locus="$col6" # no harm if there's no 6th column in the file
+#
+#  if [[ "$extract" = true ]]; then
+#    id="${id#*|}"
+#    id="${id%%|*}"
+#  fi
+#
+#  
+#  write_fasta "$genome" "$id" "$title" "$evalue" "$sequence" "$locus"
+#
+#done <<< "$tail_input"
 
-  if [[ "$extract" = true ]]; then
-    id="${id#*|}"
-    id="${id%%|*}"
-  fi
+# Use awk to process the input with proper empty field handling
+awk -F'\t' -v extract="$extract" -v concat="$concat" '
+{
+    genome = $1
+    id = $2
+    sequence = $3
+    evalue = $4
+    title = $5
+    locus = $6
 
-  
-  write_fasta "$genome" "$id" "$title" "$evalue" "$sequence" "$locus"
+    if (extract == "true") {
+        sub(/^[^|]*\|/, "", id)  # Remove everything before first |
+        sub(/\|.*$/, "", id)      # Remove everything after first |
+    }
 
-done <<< "$tail_input"
+    # Generate the appropriate fasta format based on concat mode
+    if (concat == "genome") {
+        printf ">%s-%s %s|%s\n%s\n", genome, id, title, evalue, sequence
+    } else if (concat == "locus") {
+        printf ">%s-%s-%s %s|%s\n%s\n", genome, id, locus, title, evalue, sequence
+    } else {
+        printf ">%s %s|%s\n%s\n", id, title, evalue, sequence
+    }
+}
+' <<< "$tail_input" >> "$output"
+
 
 
 echo "Finished converting BLAST to FASTA: ${output}"

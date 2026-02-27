@@ -277,19 +277,26 @@ def rescue_source(metadata_file, metadata_origin, outname = ""):
 	# The string may be either "Isolated from" or "isolated from"
 	# so start the match with a case-insensitive match to these strings
 	if metadata_origin == "synteny_summary":
-		# titles are separated by the string "TITLE"
-		# so the match should go either until TITLE or to the end of the string
-		pattern = re.compile(r'(?i)isolated from\s+(.*?)(?=\s+TITLE|$)')
-		# (?i): Enables case-insensitive matching for just "isolated from".
-		# \s+: Matches one or more whitespace characters after "isolated from".
-		# The whitespace before and after the match are not included in the match.
-		# (.*?): Non-greedy capture of any character (i.e. the match target).
-		# (?=\s+TITLE|$): Positive lookahead; stop matching before " TITLE" or at end of string.
+#		# titles are separated by the string "TITLE"
+#		# so the match should go either until TITLE or to the end of the string
+#		pattern = re.compile(r'(?i)isolated from\s+(.*?)(?=\s+TITLE|$)')
+#		# (?i): Enables case-insensitive matching for just "isolated from".
+#		# \s+: Matches one or more whitespace characters after "isolated from".
+#		# The whitespace before and after the match are not included in the match.
+#		# (.*?): Non-greedy capture of any character (i.e. the match target).
+#		# (?=\s+TITLE|$): Positive lookahead; stop matching before " TITLE" or at end of string.
+
+		# alternative approach: instead of requiring "isolated from", allow "from".
+		pattern = re.compile(r'(?i)from\s+(.*?)(?=\s+TITLE|$)')
+
 
 	elif metadata_origin == "fetched":
 		# titles in reference column reliably end with ', even the last title
 		# because the last title is followed by ', ...)
-		pattern = re.compile(r'(?i)isolated from\s+(.*?)(?=\',|$)') # goes until ',
+		#pattern = re.compile(r'(?i)isolated from\s+(.*?)(?=\',|$)') # goes until ',
+
+		# alternative approach: instead of requiring "isolated from", allow "from".
+		pattern = re.compile(r'(?i)from\s+(.*?)(?=\',|$)')
 
 	# iterate thru df rows and apply the pattern to look for isolation sources within titles
 	for i in range(len(df)):

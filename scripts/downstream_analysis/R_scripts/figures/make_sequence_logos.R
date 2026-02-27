@@ -83,7 +83,7 @@ plot_local_logo <- function(df, outdir, reference_seq, sites_str, seq_colname = 
     # original x axis started at 1
   
   fname = glue("{outdir}/overall_sequenceLogo.pdf")
-  ggsave(fname, height=height, width=width, units="in", create.dir = TRUE)
+  ggsave(fname, height=height, width=width, units="in", limitsize = FALSE, create.dir = TRUE)
   print(glue("Saved sequence logo to {fname}!"))
   
   # also save a table of residue frequencies at each site
