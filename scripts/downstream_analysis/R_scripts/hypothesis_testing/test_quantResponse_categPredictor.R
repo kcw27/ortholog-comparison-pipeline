@@ -28,6 +28,8 @@ quantResponse_categPredictor <- function(df, response = "sequence_length", predi
       output <- c(output, "Conducting a post-hoc Tukey HSD test.")
       follow_up <- test |> tukey_hsd()
       output <- c(output, capture.output(as.data.frame(follow_up))) # convert to data frame; tibbles have truncated outputs
+      
+      # TODO: check the format of the tukey_hsd() output table and make a sig_pairs_df similar to the one for Dunn's test below
     } else {
       output <- c(output, "No significant difference detected between predictor levels.")
     }
@@ -43,7 +45,16 @@ quantResponse_categPredictor <- function(df, response = "sequence_length", predi
       follow_up <- dunn_test(data = df,
                              formula = as.formula(glue("{response} ~ {predictor}")),
                              p.adjust.method = adjust)
-      output <- c(output, capture.output(follow_up))
+                             
+      output <- c(output, "Significant pairs only:")
+      sig_pairs_df <- follow_up |>
+        select(group1, group2, n1, n2, p.adj, p.adj.signif) |>
+        filter(p.adj.signif != "ns")
+      output <- c(output, capture.output(as.data.frame(sig_pairs_df)))
+      
+      output <- c(output, "All pairs:")
+      output <- c(output, capture.output(as.data.frame(follow_up))) # convert to data frame; tibbles have truncated outputs
+
     } else {
       output <- c(output, "No significant difference detected between predictor levels.")
     }

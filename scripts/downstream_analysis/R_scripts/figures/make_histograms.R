@@ -25,11 +25,13 @@ save_histograms <- function(df, group_var, outdir, pdf_suffix, column_name = "se
             geom_histogram(aes(x = .data[[column_name]]), binwidth = width) +
             geom_vline(aes(xintercept=reference_length, colour="reference_length"), size=0.5) +
             geom_vline(aes(xintercept=mean(.data[[column_name]], na.rm = TRUE), colour="mean"), size=0.5) +
+            geom_vline(aes(xintercept=median(.data[[column_name]], na.rm = TRUE), colour="median"), size=0.5) +
             labs(x = column_name, y = "Count", title = glue("{group_var}: {unique(.x[[group_var]])[1]}; n: {nrow(.x)}")) +
             scale_color_manual(name = "Values",
-                               values = c(reference_length = "blue", mean = "red"),
+                               values = c(reference_length = "blue", mean = "red", median = "green"),
                                labels = c(reference_length = glue("{reference_label} = {reference_length}"),
-                                          mean = glue("Mean = {round(mean(.x[[column_name]], na.rm = TRUE), 1)}"))) +
+                                          mean = glue("Mean = {round(mean(.x[[column_name]], na.rm = TRUE), 1)}"),
+                                          median = glue("Median = {median(.x[[column_name]], na.rm = TRUE)}"))) +
             xlim(x_limits) # notice that we set x limits here, but no y limits yet
           )
   } else {
@@ -37,10 +39,12 @@ save_histograms <- function(df, group_var, outdir, pdf_suffix, column_name = "se
       map(~ ggplot(.x) +
             geom_histogram(aes(x = .data[[column_name]]), binwidth = width) +
             geom_vline(aes(xintercept=mean(.data[[column_name]], na.rm = TRUE), colour="mean"), size=0.5) +
+            geom_vline(aes(xintercept=median(.data[[column_name]], na.rm = TRUE), colour="median"), size=0.5) +
             labs(x = column_name, y = "Count", title = glue("{group_var}: {unique(.x[[group_var]])[1]}; n: {nrow(.x)}")) +
             scale_color_manual(name = "Values",
-                               values = c(mean = "red"),
-                               labels = c(mean = glue("Mean = {round(mean(.x[[column_name]], na.rm = TRUE), 1)}"))) +
+                               values = c(mean = "red", median = "green"),
+                               labels = c(mean = glue("Mean = {round(mean(.x[[column_name]], na.rm = TRUE), 1)}"),
+                                          median = glue("Median = {median(.x[[column_name]], na.rm = TRUE)}"))) +
             xlim(x_limits) # notice that we set x limits here, but no y limits yet
           )
   }
@@ -129,21 +133,25 @@ histograms_by_source <- function(df, outdir, column_name = "sequence_length", re
       geom_histogram(aes(x = df[[column_name]]), binwidth = width) +
       geom_vline(aes(xintercept=reference_length, colour="reference_length"), size=0.5) +
       geom_vline(aes(xintercept=mean(df[[column_name]], na.rm = TRUE), colour="mean"), size=0.5) +
+      geom_vline(aes(xintercept=median(df[[column_name]], na.rm = TRUE), colour="median"), size=0.5) +
       labs(x = column_name, y = "Count", title = glue("{group_var}: Overall histogram; n: {nrow(df)}")) +
       scale_color_manual(name = "Values",
-                           values = c(reference_length = "blue", mean = "red"),
+                           values = c(reference_length = "blue", mean = "red", median = "green"),
                            labels = c(reference_length = glue("{reference_label} = {reference_length}"),
-                           mean = glue("Mean = {round(mean(df[[column_name]], na.rm = TRUE), 1)}")))
+                           mean = glue("Mean = {round(mean(df[[column_name]], na.rm = TRUE), 1)}"),
+                           median = glue("Median = {median(df[[column_name]], na.rm = TRUE)}")))
       ggsave(fname, create.dir=TRUE, width = 8, height = 6)
       print(glue("Histogram saved to {fname}"))
   } else {
     df |> ggplot() +
       geom_histogram(aes(x = df[[column_name]]), binwidth = width) +
       geom_vline(aes(xintercept=mean(df[[column_name]], na.rm = TRUE), colour="mean"), size=0.5) +
+      geom_vline(aes(xintercept=median(df[[column_name]], na.rm = TRUE), colour="median"), size=0.5) +
       labs(x = column_name, y = "Count", title = glue("{group_var}: Overall histogram; n: {nrow(df)}")) +
       scale_color_manual(name = "Values",
-                           values = c(mean = "red"),
-                           labels = c(mean = glue("Mean = {round(mean(df[[column_name]], na.rm = TRUE), 1)}")))
+                           values = c(mean = "red", median = "green"),
+                           labels = c(mean = glue("Mean = {round(mean(df[[column_name]], na.rm = TRUE), 1)}"),
+                           median = glue("Median = {median(df[[column_name]], na.rm = TRUE)}")))
       ggsave(fname, create.dir=TRUE, width = 8, height = 6)
       print(glue("Histogram saved to {fname}"))
   }

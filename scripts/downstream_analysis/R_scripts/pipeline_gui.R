@@ -62,7 +62,7 @@ ui <- navbarPage("Pipeline GUI",
           ),
           br(),
           fluidRow(
-            column(6, actionButton("select_all", "Select All", style = "width: 100%;")),
+            column(6, actionButton("reverse_selection", "Reverse Selection", style = "width: 100%;")),
             column(6, actionButton("deselect_all", "Deselect All", style = "width: 100%;"))
           )
         )
@@ -166,7 +166,7 @@ ui <- navbarPage("Pipeline GUI",
         # Inputs for test_quantResponse_categPredictor.R
         conditionalPanel("input.test_script == 'test_quantResponse_categPredictor.R'",
           selectInput("response_col", "Response (numeric):", choices = NULL),
-          selectInput("predictor_col", "Predictor:", choices = c("category", "genus")),
+          selectInput("predictor_col", "Predictor:", choices = c("category", "subcategory", "genus", "species")),
           selectInput("adjust_method", "Adjustment method:",
                       choices = c("", "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none"),
                       selected = "fdr"),
@@ -348,20 +348,26 @@ server <- function(input, output, session) {
     append_log("Data subset cleared - using full dataset")
   })
   
-  # NEW: Select all levels
-  observeEvent(input$select_all, {
+  # NEW: Reverse selection
+  observeEvent(input$reverse_selection, {
     req(df_store(), input$subset_group_var)
-    
+  
     df <- df_store()
     group_var <- input$subset_group_var
-    
+  
     if (!group_var %in% names(df)) return()
-    
-    levels <- sort(unique(df[[group_var]]))
-    levels <- levels[!is.na(levels)]  # Remove NA values
-    
-    updateCheckboxGroupInput(session, "subset_levels",
-                            selected = levels)
+  
+    all_levels <- sort(unique(df[[group_var]]))
+    all_levels <- all_levels[!is.na(all_levels)]
+  
+    current <- input$subset_levels %||% character(0)
+  
+    reversed <- setdiff(all_levels, current)
+  
+    updateCheckboxGroupInput(
+      session, "subset_levels",
+      selected = reversed
+    )
   })
   
   # NEW: Deselect all levels
