@@ -83,6 +83,11 @@ $blastdir/run_local_blast.sh -p "$rundir/toydb" -d "toydb" -i "$rundir/PAO1_PA35
 # To limit the max number of hits per query sequence, use the -m flag (default=500,000)
 ```
 
+An R script is provided to assist with summarizing the BLAST outputs. (Dependencies: R version 4.3.3, tidyverse package, glue package.) This script can be run on any BLAST file in which the first 6 columns are consistent with the expected format of "genome_id", "protein_id", "sequence", "evalue", "protein_title", "organism", so it can be used for raw or filtered BLAST files.
+```bash
+Rscript $blastdir/summarize_blast.R "$rundir/PA3565_hits.blast"
+```
+
 ## Filter BLAST outputs
 There are two paths of filtering: one that includes filtering by synteny block context, and one that doesn't. The primary difference between these two paths is the metadata: if a synteny search is performed, the summary file doubles as a metadata file; otherwise, metadata must be obtained separately via NCBI esearch.  
 The metadata files from the two paths are formatted differently. However, the categorization script (TODO: link to categorization section) and GUI (TODO: also link this) are able to handle both metadata formats.
@@ -122,6 +127,14 @@ mv $rundir/path1/PA3565_hits_evalueThreshold_1e-100_topPerOrganism.blast  $rundi
 Recommendations: 
 * Please follow [NCBI usage guidelines](https://www.nlm.nih.gov/dataguide/eutilities/utilities.html#:~:text=Timing%3A%20Please%20try%20to%20limit%20large%20jobs%20to,PM%20and%205%3A00%20AM%20Eastern%20time%20during%20weekdays.). In particular, avoid submitting large jobs during business hours. Failure to comply may result in NCBI blocking your IP address.  
 * The script will fail if the connection to the server is lost. To mitigate this risk, break large input files should be broken into smaller parts. Do not run metadata retrieval jobs in parallel, as this will overburden the server and cause disconnections.
+```bash
+# Code example for splitting large file into smaller parts:
+bigfile="/home/kcw2/data/blast_outputs/mucA/mucA_wt/mucA_paComplete_genomeIDs.blast"
+split -d -a 1 -l 8000 $bigfile /home/kcw2/data/blast_outputs/mucA/mucA_wt/mucA_part_ --additional-suffix=.blast
+# -d for numeric suffixes, -a 1 to specify that each suffix should be 1 digit long
+# after the filename, put the prefix of the file
+# --additional-suffix to give it a file extension
+```
 * Use a tmux window, even for input files of moderate size. The script features built-in delays to comply with NCBI deadlines, but as a result, it takes a long time to run.
 
 Dependencies: Python 3 (I am using 3.13) and the following Python packages:
@@ -177,6 +190,17 @@ TODO
 
 
 (prepare inputs for synteny search)
+(important note for -i, input_file: if you prepare the text file in Windows, it may have Windows-style return characters, which show up as ^M. This causes various issues- for example, the synteny wrapper will create directories with names that look normal but actually end with return characters.
+Prior to running the synteny search, use code like this to remove Windows-style return characters from your synteny input file.
+```bash
+sed -i 's/\r$//' "/my/file/path/synteny_input.tsv" # replace with your own filepath
+```
+
+If you find that there are Windows-style return characters in your filepath after you've already run the synteny search, use code like this to remove the return characters:
+```bash
+mv "/my/file/path$(printf '\r')/" "/my/file/path/"
+```
+)
 
 
 (run synteny wrapper)
@@ -194,7 +218,7 @@ The final output of synteny filtering isn't the synteny summary; it's the inters
 Use this if the naming conventions aren't consistent between your BLAST file and the synteny search output file. This might happen if you BLAST against a custom database where the protein names aren't the same as the names in the GenBank files queried in the synteny search.
 
 Dependencies:
-
+(seqtk is installed in my base conda environment?? in any case, this will fail to make the fastas at the end if you're in pynteny_env)
 
 Inputs:
 
@@ -208,7 +232,9 @@ Outputs:
 (wrapper encompasses rescue and categorization. Can use the same wrapper regardless of whether metadata was obtained through path 1 or path 2)
 
 ## Multiple sequence alignment
-TODO; I use a MUSCLE alignment through the AliView application because it works quickly and doesn't seem to insert as many gaps as 
+TODO; I use a MUSCLE alignment through the AliView application because it works quickly and doesn't seem to insert as many gaps as other methods I've tried, such as MAFFT.
+I've tried MUSCLE in the command line (muscle -align "in.fasta" -output out.fasta) and it performed significantly worse than MUSCLE in AliView, so I recommend just using AliView.  
+AliView > Align > Realign Everything.
 
 ## GUI
 TODO. Include screenshots.
