@@ -46,8 +46,7 @@ done
 # Process each file
 for file in "${FILES[@]}"; do
     output="${file%.*}_evalueThreshold_${THRESHOLD}.blast"
-    > $output # if the file already exists, overwrite it
     
-    awk -v threshold="$THRESHOLD" '$4 < threshold' "$file" > "$output" # -v is the safest way to pass a variable to awk
+    awk -F'\t' -v threshold="$THRESHOLD" '$4 <= threshold' "$file" > "$output" # -v is the safest way to pass a variable to awk
     echo "Processed: $file -> $output"
 done

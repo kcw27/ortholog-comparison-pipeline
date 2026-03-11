@@ -18,8 +18,6 @@ from Bio import Entrez, SeqIO # I added the SeqIO import
 import time
 import os # to get the path
 
-Entrez.email = "kcw2@andrew.cmu.edu"
-
 def extract_accession(subject):
     return subject.strip().split()[0]
 
@@ -213,7 +211,9 @@ def fetch_info(accessions, outdir):
     log.close()
     return info_dict
 
-def main(input_blast, output_tsv):
+def main(input_blast, output_tsv, email = "example@mail.com"):
+    Entrez.email = email
+    print(f"Entrez email: {Entrez.email}")
     outdir = os.path.dirname(output_tsv)
 
     cols = ['genome_id_old', 'subject', 'sequence_old', 'evalue', 'title_old', 'organism_old'] # I believe 'subject' is meant to be the protein accession
@@ -256,7 +256,12 @@ def main(input_blast, output_tsv):
     print(f"Annotated output saved to {output_tsv}")
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print(f"Usage: {sys.argv[0]} input_blast.tsv output_annotated.tsv")
+    if len(sys.argv) not in (3, 4):
+        print(f"Usage: {sys.argv[0]} input_blast.tsv output_annotated.tsv [user_email@mail.com]")
         sys.exit(1)
-    main(sys.argv[1], sys.argv[2])
+
+    input_blast = sys.argv[1]
+    output_tsv  = sys.argv[2]
+    email       = sys.argv[3] if len(sys.argv) == 4 else "example@mail.com"
+
+    main(input_blast, output_tsv, email)

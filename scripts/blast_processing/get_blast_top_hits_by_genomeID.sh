@@ -5,11 +5,11 @@
 
 # set default values
 REMOVEHEADER="false"
-GENOMECOL="9"
+GENOMECOL="1"
 FILES=()
 
 print_help() {
-    echo "Usage: $0 -r -c -f file1 [file2 ...]"
+    echo "Usage: $0 -r -c [col] -f file1 [file2 ...]"
     echo
     echo "Filters BLAST output files to include only the top record (lowest evalue, column 4) per genome ID."
     echo "In event of a tie within a genome ID, only the first record is kept."
@@ -17,7 +17,7 @@ print_help() {
     echo
     echo "Options:"
     echo '  -r               Optional. Include this flag to remove the first row, assumed to be the header (default: false).'
-    echo '  -c               Optional. Specifies the column in which genome ID is found (default: column 9, which assumes output is from blast2gen.py)'
+    echo '  -c <col>         Optional. Specifies the column in which genome ID is found (default: column 1, consistent with the current version of blast2gen.py)'
     echo '  -f <files...>    Required. One or more BLAST output files with format -outfmt "6 sallgi sallseqid sseq evalue salltitles", and organism column added to the end.'
     echo '                   Please ensure that all files have the same formate (i.e. having a header or not, and the column number for genome ID).'
     echo "  -h               Show help message and exit"

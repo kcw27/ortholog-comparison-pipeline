@@ -4,27 +4,30 @@
 # $blastdir/run_local_blast.sh -p "$rundir/toydb" -d "toydb" -i "$rundir/PAO1_PA3565.fasta" -o "$rundir/PA3565_hits.blast"
 
 print_help() {
-    echo "Usage: $0 -p <db_path> -d <db_name> -i <query> -o <outfile> -m <max>"
+    echo "Usage: $0 -p <db_path> -d <db_name> -i <query> -o <outfile> -m <max> -s"
     echo ""
     echo "  -p    Path to BLAST db"
     echo "  -d    Name of BLAST db"
     echo "  -i    Path to BLAST query FASTA"
     echo "  -o    Name of output file"
     echo "  -m    Max target seqs to return per sequence in query FASTA"
+    echo "  -s    Use -parse_seqids flag (default: false). Use only if the original BLAST db was built using -parse_seqids."
     echo "  -h    Show help message and exit"
 }
 
-# Set default value for optional flag
+# Set default value for optional flags
 max=500000
+parse="false"
 
 # Parse options with getopts (not GNU getopts, as that causes issues on Mac systems)
-while getopts "p:d:i:o:m:h" opt; do
+while getopts "p:d:i:o:m:sh" opt; do
   case $opt in
     p) db_path="$OPTARG" ;;
     d) db_name="$OPTARG" ;;
     i) query="$OPTARG" ;;
     o) outfile="$OPTARG" ;;
     m) max="$OPTARG" ;;
+    s) parse="true" ;;
     h) print_help; exit 0 ;;
     *) print_help; exit 1 ;; #echo "Invalid option"; exit 1 ;;
   esac
@@ -45,7 +48,11 @@ scriptsdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) 
 
 tempBlast=$(mktemp)
 echo "Running BLAST... Temp file at $tempBlast"
-blastp -db "$db_name" -query "$query" -max_target_seqs "$max" -num_threads $procs_to_use -outfmt "6 sallgi sallseqid sseq evalue salltitles" -out $tempBlast
+if [[ "$parse" == "true" ]]; then
+  blastp -db "$db_name" -query "$query" -max_target_seqs "$max" -num_threads $procs_to_use -outfmt "6 sallgi sallseqid sseq evalue salltitles" -parse_seqids -out $tempBlast
+else
+  blastp -db "$db_name" -query "$query" -max_target_seqs "$max" -num_threads $procs_to_use -outfmt "6 sallgi sallseqid sseq evalue salltitles" -out $tempBlast
+fi
 
 # add organisms column
 tempBlastOrgs=$(mktemp)

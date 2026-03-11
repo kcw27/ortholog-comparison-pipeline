@@ -128,6 +128,20 @@ process_metadata <- function(metadata_file, metadata_type) {
       mutate(species = ifelse(is.na(species), " ", species))
   }
   
+  # Replace any NA ids with empty strings
+  metadata <- metadata |>
+    mutate(genome_id = ifelse(is.na(genome_id), "", genome_id)) |>
+    mutate(locus_tag = ifelse(is.na(locus_tag), "", locus_tag))
+  
+  # protein id column is named differently depending on source
+   if (metadata_type == "synteny_summary") {
+     metadata <- metadata |>
+       mutate(protein_id = ifelse(is.na(protein_id), "", protein_id))
+   } else if (metadata_type == "fetched") {
+     metadata <- metadata |>
+       mutate(subject = ifelse(is.na(subject), "", subject))
+   }
+  
   return(metadata)
 }
 
