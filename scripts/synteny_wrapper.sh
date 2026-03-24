@@ -8,7 +8,8 @@
 
 # $2: a TSV with two columns:
 # Column 1 contains a synteny structure query for pynteny search
-# Column 2 contains an outdir (use an absolute path!) to which the results from that pynteny search will be written
+# Column 2 contains an outdir (use an absolute path if running this script as standalone, relative path if running as part of Nextflow pipeline)
+# to which the results from that pynteny search will be written
 
 # $3: a newline-separated text file listing HMMs that represent genes of interest.
 # e.g. if you're looking for metadata related to PA3565 orthologs, $3 contains PF00126 and PF03466,

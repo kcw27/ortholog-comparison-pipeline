@@ -1,10 +1,10 @@
 #!/usr/bin/env nextflow
 include { runBlast } from './modules/runBlast.nf'
-include { foo; bar; handleGenomeFlag } from './modules/filtering.nf'
-include { foo_metadata; bar_metadata } from './modules/retrieveMetadata.nf' 
+include { foo; bar; filterToEvalue; filterToOrganism; filterToGenome; filterSynteny } from './modules/filtering.nf'
+include { foo_metadata as foo_metadata_beforeFiltering; foo_metadata as foo_metadata_afterFiltering; bar_metadata } from './modules/retrieveMetadata.nf' 
 include { FILTER1 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter1.nf'
 include { FILTER2 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter2.nf'
-include { FILTER3 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter3.nf'
+include { filter3NeedSignal as filter3_noMetadata; filter3NeedSignal as filter3_withMetadata } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter3.nf'
 include { FILTER4 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter4.nf'
 include { FINAL } from '/home/kcw2/test_scripts/nextflow_tests/modules/finalStep.nf'
 
@@ -41,6 +41,7 @@ params {
     // retrieving metadata
     genomeDBmetadata: Path
     entrezEmail: String
+    splitSize: String
 
     // metadata categorization
     category: Path
@@ -50,224 +51,170 @@ params {
     align: Boolean
 }
 
-// This one almost worked, but hasGenomeIDs wasn't actually a Boolean, but rather a channel
-workflow applyFiltersWithMetadata {
-    take:
-    blastWithFlag   // each element is [hasGenomeIDs (bool), blastFile]
+workflow {
 
     main:
-    // Split the flag out so conditional logic can use it
-    hasGenomeIDs = blastWithFlag.map { flag, _blast -> flag }.first()
-    hasGenomeIDs.view{ contents -> "hasGenomeIDs contents: $contents" }
-    def current  = blastWithFlag.map { _flag, blast -> blast }
-    // This will wait for the value and assign it as a string
-    def myString = hasGenomeIDs.value as String
+    // def currentBlast = Channel.empty() // not strictly necessary because it's guaranteed to populate right after, but this is for the sake of clarity
+    def metadata = Channel.empty() // will later decide whether we still need to get metadata based on whether this is still empty or not. (Can't initialize with empty strings)
+    // May contain multiple values.
+    // currentFasta = Channel.empty() // Actually, I should keep this empty so that if we opt in for alignment, it's restricted until after we have a FASTA at all
+    // either make the FASTA from the metadata file (maybe I shouldn't initialize that then...), or if synteny search was performed, use the FASTA from that 
+    def alignedFasta = Channel.empty() // may or may not align FASTA, but either way, initialize it so there are no errors with publishing
+
+    // // move this over in a bit: detremining whether to do synteny search
+    // def syntenyInputList = [params.genomeDBsynteny, params.syntenyInput, params.hmmsList, params.hmmsDir, params.hmmsMetadata]
+    // if (syntenyInputList.any { it == null }) {
+    //     println "List contains at least one null value"
+    //     syntenySearchFlag = false
+    // } else {
+    //     println "List contains no null values"
+    //     syntenySearchFlag = true
+    // }
+    // println("syntenySearchFlag: '${syntenySearchFlag}'")
+
+    // if (syntenySearchFlag) {
+    //     foo()
+    // } else {
+    //     bar()
+    // }
+
+    // Get the BLAST file
+    runBlast(params.queryFasta, params.blastPath, params.blastName)
+    currentBlast = runBlast.out.blast
     
-    
+    // runBlast.out.hasGenomeIDsFile.view { "File path: $it" }
+    // runBlast.out.hasGenomeIDsFile
+    //     .map { file -> file.text.trim() }
+    //     .view { contents -> "Current contents: $contents" }
+
+
+    // test filtering gauntlet
+    // def current = Channel.empty()
     // Filter 1
     if (params.gate1) {
         println("Filter 1 applied")
-        current = FILTER1(current)
+        current = FILTER1(currentBlast)
+        currentBlast = current
     }
     
     // Filter 2
     if (params.gate2) {
         println("Filter 2 applied")
-        current = FILTER2(current)
+        current = FILTER2(currentBlast)
+        currentBlast = current
     }
     
     // Filter 3
+    // runBlast.out.hasGenomeIDsFile
+    //     .branch { file ->
+    //         def content = file.text.trim()
+    //         yes: content == "true"
+    //         no: content == "false"
+    //         other: true
+    //     }
+    //     .set { result }
+
+    // if (params.gate3) {
+    //     println("Filter 3 applied")
+    //     result_y = result.yes.view { v -> "$v is yes" }
+    //     result_n = result.no.view { v -> "$v is no" }
+    //     result_o = result.other.view { v -> "$v is other" }
+
+    //     currentBlast.view { blastFile -> 
+    //         def contents = blastFile.text  // This reads the file content
+    //         println "Current contents of blastFile: $contents"
+    //     }
+
+    //     // yes branch: just run FILTER3
+    //     f3_noMetadata_out = filter3_noMetadata(
+    //         result.yes,
+    //         currentBlast
+    //     )
+        
+
+    //     // no branch: run foo_metadata and then FILTER3
+    //     fooMetadata_out = foo_metadata_beforeFiltering(
+    //         result.no,
+    //         currentBlast
+    //     )
+
+    //     f3_withMetadata_out = filter3_withMetadata(
+    //         fooMetadata_out.map { true },
+    //         fooMetadata_out
+    //     )
+
+    //     // either way, assign to out
+    //     current = f3_noMetadata_out.out[0]
+    //         .mix(
+    //             f3_withMetadata_out.out[0]
+    //         )
+    //         .view()
+
+    //     currentBlast = current
+    // }
     if (params.gate3) {
         println("Filter 3 applied")
-        println "The value is: ${myString}"
-        if (myString == "false") {
-            println("No genome IDs; running foo_metadata")
-            current = foo_metadata(current)
-            hasMetadata = true
+        
+        // Read the first value from each BLAST file to determine the branch
+        def blastWithCheck = currentBlast.map { blastFile ->
+            def firstLine = blastFile.text.readLines().first()
+            def firstValue = firstLine.split()[0]  // Get first column
+            def hasGenomeIDs = (firstValue != "0")  // true if not 0
+            return tuple(blastFile, hasGenomeIDs)
+        }.view { blastFile, hasGenomeIDs -> "Blast: $blastFile, Has genome IDs: $hasGenomeIDs" }
+        
+        // Branch based on the check
+        def result = blastWithCheck.branch { blastFile, hasGenomeIDs ->
+            yes: hasGenomeIDs == true
+            no: hasGenomeIDs == false
         }
-        current = FILTER3(current)
+        
+        // Process YES branch
+        def yesOutput = filter3_noMetadata(
+                result.yes,
+                currentBlast
+            )
+        
+        
+        // Process NO branch  
+        def metadataOut = foo_metadata_beforeFiltering(
+                result.no,
+                currentBlast
+            )
+            
+            noOutput = filter3_withMetadata(
+                metadataOut.map { true },
+                metadataOut
+            )
+        
+        // Combine outputs
+        current = yesOutput.mix(noOutput)
+        currentBlast = current
     }
     
     // Filter 4
     if (params.gate4) {
         println("Filter 4 applied")
-        current = FILTER4(current)
+        current = FILTER4(currentBlast)
+        currentBlast = current
     }
     
     // Final step
-    current = FINAL(current)
-    
-    emit:
-    filtered_blast = current
-}
-
-// // this one seems to work, but doesn't guarantee that foo_metadata runs in between FILTER2 and FILTER3
-// // Also, as I've discovered, this runs foo_metadata even if filter3 isn't applied...
-// workflow applyFiltersWithMetadata {
-//     take:
-//     blastWithFlag   // each element is [hasGenomeIDs (bool), blastFile]
-
-//     main:
-//     // Split into two branches based on the flag
-//     def (branchWithGenomes, branchWithoutGenomes) = blastWithFlag.branch {
-//         withGenomes: it[0] == true
-//         withoutGenomes: it[0] == false
-//     }
-    
-//     // Process branch without genomes through foo_metadata
-//     // Extract just the blast files for each branch
-//     def blastsWithGenomes = branchWithGenomes.map { flag, blast -> blast }
-//     def blastsWithoutGenomes = branchWithoutGenomes.map { flag, blast -> blast }
-    
-//     // Apply foo_metadata process to the branch without genome IDs
-//     def processedWithoutGenomes = foo_metadata(blastsWithoutGenomes)
-    
-//     // Combine the branches back
-//     def current = blastsWithGenomes.mix(processedWithoutGenomes)
-    
-//     // Now apply filters that don't depend on the flag
-//     if (params.gate1) {
-//         println("Filter 1 applied")
-//         current = FILTER1(current)
-//     }
-    
-//     if (params.gate2) {
-//         println("Filter 2 applied")
-//         current = FILTER2(current)
-//     }
-    
-//     if (params.gate3) {
-//         println("Filter 3 applied")
-//         current = FILTER3(current)
-//     }
-    
-//     if (params.gate4) {
-//         println("Filter 4 applied")
-//         current = FILTER4(current)
-//     }
-    
-//     current = FINAL(current)
-    
-//     emit:
-//     filtered_blast = current
-// }
+    current = FINAL(currentBlast)
+    currentBlast = current
 
 
 
-
-workflow {
-
-    main:
-    currentBlast = Channel.empty() // not strictly necessary because it's guaranteed to populate right after, but this is for the sake of clarity
-    // currentMetadata = Channel.empty() // make metadataFile only after the filtering gauntlet is complete, and only if synteny search wasn't run.
-    // currentFasta = Channel.empty() // Actually, I should keep this empty so that if we opt in for alignment, it's restricted until after we have a FASTA at all
-    // either make the FASTA from the metadata file (maybe I shouldn't initialize that then...), or if synteny search was performed, use the FASTA from that 
-
-    hasMetadata = Channel.of("false") // keeping it as a string because processes are buggy with Booleans
-    // hasFasta = Channel.of("false") // actually, the better way to ensure this is just to rely on the presence/absence of the currentFasta channel
-
-    syntenyInputList = [params.genomeDBsynteny, params.syntenyInput, params.hmmsList, params.hmmsDir, params.hmmsMetadata]
-    if (syntenyInputList.any { it == null }) {
-        println "List contains at least one null value"
-        syntenySearchFlag = false
-    } else {
-        println "List contains no null values"
-        syntenySearchFlag = true
-    }
-    println("syntenySearchFlag: '${syntenySearchFlag}'")
-
-    if (syntenySearchFlag) {
-        foo()
-    } else {
-        bar()
-    }
-
-    // Get the BLAST file
-    runBlast(params.queryFasta, params.blastPath, params.blastName)
-    currentBlast = runBlast.out.blast
-
-    // test modification to the current BLAST
-    bar_metadata(runBlast.out.blast, runBlast.out.hasGenomeIDsFile)
-    currentBlast = bar_metadata.out
-
-    hasGenomeIDs = runBlast.out.hasGenomeIDsFile
-        .map { file -> file.text.trim() == "true" }
-
-    runBlast.out.hasGenomeIDsFile.view { hasGenomeIDsFile -> 
-        def contents = hasGenomeIDsFile.text  // This reads the file content
-        println "Current contents: $contents"
-    }
-
-    // First, check what's actually in the channel
-    hasGenomeIDs.view { "Channel contains: $it" }
-
-    // Also check if the file exists and has content
-    runBlast.out.hasGenomeIDsFile.view { "File path: $it" }
-
-    // reading this file: need strip to remove the newline character baked into the file 
-    runBlast.out.hasGenomeIDsFile.text.strip()
-        .branch { v ->
-            yes: v == "true"
-            no: v == "false"
-            other: true //fall-through
-        }
-        .set { result }
-
-    result_y = result.yes.view { v -> "$v is yes" }
-    result_n = result.no.view { v -> "$v is no" }
-    result_o = result.other.view { v -> "$v is other" }
-    // hasGenomeIDs = 
-
-        
-    // Print the actual file content after the process runs
-    runBlast.out.hasGenomeIDsFile
-        .map { file ->
-            println "=== FILE CONTENTS ==="
-            println "Content: '${file.text}'"
-            println "Trimmed: '${file.text.trim()}'"
-            println "Length: ${file.text.trim().length()}"
-            println "====================="
-            return file.text.trim()
-        }
-        .view()
-
-    // // Create a value channel with the string
-    // def genomeFlagChannel = runBlast.out.hasGenomeIDsFile
-    //     .map { file -> file.text.trim() }
-    
-    // // Now capture it as a string using .value inside the workflow
-    // def genomeFlagString = genomeFlagChannel.value
-    
-    // // Now you have it as a regular string
-    // println "The flag is: '$genomeFlagString'"  // Should print: The flag is: 'false'
-    
-    
-    // // Use it in conditional logic
-    // if (genomeFlagString == "true") {
-    //     println "Genome IDs present"
-    //     // Do something with genome IDs
-    // } else {
-    //     println "No genome IDs found"
-    //     // Handle the false case
-    // }
- 
-    handleGenomeFlag(runBlast.out.hasGenomeIDsFile.map { file -> file.text.trim() })
-
-    // Combine blast records with the flag as a tuple: [hasGenomeIDs, blastFile]
-    blastWithFlag = hasGenomeIDs.combine(currentBlast)
-    // blastWithFlag = runBlast.out.hasGenomeIDsFile.combine(currentBlast)
-
-    filtered_blast = applyFiltersWithMetadata(blastWithFlag)
-
-    println("Has metadata:")
-    println(hasMetadata)
-
-    // currentBlast.view { blastFile -> 
-    //     def contents = blastFile.text  // This reads the file content
-    //     println "Current contents: $contents"
+    // Run through the filtering gauntlet
+    // if (params.evalueThreshold ) {
+    //     currentBlast = FILTER1(currentBlast)
+    //     filter1_out = current
     // }
 
-    // use .branch for branching paths
+
+
+
+
 
 
     
@@ -322,8 +269,9 @@ workflow {
     publish:
     blast_output = runBlast.out.blast
     currentBlastFile = currentBlast
-    final_results = filtered_blast
-
+    // final_results = filtered_blast
+    alignedFastaFile = alignedFasta
+    metadataFile = metadata
 }
 
 output {
@@ -336,11 +284,23 @@ output {
 
     currentBlastFile {
         path { "blastFiles" }
+        mode 'copy' // for debug
     }
 
-    final_results {
-        path { "final" }
+    // publish FASTA later, once you've actually initialized the channel in the script
+    // with mode 'copy'
+
+    alignedFastaFile {
         mode 'copy'
     }
+
+    metadataFile {
+        mode 'copy'
+    }
+
+    // final_results {
+    //     path { "final" }
+    //     mode 'copy'
+    // }
 
 }

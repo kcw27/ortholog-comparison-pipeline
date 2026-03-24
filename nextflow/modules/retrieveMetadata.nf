@@ -2,6 +2,7 @@
 
 process foo_metadata {
     input:
+    val signal // doesn't do anything, just blocks until the upstream process executes
     path input_file
 
     output:
