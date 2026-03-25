@@ -2,19 +2,22 @@
 
 # --- Parse command-line flags ---
 print_help() {
-    echo "Usage: $0 -f <metadata_file> -o <metadata_origin> -c <category_file> -s <subcategory_file>"
+    echo "Usage: $0 -f <metadata_file> -o <out> -c <category_file> -s <subcategory_file>"
     echo ""
     echo "  -f    Path to metadata file"
-    #echo "  -o    Origin type (must be 'synteny_summary' or 'fetched')"
+    echo "  -o    Output filename (optional, default "")"
     echo "  -c    Path to category file"
     echo "  -s    Path to subcategory file"
     echo "  -h    Show help message and exit"
 }
 
+# Set default output filename
+out=""
+
 while getopts ":f:o:c:s:h" opt; do
   case $opt in
     f) metadata_file="$OPTARG" ;;
-    #o) metadata_origin="$OPTARG" ;;
+    o) out="$OPTARG" ;;
     c) category_file="$OPTARG" ;;
     s) subcategory_file="$OPTARG" ;;
     h) print_help; exit 0 ;;
@@ -51,11 +54,11 @@ print(f"Inferred metadata origin: {origin}")
 if origin not in ['synteny_summary', 'fetched']:
   raise Exception(f"Invalid origin {origin}")
 
-mp.rescue_source("$metadata_file", origin)
-mp.categorize("$metadata_file", "$category_file", "$subcategory_file")
+mp.rescue_source("$metadata_file", origin, outname="$out")
+mp.categorize("$metadata_file", "$category_file", "$subcategory_file", outname="$out")
 EOF
 
 
 # --- Run R script for benchmarking ---
 # Rscript "$scriptsdir/R_scripts/benchmarking.R" "$metadata_file"
-Rscript -e "source('$scriptsdir/R_scripts/benchmarking.R'); benchmark('$metadata_file')"
+Rscript -e "source('$scriptsdir/R_scripts/benchmarking.R'); benchmark('$out')"

@@ -1,11 +1,12 @@
 #!/usr/bin/env nextflow
 include { runBlast } from './modules/runBlast.nf'
 include { foo; bar; filterToEvalue; filterToOrganism; filterToGenome; filterSynteny } from './modules/filtering.nf'
-include { foo_metadata as foo_metadata_beforeFiltering; foo_metadata as foo_metadata_afterFiltering; bar_metadata } from './modules/retrieveMetadata.nf' 
+include { foo_metadata as foo_metadata_beforeFiltering; foo_metadata as foo_metadata_afterFiltering; bar_metadata } from './modules/retrieveMetadata.nf'
+include { processMetadata } from './modules/processMetadata.nf' 
 include { FILTER1 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter1.nf'
 include { FILTER2 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter2.nf'
 include { filter3NeedSignal as filter3_noMetadata; filter3NeedSignal as filter3_withMetadata } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter3.nf'
-include { FILTER4 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter4.nf'
+include { filter4WithMultipleOutputs } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter4.nf'
 include { FINAL } from '/home/kcw2/test_scripts/nextflow_tests/modules/finalStep.nf'
 
 params {
@@ -52,11 +53,11 @@ params {
 }
 
 workflow {
+    // println("hi")
 
     main:
     // def currentBlast = Channel.empty() // not strictly necessary because it's guaranteed to populate right after, but this is for the sake of clarity
-    def metadata = Channel.empty() // will later decide whether we still need to get metadata based on whether this is still empty or not. (Can't initialize with empty strings)
-    // May contain multiple values.
+    def metadata = Channel.empty() // May contain multiple values.
     // currentFasta = Channel.empty() // Actually, I should keep this empty so that if we opt in for alignment, it's restricted until after we have a FASTA at all
     // either make the FASTA from the metadata file (maybe I shouldn't initialize that then...), or if synteny search was performed, use the FASTA from that 
     def alignedFasta = Channel.empty() // may or may not align FASTA, but either way, initialize it so there are no errors with publishing
@@ -104,81 +105,32 @@ workflow {
         currentBlast = current
     }
     
-    // Filter 3
-    // runBlast.out.hasGenomeIDsFile
-    //     .branch { file ->
-    //         def content = file.text.trim()
-    //         yes: content == "true"
-    //         no: content == "false"
-    //         other: true
-    //     }
-    //     .set { result }
-
-    // if (params.gate3) {
-    //     println("Filter 3 applied")
-    //     result_y = result.yes.view { v -> "$v is yes" }
-    //     result_n = result.no.view { v -> "$v is no" }
-    //     result_o = result.other.view { v -> "$v is other" }
-
-    //     currentBlast.view { blastFile -> 
-    //         def contents = blastFile.text  // This reads the file content
-    //         println "Current contents of blastFile: $contents"
-    //     }
-
-    //     // yes branch: just run FILTER3
-    //     f3_noMetadata_out = filter3_noMetadata(
-    //         result.yes,
-    //         currentBlast
-    //     )
-        
-
-    //     // no branch: run foo_metadata and then FILTER3
-    //     fooMetadata_out = foo_metadata_beforeFiltering(
-    //         result.no,
-    //         currentBlast
-    //     )
-
-    //     f3_withMetadata_out = filter3_withMetadata(
-    //         fooMetadata_out.map { true },
-    //         fooMetadata_out
-    //     )
-
-    //     // either way, assign to out
-    //     current = f3_noMetadata_out.out[0]
-    //         .mix(
-    //             f3_withMetadata_out.out[0]
-    //         )
-    //         .view()
-
-    //     currentBlast = current
-    // }
     if (params.gate3) {
         println("Filter 3 applied")
         
         // Read the first value from each BLAST file to determine the branch
         def blastWithCheck = currentBlast.map { blastFile ->
             def firstLine = blastFile.text.readLines().first()
-            def firstValue = firstLine.split()[0]  // Get first column
-            def hasGenomeIDs = (firstValue != "0")  // true if not 0
+            def firstGID = firstLine.split()[0]  // Get first column
+            def hasGenomeIDs = (firstGID != "0")  // if the first genome ID isn't 0, assume it has genome IDs
             return tuple(blastFile, hasGenomeIDs)
         }.view { blastFile, hasGenomeIDs -> "Blast: $blastFile, Has genome IDs: $hasGenomeIDs" }
         
         // Branch based on the check
-        def result = blastWithCheck.branch { blastFile, hasGenomeIDs ->
+        def hasGIDs_result = blastWithCheck.branch { blastFile, hasGenomeIDs ->
             yes: hasGenomeIDs == true
             no: hasGenomeIDs == false
         }
         
         // Process YES branch
         def yesOutput = filter3_noMetadata(
-                result.yes,
+                hasGIDs_result.yes,
                 currentBlast
             )
         
-        
         // Process NO branch  
         def metadataOut = foo_metadata_beforeFiltering(
-                result.no,
+                hasGIDs_result.no,
                 currentBlast
             )
             
@@ -186,6 +138,7 @@ workflow {
                 metadataOut.map { true },
                 metadataOut
             )
+            metadata = metadata.mix(noOutput).view{ content -> "Contents of metadata channel after filter3: $content" }
         
         // Combine outputs
         current = yesOutput.mix(noOutput)
@@ -195,15 +148,60 @@ workflow {
     // Filter 4
     if (params.gate4) {
         println("Filter 4 applied")
-        current = FILTER4(currentBlast)
-        currentBlast = current
+        current = filter4WithMultipleOutputs(currentBlast)
+
+        currentBlast = current // for the synteny search, you don't update the current blast, you just update the metadata channel
+        current_individual_values = current.flatMap { it }.view()
+        metadata = metadata.mix(current_individual_values).view{ content -> "Contents of metadata channel after filter4: $content" } //  filter4WithMultipleOutputs.out
+
     }
     
     // Final step
     current = FINAL(currentBlast)
     currentBlast = current
 
+    // test out the metadata processes
+    // Create the metadata channel by mixing outputs
+    // def metadata = noOutput[0].mix(filter4outputs_ch[0]).view{ content -> "Contents of metadata channel: $content" }
 
+    // Split into two branches based on whether metadata is empty
+    def (metadataWithData, metadataEmpty) = metadata
+        .branch {
+            hasData: it != null  // or some condition that indicates it has data
+            empty: true  // fall-through for empty
+        }
+
+    metadataWithData.view{ content -> "Contents of metadataWithData channel: $content" }
+    metadataEmpty.view{ content -> "Contents of metadataEmpty channel: $content" }
+
+    // Run foo_metadata_afterFiltering only on the empty branch
+    def fooMetadataOut = foo_metadata_afterFiltering(metadataEmpty.map {true}, metadataEmpty)
+
+    // Combine the non-empty metadata with the processed empty branch
+    def finalMetadata = metadataWithData.mix(fooMetadataOut).view{ content -> "Contents of finalMetadata channel: $content" }
+
+    // Process the final metadata
+    processMetadata(finalMetadata)
+
+    // metadata = noOutput.out[0]
+    //     .mix(filter4WithMultipleOutputs.out[0])
+    //     .view{ content -> "Contents of metadata channel: $content" }
+
+    // metadata
+    //     .ifEmpty {
+    //         println("Metadata channel is empty; using the output of FILTER1 for this test")
+    //         def metadata_now = FILTER1.out.view()
+    //     }
+    
+    // foo_metadata_afterFiltering(metadata_now)
+    // updated_metadata = metadata[0].mix(foo_metadata_afterFiltering.out[0]).view()
+
+    // processMetadata(updated_metadata)
+
+
+    // check whether metadata has been retrieved yet
+    // metadata = // mix the channels from foo_metadata.out and filter4.out
+    // and if this channel is empty, run foo_metadata_afterFiltering and then the categorization process; else, skip to the categorization process
 
     // Run through the filtering gauntlet
     // if (params.evalueThreshold ) {
@@ -271,7 +269,7 @@ workflow {
     currentBlastFile = currentBlast
     // final_results = filtered_blast
     alignedFastaFile = alignedFasta
-    metadataFile = metadata
+    metadataFile = processMetadata.out
 }
 
 output {
