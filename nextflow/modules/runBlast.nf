@@ -29,8 +29,8 @@ process runBlast {
     outname="queryHits.blast"
 
     # write a genome ID for testing how the filter-to-top-per-genome process responds
-    #genomeID="0"
-    genomeID="1"
+    genomeID="0"
+    #genomeID="1"
 
     echo "\$genomeID	runBlast	stub	output	file" > "\$outname" # to use $ to denote variables made in bash (as opposed to being passed in), you need to escape the dollar sign
     echo "\$genomeID	here's	yet	another	row" >> "\$outname" # to use $ to denote variables made in bash (as opposed to being passed in), you need to escape the dollar sign

@@ -130,12 +130,12 @@ workflow {
         
         // Process NO branch  
         def metadataOut = foo_metadata_beforeFiltering(
-                hasGIDs_result.no,
+                hasGIDs_result.no.map { "true" } ,
                 currentBlast
             )
             
             noOutput = filter3_withMetadata(
-                metadataOut.map { true },
+                metadataOut.map { "true" },
                 metadataOut
             )
             metadata = metadata.mix(noOutput).view{ content -> "Contents of metadata channel after filter3: $content" }
@@ -164,23 +164,60 @@ workflow {
     // Create the metadata channel by mixing outputs
     // def metadata = noOutput[0].mix(filter4outputs_ch[0]).view{ content -> "Contents of metadata channel: $content" }
 
-    // Split into two branches based on whether metadata is empty
-    def (metadataWithData, metadataEmpty) = metadata
-        .branch {
-            hasData: it != null  // or some condition that indicates it has data
-            empty: true  // fall-through for empty
-        }
+    // // Split into two branches based on whether metadata is empty
+    // def (metadataWithData, metadataEmpty) = metadata
+    //     .branch {
+    //         hasData: it != null  // or some condition that indicates it has data
+    //         empty: true  // fall-through for empty
+    //     }
 
-    metadataWithData.view{ content -> "Contents of metadataWithData channel: $content" }
-    metadataEmpty.view{ content -> "Contents of metadataEmpty channel: $content" }
+    // metadataWithData.view{ content -> "Contents of metadataWithData channel: $content" }
+    // metadataEmpty.view{ content -> "Contents of metadataEmpty channel: $content" }
 
-    // Run foo_metadata_afterFiltering only on the empty branch
-    def fooMetadataOut = foo_metadata_afterFiltering(metadataEmpty.map {true}, metadataEmpty)
+    // // Run foo_metadata_afterFiltering only on the empty branch
+    // def fooMetadataOut = foo_metadata_afterFiltering(metadataEmpty.map {true}, metadataEmpty)
 
-    // Combine the non-empty metadata with the processed empty branch
-    def finalMetadata = metadataWithData.mix(fooMetadataOut).view{ content -> "Contents of finalMetadata channel: $content" }
+    // // Combine the non-empty metadata with the processed empty branch
+    // def finalMetadata = metadataWithData.mix(fooMetadataOut).view{ content -> "Contents of finalMetadata channel: $content" }
+
+    // Try to get metadata with a default if empty
+    // def call_foo_metadata_on_this = Channel.empty()
+
+    // def finalMetadata = metadata
+    //     .ifEmpty { 
+    //         // If empty, create metadata from foo_metadata_afterFiltering
+    //         // foo_metadata_afterFiltering(Channel.of(true), Channel.empty())
+    //         call_foo_metadata_on_this = currentBlast
+    //     }
+    //     .ifEmpty {
+    //         // This shouldn't happen, but just in case
+    //         error "Failed to generate metadata"
+    //     }
+
+    // def fooMetadataOut = foo_metadata_afterFiltering(call_foo_metadata_on_this.map {true}, call_foo_metadata_on_this)
+
+
+    metadata.view{v -> "metadata channel contents: $v"}
+
+    def metadataCheck = metadata
+    .ifEmpty { "true" }
+    metadataCheck.view{v-> "Value of metadataCheck: $v"}
+
+    def metadataIsEmpty = metadataCheck.filter { it == "true" }
+    def metadataIsNotEmpty = metadataCheck.filter { it == "false" } // I don't think we need this?
+    metadataIsEmpty.view{v-> "Value of metadataIsEmpty: $v"}
+    metadataIsNotEmpty.view{v-> "Value of metadataIsNotEmpty: $v"}
+
+    foo_metadata_afterFiltering(metadataIsEmpty, currentBlast)
+
+    // // the code below works, but I'm trying something else
+    // metadataIsEmpty = metadata | ifEmpty { "true" } // if not empty, it'll just contain the contents of the metadata channel
+    // metadataIsEmpty.view{v -> "Contents of metadataIsEmpty channel: $v"}
+    // foo_metadata_afterFiltering(metadataIsEmpty, currentBlast)
+
 
     // Process the final metadata
+    def finalMetadata = metadata.mix(foo_metadata_afterFiltering.out).view{ content -> "Contents of finalMetadata channel: $content" } // fix this in a bit
     processMetadata(finalMetadata)
 
     // metadata = noOutput.out[0]

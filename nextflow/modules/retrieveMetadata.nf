@@ -2,11 +2,14 @@
 
 process foo_metadata {
     input:
-    val signal // doesn't do anything, just blocks until the upstream process executes
+    val signal
     path input_file
 
     output:
     path "foo_metadata.txt"
+
+    when:
+    signal == "true"
 
     script:
     """
