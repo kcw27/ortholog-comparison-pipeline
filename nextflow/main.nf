@@ -3,6 +3,7 @@ include { runBlast } from './modules/runBlast.nf'
 include { foo; bar; filterToEvalue; filterToOrganism; filterToGenome; filterSynteny } from './modules/filtering.nf'
 include { foo_metadata as foo_metadata_beforeFiltering; foo_metadata as foo_metadata_afterFiltering; bar_metadata } from './modules/retrieveMetadata.nf'
 include { processMetadata } from './modules/processMetadata.nf' 
+include { produceFasta; alignFasta } from './modules/processFasta.nf' 
 include { FILTER1 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter1.nf'
 include { FILTER2 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter2.nf'
 include { filter3NeedSignal as filter3_noMetadata; filter3NeedSignal as filter3_withMetadata } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter3.nf'
@@ -57,9 +58,8 @@ workflow {
 
     main:
     // def currentBlast = Channel.empty() // not strictly necessary because it's guaranteed to populate right after, but this is for the sake of clarity
-    def metadata = Channel.empty() // May contain multiple values.
-    // currentFasta = Channel.empty() // Actually, I should keep this empty so that if we opt in for alignment, it's restricted until after we have a FASTA at all
-    // either make the FASTA from the metadata file (maybe I shouldn't initialize that then...), or if synteny search was performed, use the FASTA from that 
+    def metadata = Channel.empty() // May contain multiple values if performing synteny search
+    def fasta = Channel.empty() // AMay contain multiple values if performing synteny search
     def alignedFasta = Channel.empty() // may or may not align FASTA, but either way, initialize it so there are no errors with publishing
 
     // // move this over in a bit: detremining whether to do synteny search
@@ -150,10 +150,16 @@ workflow {
         println("Filter 4 applied")
         current = filter4WithMultipleOutputs(currentBlast)
 
-        currentBlast = current // for the synteny search, you don't update the current blast, you just update the metadata channel
-        current_individual_values = current.flatMap { it }.view()
-        metadata = metadata.mix(current_individual_values).view{ content -> "Contents of metadata channel after filter4: $content" } //  filter4WithMultipleOutputs.out
+        // // for use when all the outputs are in the same channel and you have to split them
+        // currentBlast = current // for the synteny search, you don't update the current blast, you just update the metadata channel. But for testing I'll use this.
+        // current_individual_values = current.flatMap { it }.view()
+        // metadata = metadata.mix(current_individual_values).view{ content -> "Contents of metadata channel after filter4: $content" }
 
+        currentBlast = current.syntenySummaries
+        current_individual_values = current.syntenySummaries.flatMap { it }.view()
+        metadata = metadata.mix(current_individual_values).view{ content -> "Contents of metadata channel after filter4: $content" }
+
+        fasta = fasta.mix(current.fastas.flatMap { it }).view{ content -> "Contents of fasta channel after filter4: $content" }
     }
     
     // Final step
@@ -217,8 +223,26 @@ workflow {
 
 
     // Process the final metadata
-    def finalMetadata = metadata.mix(foo_metadata_afterFiltering.out).view{ content -> "Contents of finalMetadata channel: $content" } // fix this in a bit
+    def finalMetadata = metadata.mix(foo_metadata_afterFiltering.out).view{ content -> "Contents of finalMetadata channel: $content" } 
     processMetadata(finalMetadata)
+
+    // produce a FASTA from the current blast only if synteny search hasn't been performed (i.e. only if the fasta channel is still empty)
+    // the synteny search may produce multiple FASTAs, but if you don't do synteny search, currentBlast is guaranteed to have 1 thing in it, so you just make a FASTA based on that
+    def fastaCheck = fasta
+    .ifEmpty { "true" }
+    fastaCheck.view{v-> "Value of fastaCheck: $v"}
+
+    def fastaIsEmpty = fastaCheck.filter { it == "true" }
+    fastaIsEmpty.view{v-> "Value of fastaIsEmpty: $v"}
+    produceFasta(fastaIsEmpty, currentBlast)
+    fasta = fasta.mix(produceFasta.out).view{ content -> "Contents of fasta channel: $content" } 
+
+    // and then, if params.align is true, we align the FASTA(s)- anything in the fasta channel. 
+    if (params.align) {
+        alignFasta(fasta)
+        alignedFasta = alignedFasta.mix(alignFasta.out).view{ content -> "Contents of alignedFasta channel: $content" } 
+    }
+
 
     // metadata = noOutput.out[0]
     //     .mix(filter4WithMultipleOutputs.out[0])
@@ -304,7 +328,7 @@ workflow {
     publish:
     blast_output = runBlast.out.blast
     currentBlastFile = currentBlast
-    // final_results = filtered_blast
+    fastaFile = fasta
     alignedFastaFile = alignedFasta
     metadataFile = processMetadata.out
 }
@@ -324,6 +348,10 @@ output {
 
     // publish FASTA later, once you've actually initialized the channel in the script
     // with mode 'copy'
+    
+    fastaFile {
+        mode 'copy'
+    }
 
     alignedFastaFile {
         mode 'copy'
