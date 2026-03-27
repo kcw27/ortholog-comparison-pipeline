@@ -9,12 +9,16 @@ process foo {
 }
 
 process bar {
+    conda "${workflow.projectDir}/envs/metadata-magnet-env.yaml"
+
     output:
     val "bar"
 
     script:
     """
-    echo "bar"
+    #!/usr/bin/env Rscript
+
+    installed.packages()
     """
 }
 
@@ -30,6 +34,7 @@ process filterToEvalue {
     
     script:
     """
+    # use evalue for -t 
     """
 
     stub:
@@ -37,7 +42,7 @@ process filterToEvalue {
     projDir="${workflow.projectDir}"
     head "\$projDir/../scripts/blast_processing/filter_blast_by_evalue.sh"
 
-    sleep 3 # to confirm that later processes WILL wait for this to finish
+    # sleep 3 # to confirm that later processes WILL wait for this to finish
 
     # assign the variables to string variables in bash to be safe
     inputf="${inputFile}"
@@ -73,7 +78,7 @@ process filterToOrganism {
     projDir="${workflow.projectDir}"
     head "\$projDir/../scripts/blast_processing/get_blast_top_hits_by_organism.sh"
 
-    sleep 1 # to confirm that later processes WILL wait for this to finish
+    # sleep 1 # to confirm that later processes WILL wait for this to finish
 
     # assign the variables to string variables in bash to be safe
     inputf="${inputFile}"
@@ -93,6 +98,7 @@ process filterToGenome {
     val signal
     path inputFile
     path benchmark_file
+    val hasHeader
 
     output:
     path "*_topPerGenome.blast", emit: blast 
@@ -101,6 +107,10 @@ process filterToGenome {
     
     script:
     """
+    # genome ID col will be col 1
+    # determine whether to use -r based on hasHeader
+    # -f is inputFile
+    # output is auto-nsmed.
     """
 
     stub:
@@ -108,7 +118,7 @@ process filterToGenome {
     projDir="${workflow.projectDir}"
     head "\$projDir/../scripts/blast_processing/get_blast_top_hits_by_genomeID.sh"
 
-    sleep 3 # to confirm that later processes WILL wait for this to finish
+    # sleep 3 # to confirm that later processes WILL wait for this to finish
 
     # assign the variables to string variables in bash to be safe
     inputf="${inputFile}"
@@ -120,10 +130,20 @@ process filterToGenome {
     newBenchmarkFile="benchmarking_genome.txt"
     cat ${benchmark_file} > \$newBenchmarkFile
     echo "Number of hits remaining after filtering to top hit per genome: \$lineCount" >> \$newBenchmarkFile
+
+    hasHeaderStr="${hasHeader}"
+    echo "hasHeaderStr: \$hasHeaderStr" >> "\$output"
+    if [[ \${hasHeaderStr} == "true" ]]; then
+        echo "Input file has a header (which should be the case if metadata is retrieved, otherwise no header)" >> "\$output"
+    else
+        echo "Input file does NOT have a header (i.e. metadata has not yet been retrieved)" >> "\$output"
+    fi
     """
 }
 
 process filterSynteny {
+    conda "${workflow.projectDir}/envs/pynteny-env.yaml"
+
     input:
     // for the synteny search
     tuple path(genomeDBsynteny), path(syntenyInput), path(hmmsList), path(hmmsDir), path(hmmsMetadata)
@@ -143,27 +163,18 @@ process filterSynteny {
 
     stub:
     """
+    #pynteny --help # check .command.out
+    #pynteny build -i "/home/kcw2/ortholog-comparison-pipeline/nextflow/data/GCA_000967305.2_ASM96730v2_genomic.gbff" -o "my_outfile.txt"
+
     projDir="${workflow.projectDir}"
     head "\$projDir/../scripts/synteny_wrapper.sh"
 
-    # man, but what do I do about this taking multiple outdirs? Then there will be multiple metadata files???
-    # actually, I think it's fine to have multiple values in the metadata channel?? all we do with the metadata files afterward is publish them
-    # though it is concerning that we have to check whether the metadata channel contains "" vs something else
-    # and come to think of it, intersecting blast with synteny is going to produce multiple fastas
-    # so do we align multiple fastas??
-    # let me think about whether I want to restrict this to one synteny search or not
+    # This function features both the synteny search and synteny intersection
 
-    # also run synteny intersection
-
-    # for now, do a very simple stub
-    # later comment out the out2 and out3 lines to test with a single synteny output
+    # I've also successfully tested this with a single synteny output
     out1="outdir1"
     mkdir -p \$out1
     echo "4: synteny file saved to \${out1}/synteny_summary.tsv" > "\${out1}/synteny_summary.tsv" 
-    # by design, synteny_summary.tsv is uniformly named, but won't these clobber each other?
-    # Alternatively, after they're created we don't rely on them being named anything in particular,
-    # so we could rename them :)
-    # mv "\${out1}/synteny_summary.tsv" "\${out1}/*_synteny_summary.tsv" 
     echo "4: fasta file saved to \${out1}.fasta" > "\${out1}.fasta"
     echo "4: benchmarking file saved to \${out1}/\${out1}_benchmarking.txt" > "\${out1}/\${out1}_benchmarking.txt"
     echo "print the number of lines minus 1 in the synteny_summary.tsv file, and the number of lines divided by 2 in the fasta" >> "\${out1}/\${out1}_benchmarking.txt"
@@ -171,15 +182,13 @@ process filterSynteny {
     out2="outdir2"
     mkdir -p \$out2
     echo "4: synteny file saved to \${out2}/synteny_summary.tsv" > "\${out2}/synteny_summary.tsv"
-    # mv "\${out2}/synteny_summary.tsv" "\${out2}/*_synteny_summary.tsv" 
     echo "4: fasta file saved to \${out2}.fasta" > "\${out2}.fasta"
     echo "4: benchmarking file saved to \${out2}/\${out2}_benchmarking.txt" > "\${out2}/\${out2}_benchmarking.txt"
     echo "print the number of lines minus 1 in the synteny_summary.tsv file, and the number of lines divided by 2 in the fasta" >> "\${out2}/\${out2}_benchmarking.txt"
 
     out3="outdir3"
     mkdir -p \$out3
-    echo "4: synteny file saved to \${out3}/synteny_summary.tsv" > "\${out3}/synteny_summary.tsv"
-    # mv "\${out3}/synteny_summary.tsv" "\${out3}/*_synteny_summary.tsv" 
+    echo "4: synteny file saved to \${out3}/synteny_summary.tsv" > "\${out3}/synteny_summary.tsv" 
     echo "4: fasta file saved to \${out3}.fasta" > "\${out3}.fasta"
     echo "4: benchmarking file saved to \${out3}/\${out3}_benchmarking.txt" > "\${out3}/\${out3}_benchmarking.txt"
     echo "print the number of lines minus 1 in the synteny_summary.tsv file, and the number of lines divided by 2 in the fasta" >> "\${out3}/\${out3}_benchmarking.txt"

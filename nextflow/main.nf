@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 include { runBlast } from './modules/runBlast.nf'
-// include { foo; bar} from './modules/filtering.nf'
+include { foo; bar} from './modules/filtering.nf'
 include { filterToEvalue; filterToOrganism; filterToGenome as filterToGenome_noMetadata; filterToGenome as filterToGenome_withMetadata; filterSynteny; collectSyntenyBenchmarking } from './modules/filtering.nf' 
 include { foo_metadata as foo_metadata_beforeFiltering; foo_metadata as foo_metadata_afterFiltering; bar_metadata } from './modules/retrieveMetadata.nf'
 include { retrieveMetadata as retrieveMetadata_beforeFiltering; retrieveMetadata as retrieveMetadata_afterFiltering } from './modules/retrieveMetadata.nf'
@@ -58,6 +58,8 @@ params {
 workflow {
 
     main:
+    bar()
+    
     def metadata = Channel.empty() // May contain multiple values if performing synteny search
     def fasta = Channel.empty() // AMay contain multiple values if performing synteny search
     def alignedFasta = Channel.empty() // may or may not align FASTA, but either way, initialize it so there are no errors with publishing
@@ -102,7 +104,7 @@ workflow {
             def firstGID = firstLine.split()[0]  // The first value in the row represents the genome ID, which is either 0 (representing no data) or a legitimate genome ID
             def hasGenomeIDs = (firstGID != "0")  
             return tuple(blastFile, hasGenomeIDs)
-        }//.view { blastFile, hasGenomeIDs -> "Blast: $blastFile, Has genome IDs: $hasGenomeIDs" }
+        }.view { blastFile, hasGenomeIDs -> "Blast: $blastFile, Has genome IDs: $hasGenomeIDs" }
         
         // Branch based on the whether we have enough info to filter to top per genome yet
         def hasGIDs_result = blastWithCheck.branch { blastFile, hasGenomeIDs ->
@@ -114,7 +116,8 @@ workflow {
         def yesOutput = filterToGenome_noMetadata(
                 hasGIDs_result.yes,
                 currentBlast,
-                benchmarking
+                benchmarking,
+                hasGIDs_result.yes
             )
 
         
@@ -129,7 +132,8 @@ workflow {
             noOutput = filterToGenome_withMetadata(
                 metadataOut.map { "true" },
                 metadataOut,
-                benchmarking
+                benchmarking,
+                metadataOut.map { "true" }
             )
             metadata = metadata.mix(noOutput.blast)//.view{ content -> "Contents of metadata channel after filter3: $content" }
         
@@ -228,156 +232,11 @@ workflow {
     benchmarkFile = benchmarking
 }
 
-//  // test run workflow
-// workflow {
-
-//     main:
-//     def metadata = Channel.empty() // May contain multiple values if performing synteny search
-//     def fasta = Channel.empty() // AMay contain multiple values if performing synteny search
-//     def alignedFasta = Channel.empty() // may or may not align FASTA, but either way, initialize it so there are no errors with publishing
-
-//     // // move this over in a bit: detremining whether to do synteny search
-//     // def syntenyInputList = [params.genomeDBsynteny, params.syntenyInput, params.hmmsList, params.hmmsDir, params.hmmsMetadata]
-//     // if (syntenyInputList.any { it == null }) {
-//     //     println "List contains at least one null value"
-//     //     syntenySearchFlag = false
-//     // } else {
-//     //     println "List contains no null values"
-//     //     syntenySearchFlag = true
-//     // }
-//     // println("syntenySearchFlag: '${syntenySearchFlag}'")
-
-//     // if (syntenySearchFlag) {
-//     //     foo()
-//     // } else {
-//     //     bar()
-//     // }
-
-//     // Get the BLAST file
-//     runBlast(params.queryFasta, params.blastPath, params.blastName)
-//     currentBlast = runBlast.out.blast
-
-
-//     // test filtering gauntlet
-//     // Filter 1
-//     if (params.gate1) {
-//         println("Filter 1 applied")
-//         currentBlast = FILTER1(currentBlast)
-//     }
-    
-//     // Filter 2
-//     if (params.gate2) {
-//         println("Filter 2 applied")
-//         currentBlast = FILTER2(currentBlast)
-//     }
-    
-//     if (params.gate3) {
-//         println("Filter 3 applied")
-        
-//         // Read the first value from each BLAST file to determine the branch
-//         def blastWithCheck = currentBlast.map { blastFile ->
-//             def firstLine = blastFile.text.readLines().first()
-//             def firstGID = firstLine.split()[0]  // Get first column
-//             def hasGenomeIDs = (firstGID != "0")  // if the first genome ID isn't 0, assume it has genome IDs
-//             return tuple(blastFile, hasGenomeIDs)
-//         }.view { blastFile, hasGenomeIDs -> "Blast: $blastFile, Has genome IDs: $hasGenomeIDs" }
-        
-//         // Branch based on the check
-//         def hasGIDs_result = blastWithCheck.branch { blastFile, hasGenomeIDs ->
-//             yes: hasGenomeIDs == true
-//             no: hasGenomeIDs == false
-//         }
-        
-//         // Process YES branch
-//         def yesOutput = filter3_noMetadata(
-//                 hasGIDs_result.yes,
-//                 currentBlast
-//             )
-        
-//         // Process NO branch  
-//         def metadataOut = foo_metadata_beforeFiltering(
-//                 hasGIDs_result.no.map { "true" } ,
-//                 currentBlast
-//             )
-            
-//             noOutput = filter3_withMetadata(
-//                 metadataOut.map { "true" },
-//                 metadataOut
-//             )
-//             metadata = metadata.mix(noOutput).view{ content -> "Contents of metadata channel after filter3: $content" }
-        
-//         // Combine outputs
-//         currentBlast = yesOutput.mix(noOutput)
-//     }
-    
-//     // Filter 4
-//     if (params.gate4) {
-//         println("Filter 4 applied")
-//         current = filter4WithMultipleOutputs(currentBlast)
-
-//         // // for use when all the outputs are in the same channel and you have to split them
-//         // currentBlast = current // for the synteny search, you don't update the current blast, you just update the metadata channel. But for testing I'll use this.
-//         // current_individual_values = current.flatMap { it }.view()
-//         // metadata = metadata.mix(current_individual_values).view{ content -> "Contents of metadata channel after filter4: $content" }
-
-//         currentBlast = current.syntenySummaries
-//         current_individual_values = current.syntenySummaries.flatMap { it }.view()
-//         metadata = metadata.mix(current_individual_values).view{ content -> "Contents of metadata channel after filter4: $content" }
-
-//         fasta = fasta.mix(current.fastas.flatMap { it }).view{ content -> "Contents of fasta channel after filter4: $content" }
-//     }
-    
-//     // Final step
-//     currentBlast = FINAL(currentBlast)
-
-//     metadata.view{v -> "metadata channel contents: $v"}
-
-//     def metadataCheck = metadata
-//     .ifEmpty { "true" }
-//     metadataCheck.view{v-> "Value of metadataCheck: $v"}
-
-//     def metadataIsEmpty = metadataCheck.filter { it == "true" }
-//     def metadataIsNotEmpty = metadataCheck.filter { it == "false" } // I don't think we need this?
-//     metadataIsEmpty.view{v-> "Value of metadataIsEmpty: $v"}
-//     metadataIsNotEmpty.view{v-> "Value of metadataIsNotEmpty: $v"}
-
-//     foo_metadata_afterFiltering(metadataIsEmpty, currentBlast)
-
-
-//     // Process the final metadata
-//     def finalMetadata = metadata.mix(foo_metadata_afterFiltering.out).view{ content -> "Contents of finalMetadata channel: $content" } 
-//     processMetadata(finalMetadata)
-
-//     // produce a FASTA from the current blast only if synteny search hasn't been performed (i.e. only if the fasta channel is still empty)
-//     // the synteny search may produce multiple FASTAs, but if you don't do synteny search, currentBlast is guaranteed to have 1 thing in it, so you just make a FASTA based on that
-//     def fastaCheck = fasta
-//     .ifEmpty { "true" }
-//     fastaCheck.view{v-> "Value of fastaCheck: $v"}
-
-//     def fastaIsEmpty = fastaCheck.filter { it == "true" }
-//     fastaIsEmpty.view{v-> "Value of fastaIsEmpty: $v"}
-//     produceFasta(fastaIsEmpty, currentBlast)
-//     fasta = fasta.mix(produceFasta.out).view{ content -> "Contents of fasta channel: $content" } 
-
-//     // and then, if params.align is true, we align the FASTA(s)- anything in the fasta channel. 
-//     if (params.align) {
-//         alignFasta(fasta)
-//         alignedFasta = alignedFasta.mix(alignFasta.out).view{ content -> "Contents of alignedFasta channel: $content" } 
-//     }
-
-//     publish:
-//     blast_output = runBlast.out.blast
-//     currentBlastFile = currentBlast
-//     fastaFile = fasta
-//     alignedFastaFile = alignedFasta
-//     metadataFile = processMetadata.out
-// }
 
 output {
     // only the final outputs will be copied; the rest are published as soft links.
     currentBlastFile {
         path { "blastFiles" }
-        // mode 'copy' // for debug
     }
 
     fastaFile {
@@ -415,5 +274,4 @@ output {
     filteredBlastGenome_outputFile {
         path { "blastFiles/intermediates" }
     }
-
 }
