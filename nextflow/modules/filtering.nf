@@ -125,17 +125,18 @@ process filterToGenome {
 
 process filterSynteny {
     input:
+    // for the synteny search
     tuple path(genomeDBsynteny), path(syntenyInput), path(hmmsList), path(hmmsDir), path(hmmsMetadata)
 
     // for the intersection
-    val keepSyntenyFasta
-    val intersectPident
-    val intersectQcovs
-    val initialBlast 
+    tuple val(keepSyntenyFasta), val(intersectPident), val(intersectQcovs), val(blastFiles) 
 
     output:
-    path "*/synteny_input.tsv", emit: metadataFiles // synteny output dirs will be saved as subdirs of this
-    path "*/*.fasta", emit: fastaFiles
+    // path "*/synteny_summary.tsv", emit: metadataFiles // synteny output dirs will be saved as subdirs of this
+    path "*/*_synteny_summary.tsv", emit: syntenySummaries // synteny output dirs will be saved as subdirs of this
+    path "*.fasta", emit: fastaFiles
+    path "*/*_benchmarking.txt", emit: benchmarkFiles
+
     script:
     """
     """
@@ -157,15 +158,51 @@ process filterSynteny {
     # for now, do a very simple stub
     # later comment out the out2 and out3 lines to test with a single synteny output
     out1="outdir1"
-    echo "4: synteny file saved to \${out1}/synteny_input.tsv" >> "\${out1}/synteny_input.tsv"
-    echo "4: fasta file saved to \${out1}/\${out1}.fasta" >> "\${out1}/\${out1}.fasta"
+    mkdir -p \$out1
+    echo "4: synteny file saved to \${out1}/synteny_summary.tsv" > "\${out1}/synteny_summary.tsv" 
+    # by design, synteny_summary.tsv is uniformly named, but won't these clobber each other?
+    # Alternatively, after they're created we don't rely on them being named anything in particular,
+    # so we could rename them :)
+    # mv "\${out1}/synteny_summary.tsv" "\${out1}/*_synteny_summary.tsv" 
+    echo "4: fasta file saved to \${out1}.fasta" > "\${out1}.fasta"
+    echo "4: benchmarking file saved to \${out1}/\${out1}_benchmarking.txt" > "\${out1}/\${out1}_benchmarking.txt"
+    echo "print the number of lines minus 1 in the synteny_summary.tsv file, and the number of lines divided by 2 in the fasta" >> "\${out1}/\${out1}_benchmarking.txt"
 
     out2="outdir2"
-    echo "4: synteny file saved to \${out2}/synteny_input.tsv" >> "\${out2}/synteny_input.tsv"
-    echo "4: fasta file saved to \${out2}/\${out2}.fasta" >> "\${out2}/\${out2}.fasta"
+    mkdir -p \$out2
+    echo "4: synteny file saved to \${out2}/synteny_summary.tsv" > "\${out2}/synteny_summary.tsv"
+    # mv "\${out2}/synteny_summary.tsv" "\${out2}/*_synteny_summary.tsv" 
+    echo "4: fasta file saved to \${out2}.fasta" > "\${out2}.fasta"
+    echo "4: benchmarking file saved to \${out2}/\${out2}_benchmarking.txt" > "\${out2}/\${out2}_benchmarking.txt"
+    echo "print the number of lines minus 1 in the synteny_summary.tsv file, and the number of lines divided by 2 in the fasta" >> "\${out2}/\${out2}_benchmarking.txt"
 
     out3="outdir3"
-    echo "4: synteny file saved to \${out3}/synteny_input.tsv" >> "\${out3}/synteny_input.tsv"
-    echo "4: fasta file saved to \${out3}/\${out3}.fasta" >> "\${out3}/\${out3}.fasta"
+    mkdir -p \$out3
+    echo "4: synteny file saved to \${out3}/synteny_summary.tsv" > "\${out3}/synteny_summary.tsv"
+    # mv "\${out3}/synteny_summary.tsv" "\${out3}/*_synteny_summary.tsv" 
+    echo "4: fasta file saved to \${out3}.fasta" > "\${out3}.fasta"
+    echo "4: benchmarking file saved to \${out3}/\${out3}_benchmarking.txt" > "\${out3}/\${out3}_benchmarking.txt"
+    echo "print the number of lines minus 1 in the synteny_summary.tsv file, and the number of lines divided by 2 in the fasta" >> "\${out3}/\${out3}_benchmarking.txt"
+
+    for outdir in \${PWD}/*/; do # PWD to get the working directory of the current process
+        dirName="\$(basename "\$outdir")" # extract the name of the deepest directory, e.g. "outdir1"
+        mv "\${outdir}/synteny_summary.tsv" "\${outdir}/\${dirName}_synteny_summary.tsv" # give unique names so they don't clobber each other
+    done
+    """
+}
+
+process collectSyntenyBenchmarking {
+    input:
+    path benchmark_file
+    path syntenyBenchmarking
+
+    output:
+    path "benchmarking_synteny.txt"
+
+    script:
+    """
+    cat "${benchmark_file}" > "benchmarking_synteny.txt"
+    echo "No longer filtering the file from the original BLAST. Instead, for each synteny search, a subset is taken from the hits that closely resemble sequences in the original BLAST." >> "benchmarking_synteny.txt"
+    cat ${syntenyBenchmarking} >> "benchmarking_synteny.txt" # don't put quotes around syntenyBenchmarking; let it expand if there are multiple, and cat them all
     """
 }
