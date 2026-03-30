@@ -1,34 +1,28 @@
 process processMetadata {
+    conda "${workflow.projectDir}/envs/metadata-magnet-env.yaml"
+
     input:
     path input_file
+    path categoryFile
+    path subcategoryFile
 
     output:  
-    path "${inputBasename}_processedMetadata.txt"
+    path "${inputBasename}_processedMetadata.blast"
 
     script:
     inputBasename = input_file.simpleName
     """
-    # you can now pass an outname to metadata_processing_wrapper.sh
-    # use -o "processedMetadata.txt" or whatever the output filename is
+    projDir="${workflow.projectDir}"
+    outname="${inputBasename}_processedMetadata.blast"
+
+    bash "\$projDir/../scripts/metadata_processing_wrapper.sh" -f ${input_file} -o "\$outname" -c ${categoryFile} -s ${subcategoryFile}
     """
 
     stub:
     inputBasename = input_file.simpleName
     """
-    cat "${input_file}" > "${inputBasename}_processedMetadata.txt"
-    echo "metadata processing process" >> "${inputBasename}_processedMetadata.txt"
-    wc -l "${inputBasename}_processedMetadata.txt" >> "${inputBasename}_processedMetadata.txt" 
+    cat "${input_file}" > "${inputBasename}_processedMetadata.blast"
+    echo "metadata processing process" >> "${inputBasename}_processedMetadata.blast"
+    wc -l "${inputBasename}_processedMetadata.blast" >> "${inputBasename}_processedMetadata.blast" 
     """
-    
-    // output:
-    // path "foo.txt"
-
-    // script:
-    // """
-    // """
-
-    // stub:
-    // """
-    // echo "foo" > "foo.txt"
-    // """
 }

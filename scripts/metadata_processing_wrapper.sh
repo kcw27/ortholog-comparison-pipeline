@@ -5,7 +5,7 @@ print_help() {
     echo "Usage: $0 -f <metadata_file> -o <out> -c <category_file> -s <subcategory_file>"
     echo ""
     echo "  -f    Path to metadata file"
-    echo "  -o    Output filename (optional, default "")"
+    echo "  -o    Output filename (optional, default "" to overwrite the input file)"
     echo "  -c    Path to category file"
     echo "  -s    Path to subcategory file"
     echo "  -h    Show help message and exit"

@@ -11,7 +11,7 @@ print_help() {
     echo "  -i    Path to BLAST query FASTA"
     echo "  -o    Name of output file"
     echo "  -m    Max target seqs to return per sequence in query FASTA"
-    echo "  -s    Use -parse_seqids flag (default: false). Use only if the original BLAST db was built using -parse_seqids."
+    echo "  -s    Separate column 2 formatted as "genomeID-proteinID" into "genomeID" col1 and "proteinID" col2 (default false)"
     echo "  -h    Show help message and exit"
 }
 
@@ -22,7 +22,7 @@ parse="false"
 # Parse options with getopts (not GNU getopts, as that causes issues on Mac systems)
 while getopts "p:d:i:o:m:sh" opt; do
   case $opt in
-    p) db_path="$OPTARG" ;;
+    p) db_path="$OPTARG" ;; 
     d) db_name="$OPTARG" ;;
     i) query="$OPTARG" ;;
     o) outfile="$OPTARG" ;;
@@ -41,17 +41,25 @@ if [[ -z "$db_path" || -z "$db_name" || -z "$query" || -z "$outfile" ]]; then
 fi
 
 # run script
-cd $db_path # so that it can find the blast database
+db_path_and_name="${db_path%/}/$db_name" # remove trailing slash from db_path
 procs_to_use=$(( $(nproc) / 4 ))
 mkdir -p $(dirname $outfile) # make the outdir if it doesn't exist already
 scriptsdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) # get location of current script; this is where the other scripts are found too
 
 tempBlast=$(mktemp)
 echo "Running BLAST... Temp file at $tempBlast"
-if [[ "$parse" == "true" ]]; then
-  blastp -db "$db_name" -query "$query" -max_target_seqs "$max" -num_threads $procs_to_use -outfmt "6 sallgi sallseqid sseq evalue salltitles" -parse_seqids -out $tempBlast
-else
-  blastp -db "$db_name" -query "$query" -max_target_seqs "$max" -num_threads $procs_to_use -outfmt "6 sallgi sallseqid sseq evalue salltitles" -out $tempBlast
+blastp -db "$db_path_and_name" -query "$query" -max_target_seqs "$max" -num_threads $procs_to_use -outfmt "6 sallgi sallseqid sseq evalue salltitles" -out $tempBlast
+
+# separate ID only if requested
+if [[ "$parse" == "true" ]]; then 
+  # safeguard: is there actually a "-" delimiter in the protein ID column? If not, there's no way it has both a genome ID and protein ID.
+  firstProteinID=$(head -n 1 "$tempBlast" | cut -f 2)
+  if [[ "$firstProteinID" == *"-"* ]]; then # check for "-" delimiter
+    echo "Separating genome IDs from protein IDs."
+    bash "${scriptsdir}/separate_ids.sh" "$tempBlast"
+  else
+    echo "ID separation was requested, but there is no genome ID in the protein ID column."
+  fi
 fi
 
 # add organisms column

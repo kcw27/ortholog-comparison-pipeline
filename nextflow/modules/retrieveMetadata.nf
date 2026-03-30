@@ -136,7 +136,8 @@ process foo_metadata {
 
     script:
     """
-    cat "${input_file}" > "foo_metadata.txt"
+    cat "/home/kcw2/ortholog-comparison-pipeline/example_run/path1/PA3565_hits_filtered_metadata.blast" > "foo_metadata.txt"
+    cat "${input_file}" >> "foo_metadata.txt"
     echo "foo metadata" >> "foo_metadata.txt"
     wc -l "foo_metadata.txt" >> "foo_metadata.txt"
     """

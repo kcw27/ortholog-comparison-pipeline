@@ -2,20 +2,37 @@
  * BLAST the query FASTA against the provided BLAST database
  */
 process runBlast {
+    conda "${workflow.projectDir}/envs/metadata-magnet-env.yaml"
 
     input:
     path queryFasta
     path blastPath
     val blastName
+    val separateIDs
 
     output:
     path "*_hits.blast", emit: blast
     path "benchmarking.txt", emit: benchmark
-    // path "has_genome_ids.tmp", emit: hasGenomeIDsFile
+    path "blastSummaryFigures/", emit: figures
 
     script:
     """
-    
+    projDir="${workflow.projectDir}"
+    inputf="${queryFasta}"
+    outname="\${inputf%.*}_hits.blast"
+
+    sepIDString="${separateIDs}"
+    if [[ "\$sepIDString" == "true" ]]; then # use the -s flag
+        bash "\$projDir/../scripts/blast_processing/run_local_blast.sh" -p ${blastPath} -d ${blastName} -i ${queryFasta} -o "\$outname" -s
+    else
+        bash "\$projDir/../scripts/blast_processing/run_local_blast.sh" -p ${blastPath} -d ${blastName} -i ${queryFasta} -o "\$outname"
+    fi
+
+    # summarize BLAST outputs
+    Rscript "\$projDir/../scripts/blast_processing/summarize_blast.R" "\$outname" "blastSummaryFigures" > "benchmarking.txt"
+
+    lineCount=\$(wc -l "\$outname" | cut -f 1 -d " ")
+    echo "Number of hits from original BLAST: \$lineCount" >> "benchmarking.txt"
     """
 
     stub:
@@ -42,6 +59,8 @@ process runBlast {
 
     lineCount=\$(wc -l "\$outname" | cut -f 1 -d " ")
     echo "Number of hits from original BLAST: \$lineCount" > "benchmarking.txt"
+
+    mkdir "blastSummaryFigures"
 
     ### decided to move the GID check to the filter-to-top-per-genome process unless I can make it work here
     # assume that if the first genome ID is 0, all genome IDs are 0 and therefore you need to get genome IDs from NCBI esearch

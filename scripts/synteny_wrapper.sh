@@ -74,6 +74,8 @@ while getopts "g:i:L:d:m:" opt; do
   esac
 done
 
+sed -i 's/\r$//' "$input_file" # clean this file of Windows-style return characters, which otherwise would be baked into outdir names
+
 wrapperdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) # get location of current script
 scriptsdir="${wrapperdir}/synteny_search" # this is where I put the scripts
 log="${wrapperdir}/synteny_wrapper_log.txt"

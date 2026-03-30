@@ -11,8 +11,11 @@ process produceFasta {
     script:
     inputBasename = input_file.simpleName
     """
-    # this process is only supposed to run on metadata files not obtained through synteny search
+    # this process is only supposed to run on metadata files not obtained through synteny search; signal is only true if no synteny search was done
     # when you pass values to this, make sure it gets one file as input
+    projDir="${workflow.projectDir}"
+    bash "\$projDir/../scripts/blast_processing/convert_blast_to_fasta.sh" -b ${input_file} -r -g -c 'locus' 
+    # in this case, removing gap characters is fine because  
     """
 
     stub:

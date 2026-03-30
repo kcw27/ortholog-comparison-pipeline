@@ -166,6 +166,10 @@ write_metadata() {
       # get the sequencing technology
       seq_tech=$(zcat $genbank_file | grep -oP '(?<=Sequencing Technology  :: ).*' | head -n 1)
       
+      # get assembly method and coverage too
+      asm_method=$(zcat $genbank_file | awk '$0 ~/Assembly Method/ { sub(/^[^:]*[: ]+/, ""); print }' | head -n 1 )
+      genome_coverage=$(zcat $genbank_file | awk '$0 ~/Genome Coverage/ { sub(/^[^:]*[: ]+/, ""); print }' | head -n 1)
+      
       # Now iterate through contig_ids and locus_tags simultaneously, pulling the corresponding metadata and then writing it to the output file
       paste <(echo "$contig_ids" | tr ' ' '\n') <(echo "$locus_tags" | tr ' ' '\n') | while read contig locus; do
        # echo  Contig ID: $contig, Locus Tag: $locus" # write $contig and $locus to the file later
@@ -181,7 +185,7 @@ write_metadata() {
         # write metadata for this protein to the summary file, tab-separated
         #echo "$genome_id	$contig	$organism	$isolation_source	$title	$locus	$protein_id	$sequence"
         #echo "Should write to ${outdir}/synteny_summary.tsv"
-        echo "$genome_id	$contig	$organism	$isolation_source	$titles	$locus	$protein_id	$sequence	$seq_tech	$isolation_site" >> "${outdir}/synteny_summary.tsv"
+        echo "$genome_id	$contig	$organism	$isolation_source	$titles	$locus	$protein_id	$sequence	$seq_tech	$asm_method	$genome_coverage	$isolation_site" >> "${outdir}/synteny_summary.tsv"
       done
     #else
       #echo "No hits found for ${output_genome}"
@@ -201,7 +205,7 @@ write_metadata() {
 # Iterate over column 2 of the input file and parallelize metadata extraction
 cut -f2 "$input_file" | while read -r outdir; do
   outdir=${outdir%/}
-  echo "genome_id	contig	organism	isolation_source	titles	locus_tag	protein_id	sequence	seq_tech	isolation_site" > "${outdir}/synteny_summary.tsv"  # Create a blank summary file for this synteny structure
+  echo "genome_id	contig	organism	isolation_source	titles	locus_tag	protein_id	sequence	seq_tech	assembly_method	genome_coverage	isolation_site" > "${outdir}/synteny_summary.tsv"  # Create a blank summary file for this synteny structure
   # renaming the "locus" column to "locus_tag" for consistency with blast2gen.py, which has been updated to include a locus tag column.
   export -f write_metadata
   
