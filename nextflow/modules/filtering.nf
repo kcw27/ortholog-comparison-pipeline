@@ -159,6 +159,13 @@ process filterSynteny {
 
     script:
     """
+    # run synteny wrapper
+
+    # then run the intersection script
+    tempDir=$(pwd) # to keep temp files in the work directory
+    # pass this as -t to the intersection script
+
+    # only after the intersection script is done do you rename the synteny summary files, since the intersection script expects them to have unchanged names
     """
 
     stub:
