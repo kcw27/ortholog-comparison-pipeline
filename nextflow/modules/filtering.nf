@@ -148,24 +148,68 @@ process filterSynteny {
     // for the synteny search
     tuple path(genomeDBsynteny), path(syntenyInput), path(hmmsList), path(hmmsDir), path(hmmsMetadata)
 
-    // for the intersection
-    tuple val(keepSyntenyFasta), val(intersectPident), val(intersectQcovs), val(blastFiles) 
+    // additional arguments for the intersection
+    tuple val(keepSyntenyFasta), val(intersectPident), val(intersectQcovs), val(blastFile)
 
     output:
     // path "*/synteny_summary.tsv", emit: metadataFiles // synteny output dirs will be saved as subdirs of this
     path "*/*_synteny_summary.tsv", emit: syntenySummaries // synteny output dirs will be saved as subdirs of this
-    path "*.fasta", emit: fastaFiles
+    path "*/*_filteredSynteny_*.fasta", emit: fastaFiles
     path "*/*_benchmarking.txt", emit: benchmarkFiles
 
     script:
     """
+    projDir="${workflow.projectDir}"
+    echo ${genomeDBsynteny} ${syntenyInput} ${hmmsList} ${hmmsDir} ${hmmsMetadata} ${blastFile} ${syntenyInput} ${intersectPident} ${intersectQcovs} ${keepSyntenyFasta}
+
     # run synteny wrapper
+    bash "\$projDir/../scripts/synteny_wrapper.sh" -g ${genomeDBsynteny} -i ${syntenyInput} -L ${hmmsList} -d ${hmmsDir} -m ${hmmsMetadata}
 
     # then run the intersection script
-    tempDir=$(pwd) # to keep temp files in the work directory
-    # pass this as -t to the intersection script
+    if [[ "${keepSyntenyFasta}" == "true" ]]; then
+        bash "\$projDir/../scripts/synteny_search/intersect_blast_and_synteny_pairwiseBlastApproach.sh" \
+            -b ${blastFile} \
+            -s ${syntenyInput} \
+            -m \
+            -p ${intersectPident} \
+            -q ${intersectQcovs} \
+            -c "locus" \
+            -k ${keepSyntenyFasta} \
+            -t "\${PWD}/temp"
+    else
+        bash "\$projDir/../scripts/synteny_search/intersect_blast_and_synteny_pairwiseBlastApproach.sh" \
+            -b ${blastFile} \
+            -s ${syntenyInput} \
+            -m \
+            -p ${intersectPident} \
+            -q ${intersectQcovs} \
+            -c "locus" \
+            -t "\${PWD}/temp" 
+    fi
 
     # only after the intersection script is done do you rename the synteny summary files, since the intersection script expects them to have unchanged names
+    # also rename the fastas
+    for outdir in \${PWD}/*/; do
+        dirName="\$(basename "\$outdir")"
+
+        if [[ -f "\${outdir}/synteny_summary.tsv" ]]; then
+            mv "\${outdir}/synteny_summary.tsv" "\${outdir}/\${dirName}_synteny_summary.tsv"
+
+            # find the single fasta file matching the pattern
+            fastaFile=\$(ls \${outdir}/filteredSynteny_*.fasta 2>/dev/null)
+
+            if [[ -n "\$fastaFile" ]]; then
+                baseFasta="\$(basename "\$fastaFile")"
+                mv "\$fastaFile" "\${outdir}/\${dirName}_\$baseFasta"
+            else
+                echo "Warning: no filteredSynteny_*.fasta found in \${outdir}"
+            fi
+
+            current_benchmark="\${outdir}/\${dirName}_benchmarking.txt"
+            echo "There are \$(expr \$(wc -l "\${outdir}/\${dirName}_synteny_summary.tsv" | cut -f 1 -d " ") - 1) hits for the synteny structure corresponding to outdir \$dirName." > "\$current_benchmark"
+            echo "Of these, \$(expr \$(wc -l "\${outdir}/\${dirName}_\$baseFasta" | cut -f 1 -d " ") / 2) hits intersected with the original BLAST for your query." >> "\$current_benchmark"
+        fi
+    done
     """
 
     stub:
@@ -218,6 +262,7 @@ process collectSyntenyBenchmarking {
     script:
     """
     cat "${benchmark_file}" > "benchmarking_synteny.txt"
+    echo "" >> "benchmarking_synteny.txt"
     echo "No longer filtering the file from the original BLAST. Instead, for each synteny search, a subset is taken from the hits that closely resemble sequences in the original BLAST." >> "benchmarking_synteny.txt"
     cat ${syntenyBenchmarking} >> "benchmarking_synteny.txt" # don't put quotes around syntenyBenchmarking; let it expand if there are multiple, and cat them all
     """

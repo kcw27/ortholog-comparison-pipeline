@@ -25,7 +25,7 @@ print_help() {
     echo "  -b    Required. Path to BLAST file in which the first five columns are sgi sseqid sseq evalue stitle."
     echo "  -s    Required. Either a path to a single summary file from synteny search via synteny_wrapper.sh (which calls find_synteny_hits.sh),"
     echo "                  or a path to a synteny input file in which the listed outdirs are assumed to contain synteny_summary.tsv files."
-    echo "  -m    Optional. If true, treats the -s input as a file referring to multiple outdirs and thus multiple summary files (default false)."
+    echo "  -m    Optional. If true, treats the -s input as a file referring to (potentially) multiple outdirs and thus multiple summary files (default false)."
     echo "  -p    Optional. Pident threshold for filtering, discarding any hits with pident lower than this (default = 99)."
     echo "  -q    Optional. qcovs threshold for filtering, discarding any hits with pident lower than this (default = 90)."
     echo "  -c    Optional. Concatenation mode for convert_blast_to_fasta.sh (default = 'no')."
