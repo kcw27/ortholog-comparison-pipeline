@@ -28,8 +28,10 @@ process produceFasta {
 }
 
 process alignFasta {
+    conda "${workflow.projectDir}/envs/metadata-magnet-env.yaml"
+
     input:
-    path input_file
+    path input_file // fasta
 
     output:  
     path "${inputBasename}_aligned.fasta"
@@ -37,6 +39,14 @@ process alignFasta {
     script:
     inputBasename = input_file.simpleName
     """
+    seqCount=\$(grep '^>' ${input_file} | wc -l) # check for lines starting with >
+    echo "There are \$seqCount sequences in the input FASTA."
+
+    if [ "\$seqCount" -le 1000 ]; then # <= 1000 seqs: use full MUSCLE algorithm, since the size is reasonably small
+        muscle -align ${input_file} -output "${inputBasename}_aligned.fasta"
+    else # use super5 for larger datasets
+        muscle -super5 ${input_file} -output "${inputBasename}_aligned.fasta"
+    fi
     """
 
     stub:

@@ -34,7 +34,20 @@ process filterToEvalue {
     
     script:
     """
-    # use evalue for -t 
+    projDir="${workflow.projectDir}"
+
+    # call the function
+    bash "\$projDir/../scripts/blast_processing/filter_blast_by_evalue.sh" -t ${evalue} -f ${inputFile}
+
+    # write benchmarking outputs
+    inputf="${inputFile}"
+    thr="${evalue}"
+    output="\${inputf%.*}_evalueThreshold_\${thr}.blast"
+
+    lineCount=\$(wc -l "\$output" | cut -f 1 -d " ")
+    newBenchmarkFile="benchmarking_evalue.txt"
+    cat ${benchmark_file} > \$newBenchmarkFile
+    echo "Number of hits remaining after filtering to evalue <= ${evalue}: \$lineCount" >> \$newBenchmarkFile
     """
 
     stub:
@@ -71,6 +84,19 @@ process filterToOrganism {
     
     script:
     """
+    projDir="${workflow.projectDir}"
+
+    # call the function
+    bash "\$projDir/../scripts/blast_processing/get_blast_top_hits_by_organism.sh" -f ${inputFile}
+
+    # write benchmarking outputs
+    inputf="${inputFile}"
+    output="\${inputf%.*}_topPerOrganism.blast"
+
+    lineCount=\$(wc -l "\$output" | cut -f 1 -d " ")
+    newBenchmarkFile="benchmarking_organism.txt"
+    cat ${benchmark_file} > \$newBenchmarkFile
+    echo "Number of hits remaining after filtering to top hit per organism: \$lineCount" >> \$newBenchmarkFile
     """
 
     stub:
@@ -107,10 +133,27 @@ process filterToGenome {
     
     script:
     """
-    # genome ID col will be col 1
+    projDir="${workflow.projectDir}"
+    inputf="${inputFile}"
+    output="\${inputf%.*}_topPerGenome.blast"
+
+    # call the function
+    # genome ID col will be col 1, which is the default
     # determine whether to use -r based on hasHeader
-    # -f is inputFile
-    # output is auto-nsmed.
+    if [[ "${hasHeader}" == "true" ]]; then
+        echo "Input file has header"
+        bash "\$projDir/../scripts/blast_processing/get_blast_top_hits_by_genomeID.sh" -r -f ${inputFile}
+        lineCount=\$(expr \$(wc -l "\$output" | cut -f 1 -d " ") - 1) # don't count the header
+    else
+        echo "Input file does not have header"
+        bash "\$projDir/../scripts/blast_processing/get_blast_top_hits_by_genomeID.sh" -f ${inputFile}
+        lineCount=\$(wc -l "\$output" | cut -f 1 -d " ")
+    fi
+
+    # write benchmarking outputs
+    newBenchmarkFile="benchmarking_genome.txt"
+    cat ${benchmark_file} > \$newBenchmarkFile
+    echo "Number of hits remaining after filtering to top hit per genome: \$lineCount" >> \$newBenchmarkFile
     """
 
     stub:
@@ -208,6 +251,7 @@ process filterSynteny {
             current_benchmark="\${outdir}/\${dirName}_benchmarking.txt"
             echo "There are \$(expr \$(wc -l "\${outdir}/\${dirName}_synteny_summary.tsv" | cut -f 1 -d " ") - 1) hits for the synteny structure corresponding to outdir \$dirName." > "\$current_benchmark"
             echo "Of these, \$(expr \$(wc -l "\${outdir}/\${dirName}_\$baseFasta" | cut -f 1 -d " ") / 2) hits intersected with the original BLAST for your query." >> "\$current_benchmark"
+            echo "(Intersected using a pairwise blast of synteny structure hits against the original BLAST hits, requiring at least ${intersectPident} pident and ${intersectQcovs} qcovs to consider a BLAST hit to be a match.)" >> "\$current_benchmark"
         fi
     done
     """

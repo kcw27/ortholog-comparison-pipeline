@@ -1,7 +1,25 @@
+# for a blast that doesn't have genome IDs
 queryFasta: 'data/PAO1_PA3565.fasta'
 blastPath: 'data/toydb/'
 blastName: 'toydb'
 
+# # alternatively: for the one with genome IDs, use a small version of the new pseudomonas db
+# separateIDs: 'true' # need this to leverage the genome IDs, and it's necessary in order for metadata retrieval to work because it can't recognize the merged IDs
+# blastPath: 'data/toydb_withGenomeIDs/'
+# blastName: 'toydb_withGenomeIDs'
+
+### filtering params; can comment out block by block
+# evalue filtering
+evalueThreshold: '1e-40'
+
+# organism filtering
+filterByOrganism: 'true'
+
+# genome filtering
+filterByGenome: 'true'
+entrezEmail: 'kcw2@andrew.cmu.edu'
+
+# synteny filtering
 genomeDBsynteny: 'data/synteny_search_inputs/genome_db/'
 syntenyInput: 'data/synteny_search_inputs/synteny_input.tsv'
 hmmsList: 'data/synteny_search_inputs/hmms_of_interest.txt'

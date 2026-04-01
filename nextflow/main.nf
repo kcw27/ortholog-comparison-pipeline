@@ -1,16 +1,16 @@
 #!/usr/bin/env nextflow
 include { runBlast } from './modules/runBlast.nf'
-include { foo; bar} from './modules/filtering.nf'
+// include { foo; bar} from './modules/filtering.nf'
 include { filterToEvalue; filterToOrganism; filterToGenome as filterToGenome_noMetadata; filterToGenome as filterToGenome_withMetadata; filterSynteny; collectSyntenyBenchmarking } from './modules/filtering.nf' 
-include { foo_metadata as foo_metadata_beforeFiltering; foo_metadata as foo_metadata_afterFiltering; bar_metadata } from './modules/retrieveMetadata.nf'
+// include { foo_metadata as foo_metadata_beforeFiltering; foo_metadata as foo_metadata_afterFiltering; bar_metadata } from './modules/retrieveMetadata.nf'
 include { retrieveMetadata as retrieveMetadata_beforeFiltering; retrieveMetadata as retrieveMetadata_afterFiltering } from './modules/retrieveMetadata.nf'
 include { processMetadata } from './modules/processMetadata.nf' 
 include { produceFasta; alignFasta } from './modules/processFasta.nf' 
-include { FILTER1 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter1.nf'
-include { FILTER2 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter2.nf'
-include { filter3NeedSignal as filter3_noMetadata; filter3NeedSignal as filter3_withMetadata } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter3.nf'
-include { filter4WithMultipleOutputs } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter4.nf'
-include { FINAL } from '/home/kcw2/test_scripts/nextflow_tests/modules/finalStep.nf'
+// include { FILTER1 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter1.nf'
+// include { FILTER2 } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter2.nf'
+// include { filter3NeedSignal as filter3_noMetadata; filter3NeedSignal as filter3_withMetadata } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter3.nf'
+// include { filter4WithMultipleOutputs } from '/home/kcw2/test_scripts/nextflow_tests/modules/filter4.nf'
+// include { FINAL } from '/home/kcw2/test_scripts/nextflow_tests/modules/finalStep.nf'
 
 params {
     // required inputs for initial blast
@@ -44,6 +44,9 @@ params {
     entrezEmail: String
     splitSize: String
 
+    // alternatively, provide a metadata file from a previous run and skip the retrieval
+    existingMetadata: Path
+
     // metadata categorization
     category: Path
     subcategory: Path
@@ -53,9 +56,7 @@ params {
 }
 
 workflow {
-    main:
-    // bar()
-    
+    main:    
     def metadata = Channel.empty() // May contain multiple values if performing synteny search
     def fasta = Channel.empty() // AMay contain multiple values if performing synteny search
     def alignedFasta = Channel.empty() // may or may not align FASTA, but either way, initialize it so there are no errors with publishing
@@ -115,7 +116,7 @@ workflow {
                     hasGIDs_result.yes,
                     currentBlast,
                     benchmarking,
-                    hasGIDs_result.yes
+                    hasGIDs_result.yes.map { "false" }
                 )
 
             
@@ -184,6 +185,12 @@ workflow {
         // after filtering, retrieve metadata (if it hasn't already been obtained in steps 3 and/or 4 of filtering)
         // metadata.view{v -> "metadata channel contents: $v"}
 
+        if (params.existingMetadata != null) {
+            println("Loading the provided metadata.")
+            def addThisMetadata = channel.fromPath(params.existingMetadata)
+            metadata = metadata.mix(addThisMetadata)
+        }
+
         def metadataCheck = metadata
         .ifEmpty { "true" }
         // metadataCheck.view{v-> "Value of metadataCheck: $v"}
@@ -191,11 +198,15 @@ workflow {
         def metadataIsEmpty = metadataCheck.filter { it == "true" }
         // metadataIsEmpty.view{v-> "Value of metadataIsEmpty: $v"}
 
-        foo_metadata_afterFiltering(metadataIsEmpty, currentBlast)
+        retrieveMetadata_afterFiltering(metadataIsEmpty.map { "true" },
+            currentBlast, 
+            params.splitSize, 
+            params.entrezEmail
+        )
 
 
         // Process the final metadata
-        def finalMetadata = metadata.mix(foo_metadata_afterFiltering.out)//.view{ content -> "Contents of finalMetadata channel: $content" } 
+        def finalMetadata = metadata.mix(retrieveMetadata_afterFiltering.out)//.view{ content -> "Contents of finalMetadata channel: $content" } 
         metadata = processMetadata(finalMetadata, params.category, params.subcategory) // will publish this
 
         // produce a FASTA from the current blast only if synteny search hasn't been performed (i.e. only if the fasta channel is still empty)

@@ -1,4 +1,6 @@
 process retrieveMetadata {
+    conda "${workflow.projectDir}/envs/metadata-magnet-env.yaml"
+
     input:
     val signal
     path inputFile // a blast file
@@ -8,107 +10,122 @@ process retrieveMetadata {
     // but for now we're just using blast2gen.py
 
     output:
-    path "*_metadata.tsv" 
+    path "*_metadata.blast" 
 
     when:
     signal == "true"
 
     script:
-    //  // when the time comes, uncomment, move to script block, and fix it up
-    // set -euo pipefail
-    
-    // retrieveMetadata() {
-    //     MAX_RETRIES=3
-    //     BACKOFF=30   # seconds
-    //     retrievalLog='retrieveMetadata.log'
-    //     > \$retrievalLog
-
-    //     local blastSegment="\$1"
-    //     local metadataSegment="\${blastSegment%.*}_metadata.blast" # the output
-
-    //     echo "Starting \$blastSegment" >> \$retrievalLog
-    //     echo "=== Log for \$blastSegment started at \$(date +"%Y-%m-%d %H:%M:%S") ===" >> \$retrievalLog
-
-    //     local attempt=1
-    //     while (( attempt <= MAX_RETRIES )); do
-    //         echo "Attempt \$attempt for \$blastSegment" >> \$retrievalLog
-
-    //         awk '{print \$0 "_METADATA-TAG AND \${metadataSegment} AND ${email}"}' \$blastSegment > \$metadataSegment & # in real script, replace this with the actual blast2gen.py call, with email param
-
-    //         pid=\$!
-    //         echo "PID: \$pid" >> \$retrievalLog
-
-    //         # Wait for job to finish
-    //         if wait "\$pid"; then # indicates that the job has exited with an error code of 0
-    //             # once job is done, check if file exists; treat as a failure otherwise
-    //             # theoretically, if the job exits successfully then 
-    //             if [[ -f "\$metadataSegment" ]]; then
-    //                 echo "Success on attempt \$attempt" >> \$retrievalLog
-    //                 echo "Finished \$blastSegment successfully" >> \$retrievalLog
-    //                 return
-    //             else 
-    //                 echo "Failure on attempt \$attempt; file was not written to \$metadataSegment" >> \$retrievalLog
-    //                 (( attempt++ ))
-    //                 if (( attempt <= MAX_RETRIES )); then
-    //                     echo "Retrying after \$BACKOFF seconds..." >> \$retrievalLog
-    //                     sleep "\$BACKOFF"
-    //                 fi
-    //             fi
-    //         else # reach this block if the job has failed, e.g. from an unhandled exception in the script
-    //             echo "Failure on attempt \$attempt; job has crashed" >> \$retrievalLog
-    //             (( attempt++ ))
-    //             if (( attempt <= MAX_RETRIES )); then
-    //                 echo "Retrying after \$BACKOFF seconds..." >> \$retrievalLog
-    //                 sleep "\$BACKOFF"
-    //             fi
-    //         fi
-    //     done
-
-    //     echo "FAILED after \$MAX_RETRIES attempts: \$blastSegment" >> \$retrievalLog
-    //     echo "=== FAILED after \$MAX_RETRIES attempts ===" >> \$retrievalLog
-    // }
-
-    // # assume that if the first genome ID is 0, all genome IDs are 0 and therefore you need to get genome IDs from NCBI esearch
-    // # and that if the first genome ID isn't 0, then you do have genome IDs
-    // firstGID=\$(head -n 1 queryHits.blast | cut -f 1)
-
-    // projDir="${workflow.projectDir}"
-    // head "\$projDir/../scripts/blast_processing/blast2gen.py"
-
-    // inputf="${inputFile}"
-    // output="\${inputf%.*}_metadata.tsv"
-    
-    // cat "\${inputf}" > "\$output"
-
-    // if [[ "\$firstGID" == "0" ]]; then # do need to get metadata
-    //     head "\$projDir/../scripts/blast_processing/blast2gen.py" 
-        
-    //     # file splitting
-    //     split -d -a 2 -l \$splitSize \$inputFile splitFile_part --additional-suffix=.blast
-
-    //     # sequential retrieval
-    //     # it's guaranteed to run on only one file at a time because the wait pid in retrieveMetadata blocks, and it won't return until completed
-    //     for file in splitFile_part*; do
-    //         echo "Processing: \$file"
-    //         retrieveMetadata "\$file"
-    //     done
-
-    //     # re-joining all the metadata parts, saving to metadataFilePath
-    //     # first write the header of the first file, splitFile_part00.blast
-    //     head -n 1 "splitFile_part00.blast" > "temp.tmp"
-
-    //     # then write everything after the header in all the files matching the pattern
-    //     tail -n +2 -q splitFile_part*.blast >> "temp.tmp" # q option so it doesn't write filenames to the file, and no quotes around input filenames so the wildcard works
-
-    //     echo "\$output" > "file_containing_metadata_path.txt" # is it okay to overwrite the input BLAST file with blast2gen.py? probably 
-    //     mv "temp.tmp" \$metadataFilePath"
-    //     echo "3.1: metadata retrieval WAS performed; metadataFilePath is \$metadataFilePath" >> "\$output"
-    // else # in the real script, still need to keep the else block to assign metadataFilePath
-    //     > "file_containing_metadata_path.txt" # writes nothing to the file
-    //     echo "3.1: metadata retrieval NOT performed; metadataFilePath is \$metadataFilePath" >> "\$output"
-    // fi
     """
+    set -euo pipefail
+    
+    retrieveMetadata() {
+        MAX_RETRIES=3
+        BACKOFF=30   # seconds
 
+        local blastSegment="\$1"
+        local metadataSegment="\$PWD/\${blastSegment%.*}_metadata.temp" # the output; need the dir (PWD) on it so that fetch_info has an outdir to write to
+        echo "blastSegment \$blastSegment, metadataSegment \$metadataSegment" > \$retrievalLog
+
+        echo "Starting \$blastSegment" >> \$retrievalLog
+        echo "=== Log for \$blastSegment started at \$(date +"%Y-%m-%d %H:%M:%S") ===" >> \$retrievalLog
+
+        local attempt=1
+        while (( attempt <= MAX_RETRIES )); do
+            echo "Attempt \$attempt for \$blastSegment" >> \$retrievalLog
+
+            projDir="${workflow.projectDir}"
+            python "\$projDir/../scripts/blast_processing/blast2gen.py" "\$blastSegment" "\$metadataSegment" "${email}" &
+
+            pid=\$!
+            echo "PID: \$pid" >> \$retrievalLog
+
+            # Wait for job to finish
+            if wait "\$pid"; then # indicates that the job has exited with an error code of 0, i.e. successfully
+                # once job is done, check if file exists; treat as a failure otherwise
+                # theoretically, if the job exits successfully then 
+                if [[ -f "\$metadataSegment" ]]; then
+                    echo "Success on attempt \$attempt" >> \$retrievalLog
+                    echo "Finished \$blastSegment successfully" >> \$retrievalLog
+                    return
+                else 
+                    echo "Failure on attempt \$attempt; file was not written to \$metadataSegment" >> \$retrievalLog
+                    (( attempt++ ))
+                    if (( attempt <= MAX_RETRIES )); then
+                        echo "Retrying after \$BACKOFF seconds..." >> \$retrievalLog
+                        sleep "\$BACKOFF"
+                    fi
+                fi
+            else # reach this block if the job has failed, e.g. from an unhandled exception in the script
+                echo "Failure on attempt \$attempt; job has crashed" >> \$retrievalLog
+                (( attempt++ ))
+                if (( attempt <= MAX_RETRIES )); then
+                    echo "Retrying after \$BACKOFF seconds..." >> \$retrievalLog
+                    sleep "\$BACKOFF"
+                fi
+            fi
+        done
+
+        echo "FAILED after \$MAX_RETRIES attempts: \$blastSegment" >> \$retrievalLog
+        echo "=== FAILED after \$MAX_RETRIES attempts ===" >> \$retrievalLog
+    }
+
+    inputf="${inputFile}"
+    output="\${inputf%.*}_metadata.blast"
+    export retrievalLog='retrieveMetadata.log'
+    
+    # file splitting
+    split -d -a 2 -l ${splitSize} ${inputFile} "splitFile_part" --additional-suffix=.blast
+
+    # sequential retrieval
+    # it's guaranteed to run on only one file at a time because the wait pid in retrieveMetadata blocks, and it won't return until completed
+    for file in splitFile_part*; do
+        echo "Processing: \$file"
+        retrieveMetadata "\$file"
+    done
+
+    # re-joining all the metadata parts
+    # first write the header of the first metadata file. There's guaranteed to be at least one file.
+    head -n 1 "splitFile_part00_metadata.temp" > "temp.tmp"
+
+    # then write everything after the header in all the files matching the pattern
+    tail -n +2 -q splitFile_part*_metadata.temp >> "temp.tmp" # q flag so it doesn't write filenames to the file, and no quotes around input filenames so the wildcard works
+
+    mv "temp.tmp" "\$output" # rename to the expected output name
+
+
+
+    # # update and uncomment once ready to integrate local database search. Also need to start by checking that the local db variable isn't null.
+    # # assume that if the first genome ID is 0, all genome IDs are 0 and therefore you need to get genome IDs from NCBI esearch
+    # # and that if the first genome ID isn't 0, then you do have genome IDs
+    # firstGID=\$(head -n 1 queryHits.blast | cut -f 1) # replace queryHits.blast with the inputFile variable
+    # if [[ "\$firstGID" == "0" ]]; then # we do need to get metadata from blast2gen.py
+    #     head "\$projDir/../scripts/blast_processing/blast2gen.py" 
+        
+    #     # file splitting
+    #     split -d -a 2 -l \$splitSize \$inputFile splitFile_part --additional-suffix=.blast
+
+    #     # sequential retrieval
+    #     # it's guaranteed to run on only one file at a time because the wait pid in retrieveMetadata blocks, and it won't return until completed
+    #     for file in splitFile_part*; do
+    #         echo "Processing: \$file"
+    #         retrieveMetadata "\$file"
+    #     done
+
+    #     # re-joining all the metadata parts, saving to metadataFilePath
+    #     # first write the header of the first file, splitFile_part00.blast
+    #     head -n 1 "splitFile_part00.blast" > "temp.tmp"
+
+    #     # then write everything after the header in all the files matching the pattern
+    #     tail -n +2 -q splitFile_part*.blast >> "temp.tmp" # q option so it doesn't write filenames to the file, and no quotes around input filenames so the wildcard works
+
+    #     echo "\$output" > "file_containing_metadata_path.txt" # is it okay to overwrite the input BLAST file with blast2gen.py? probably 
+    #     mv "temp.tmp" \$metadataFilePath"
+    #     echo "3.1: metadata retrieval WAS performed; metadataFilePath is \$metadataFilePath" >> "\$output"
+    # else # in the real script, still need to keep the else block to assign metadataFilePath
+    #     > "file_containing_metadata_path.txt" # writes nothing to the file
+    #     echo "3.1: metadata retrieval NOT performed; metadataFilePath is \$metadataFilePath" >> "\$output"
+    # fi
     """
 
     stub:
@@ -117,7 +134,7 @@ process retrieveMetadata {
     head "\$projDir/../scripts/blast_processing/blast2gen.py"
 
     inputf="${inputFile}"
-    output="\${inputf%.*}_metadata.tsv"
+    output="\${inputf%.*}_metadata.blast"
     cat "${inputFile}" > "\$output"
     echo "Called blast2gen.py with arguments: inputFile ${inputFile}, output \$output, email ${email}" >> "\$output"
     """
