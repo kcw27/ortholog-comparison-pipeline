@@ -1,12 +1,12 @@
 # for a blast that doesn't have genome IDs
 queryFasta: 'data/PAO1_PA3565.fasta'
-blastPath: 'data/toydb/'
-blastName: 'toydb'
+# blastPath: 'data/toydb/'
+# blastName: 'toydb'
 
-# # alternatively: for the one with genome IDs, use a small version of the new pseudomonas db
-# separateIDs: 'true' # need this to leverage the genome IDs, and it's necessary in order for metadata retrieval to work because it can't recognize the merged IDs
-# blastPath: 'data/toydb_withGenomeIDs/'
-# blastName: 'toydb_withGenomeIDs'
+# alternatively: for the one with genome IDs, use a small version of the new pseudomonas db
+separateIDs: 'true' # need this to leverage the genome IDs, and it's necessary in order for metadata retrieval to work because it can't recognize the merged IDs
+blastPath: 'data/toydb_withGenomeIDs/'
+blastName: 'toydb_withGenomeIDs'
 
 ### filtering params; can comment out block by block
 # evalue filtering
