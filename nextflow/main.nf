@@ -125,7 +125,8 @@ workflow {
                     hasGIDs_result.no.map { "true" } ,
                     currentBlast,
                     params.splitSize,
-                    params.entrezEmail
+                    params.entrezEmail,
+                    params.genomeDBmetadata
                 )
                 
                 noOutput = filterToGenome_withMetadata(
@@ -201,7 +202,8 @@ workflow {
         retrieveMetadata_afterFiltering(metadataIsEmpty.map { "true" },
             currentBlast, 
             params.splitSize, 
-            params.entrezEmail
+            params.entrezEmail,
+            params.genomeDBmetadata
         )
 
 

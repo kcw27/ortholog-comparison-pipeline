@@ -23,9 +23,9 @@ process runBlast {
 
     sepIDString="${separateIDs}"
     if [[ "\$sepIDString" == "true" ]]; then # use the -s flag
-        bash "\$projDir/../scripts/blast_processing/run_local_blast.sh" -p ${blastPath} -d ${blastName} -i ${queryFasta} -o "\$outname" -s
+        bash "\$projDir/../scripts/blast_processing/run_local_blast.sh" -p ${blastPath} -d ${blastName} -i ${queryFasta} -o "\$outname" -t -s
     else
-        bash "\$projDir/../scripts/blast_processing/run_local_blast.sh" -p ${blastPath} -d ${blastName} -i ${queryFasta} -o "\$outname"
+        bash "\$projDir/../scripts/blast_processing/run_local_blast.sh" -p ${blastPath} -d ${blastName} -i ${queryFasta} -o "\$outname" -t
     fi
 
     # summarize BLAST outputs

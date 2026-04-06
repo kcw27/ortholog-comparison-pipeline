@@ -4,7 +4,7 @@
 yes = ["y", "yes"]
 def format_input(param_name, param_value):
     # returns the string to write to write to the file.
-    return f"{param_name}: '{param_value.strip()}'\n"
+    return f"{param_name}: '{param_value.strip().strip('"')}'\n"
 
 def preamble():
     print("Welcome to the Metadata Magnet input file setup wizard. " \

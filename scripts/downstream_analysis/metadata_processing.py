@@ -525,8 +525,14 @@ def determine_origin(metadata_file):
 	try:
 		df = pd.read_csv(metadata_file, sep="\t")
 
-		if "titles" not in df.columns or df.empty:
+		if "titles" not in df.columns:
 			return "neither"
+		
+		if df.empty: # there's no meaningful way to guess based on the file contents, so as a last resort, guess based on the filename
+			if "synteny_summary" in metadata_file:
+				return "synteny_summary"
+			else:
+				return "fetched"
 
 		# Get first non-empty title
 		titles = df["titles"].dropna()

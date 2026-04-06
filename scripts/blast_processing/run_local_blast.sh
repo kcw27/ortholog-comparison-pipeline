@@ -12,15 +12,17 @@ print_help() {
     echo "  -o    Name of output file"
     echo "  -m    Max target seqs to return per sequence in query FASTA"
     echo "  -s    Separate column 2 formatted as "genomeID-proteinID" into "genomeID" col1 and "proteinID" col2 (default false)"
+    echo "  -t    Keep temp files in current directory (default false; used for Nextflow)"
     echo "  -h    Show help message and exit"
 }
 
 # Set default value for optional flags
 max=500000
 parse="false"
+tempInCurrDir="false"
 
 # Parse options with getopts (not GNU getopts, as that causes issues on Mac systems)
-while getopts "p:d:i:o:m:sh" opt; do
+while getopts "p:d:i:o:m:sth" opt; do
   case $opt in
     p) db_path="$OPTARG" ;; 
     d) db_name="$OPTARG" ;;
@@ -28,6 +30,7 @@ while getopts "p:d:i:o:m:sh" opt; do
     o) outfile="$OPTARG" ;;
     m) max="$OPTARG" ;;
     s) parse="true" ;;
+    t) tempInCurrDir="true" ;;
     h) print_help; exit 0 ;;
     *) print_help; exit 1 ;; #echo "Invalid option"; exit 1 ;;
   esac
@@ -47,6 +50,11 @@ mkdir -p $(dirname $outfile) # make the outdir if it doesn't exist already
 scriptsdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) # get location of current script; this is where the other scripts are found too
 
 tempBlast=$(mktemp)
+if [[ "$tempInCurrDir" == "true"]]; then
+  mv $tempBlast $(pwd)
+  tempBlast="$(pwd)/$(basename $tempBlast)"
+fi
+
 echo "Running BLAST... Temp file at $tempBlast"
 blastp -db "$db_path_and_name" -query "$query" -max_target_seqs "$max" -num_threads $procs_to_use -outfmt "6 sallgi sallseqid sseq evalue salltitles" -out $tempBlast
 
@@ -64,6 +72,10 @@ fi
 
 # add organisms column
 tempBlastOrgs=$(mktemp)
+if [[ "$tempInCurrDir" == "true"]]; then
+  mv $tempBlastOrgs $(pwd)
+  tempBlastOrgs="$(pwd)/$(basename $tempBlast)"
+fi
 echo "Adding organisms... Temp file at $tempBlastOrgs"
 bash "${scriptsdir}/add_organism_column.sh" "$tempBlast" "$tempBlastOrgs"
 

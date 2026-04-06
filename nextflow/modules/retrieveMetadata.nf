@@ -6,8 +6,7 @@ process retrieveMetadata {
     path inputFile // a blast file
     val splitSize // segmenting for metadata retrieval
     val email // for NCBI esearch
-    // eventually set it up to take params.genomeDBmetadata as an input, and if it has that and the genome IDs in the BLAST aren't 0, then search that
-    // but for now we're just using blast2gen.py
+    path genomeDBmetadata // for local metadata retrieval
 
     output:
     path "*_metadata.blast" 
@@ -16,9 +15,7 @@ process retrieveMetadata {
     signal == "true"
 
     script:
-    """
-    set -euo pipefail
-    
+    """    
     retrieveMetadata() {
         MAX_RETRIES=3
         BACKOFF=30   # seconds
@@ -74,58 +71,32 @@ process retrieveMetadata {
     output="\${inputf%.*}_metadata.blast"
     export retrievalLog='retrieveMetadata.log'
     
-    # file splitting
-    split -d -a 2 -l ${splitSize} ${inputFile} "splitFile_part" --additional-suffix=.blast
+    firstGID=\$(head -n 1 ${inputFile} | cut -f 1) 
+    if [[ "\$firstGID" != "0" && -d ${genomeDBmetadata} ]]; then # assume we have genome IDs, so we can perform local database search
+        echo "Performing local database search..."
+        projDir="${workflow.projectDir}"
+        bash "\$projDir/../scripts/blast_processing/local_metadata_retrieval.sh" ${genomeDBmetadata} ${inputFile}
+    else # we do need to get metadata from blast2gen.py
+        echo "Performing NCBI esearch..."
+        # file splitting
+        split -d -a 2 -l ${splitSize} ${inputFile} "splitFile_part" --additional-suffix=.blast
 
-    # sequential retrieval
-    # it's guaranteed to run on only one file at a time because the wait pid in retrieveMetadata blocks, and it won't return until completed
-    for file in splitFile_part*; do
-        echo "Processing: \$file"
-        retrieveMetadata "\$file"
-    done
+        # sequential retrieval
+        # it's guaranteed to run on only one file at a time because the wait pid in retrieveMetadata blocks, and it won't return until completed
+        for file in splitFile_part*; do
+            echo "Processing: \$file"
+            retrieveMetadata "\$file"
+        done
 
-    # re-joining all the metadata parts
-    # first write the header of the first metadata file. There's guaranteed to be at least one file.
-    head -n 1 "splitFile_part00_metadata.temp" > "temp.tmp"
+        # re-joining all the metadata parts
+        # first write the header of the first metadata file. There's guaranteed to be at least one file.
+        head -n 1 "splitFile_part00_metadata.temp" > "temp.tmp"
 
-    # then write everything after the header in all the files matching the pattern
-    tail -n +2 -q splitFile_part*_metadata.temp >> "temp.tmp" # q flag so it doesn't write filenames to the file, and no quotes around input filenames so the wildcard works
+        # then write everything after the header in all the files matching the pattern
+        tail -n +2 -q splitFile_part*_metadata.temp >> "temp.tmp" # q flag so it doesn't write filenames to the file, and no quotes around input filenames so the wildcard works
 
-    mv "temp.tmp" "\$output" # rename to the expected output name
-
-
-
-    # # update and uncomment once ready to integrate local database search. Also need to start by checking that the local db variable isn't null.
-    # # assume that if the first genome ID is 0, all genome IDs are 0 and therefore you need to get genome IDs from NCBI esearch
-    # # and that if the first genome ID isn't 0, then you do have genome IDs
-    # firstGID=\$(head -n 1 queryHits.blast | cut -f 1) # replace queryHits.blast with the inputFile variable
-    # if [[ "\$firstGID" == "0" ]]; then # we do need to get metadata from blast2gen.py
-    #     head "\$projDir/../scripts/blast_processing/blast2gen.py" 
-        
-    #     # file splitting
-    #     split -d -a 2 -l \$splitSize \$inputFile splitFile_part --additional-suffix=.blast
-
-    #     # sequential retrieval
-    #     # it's guaranteed to run on only one file at a time because the wait pid in retrieveMetadata blocks, and it won't return until completed
-    #     for file in splitFile_part*; do
-    #         echo "Processing: \$file"
-    #         retrieveMetadata "\$file"
-    #     done
-
-    #     # re-joining all the metadata parts, saving to metadataFilePath
-    #     # first write the header of the first file, splitFile_part00.blast
-    #     head -n 1 "splitFile_part00.blast" > "temp.tmp"
-
-    #     # then write everything after the header in all the files matching the pattern
-    #     tail -n +2 -q splitFile_part*.blast >> "temp.tmp" # q option so it doesn't write filenames to the file, and no quotes around input filenames so the wildcard works
-
-    #     echo "\$output" > "file_containing_metadata_path.txt" # is it okay to overwrite the input BLAST file with blast2gen.py? probably 
-    #     mv "temp.tmp" \$metadataFilePath"
-    #     echo "3.1: metadata retrieval WAS performed; metadataFilePath is \$metadataFilePath" >> "\$output"
-    # else # in the real script, still need to keep the else block to assign metadataFilePath
-    #     > "file_containing_metadata_path.txt" # writes nothing to the file
-    #     echo "3.1: metadata retrieval NOT performed; metadataFilePath is \$metadataFilePath" >> "\$output"
-    # fi
+        mv "temp.tmp" "\$output" # rename to the expected output name
+    fi
     """
 
     stub:

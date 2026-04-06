@@ -1,0 +1,13 @@
+queryFasta: '/home/kcw2/data/blast_outputs/wspF/wspF_PAO1.fasta'
+blastPath: '/home/share/pseudomonas/'
+blastName: 'pseudomonas_db'
+separateIDs: 'true'
+
+filterByGenome: 'true'
+genomeDBsynteny: '/home/share/pseudomonas/pseudomonas_genomes/'
+syntenyInput: '/home/kcw2/data/blast_outputs/wspF/synteny_search_inputs/synteny_input_comprehensive.tsv'
+hmmsList: '/home/kcw2/data/blast_outputs/wspF/synteny_search_inputs/hmms_of_interest.txt'
+hmmsDir: '/home/kcw2/data/blast_outputs/wspF/synteny_search_inputs/hmms/'
+hmmsMetadata: '/home/kcw2/data/blast_outputs/wspF/synteny_search_inputs/hmms_wspF.tsv'
+
+align: 'true'

@@ -105,18 +105,7 @@ write_metadata() {
       # First, get the information that is the same across all loci in locus_tags.
       organism=$(zcat $genbank_file | grep "\bORGANISM\b" | head -n 1 | awk '{$1=$1;print}' | cut -d " " -f 2-)
       
-      # old code for isolation_source and titles that only retrieved the first line of each hit
-      #isolation_source=$(zcat $genbank_file | grep "isolation_source" | sort | uniq | tr -d \\n | tr -s " ") # may be a list, but if it exists, there's usually just one unique value
-      #titles=$(zcat $genbank_file | grep "\bTITLE\b" | sort | uniq | tr -d \\n | tr -s " ") # a list, though the elements are probably just "Direct Submission" and an actual title
-      
-      # new code that gets all lines of each isolation_source and titles hit
-      #isolation_source=$(zcat $genbank_file | sed -n '/isolation_source="/,/"/p' | tr -d '\n' | tr -s " ")
-      # remove all newlines, then squeeze spaces
-      #titles=$(zcat $genbank_file | sed -n '/\bTITLE\b/,/\bJOURNAL\b/p' | grep -v "JOURNAL" | tr -d '\n' | tr -s " ")
-      # finds matches between lines featuring TITLE and JOURNAL
-      # (with word boundaries), then uses inverse grep to remove the lines featuring JOURNAL, then removes newlines and squeezes spaces
-      
-      # further-updated code that is supposed to filter out extraneous lines and remove duplicates:
+      # filter out extraneous lines and remove duplicates:
       # after finding matches and collapsing into a single line, reintroduce newlines (only between separate entries, not within entries)
       # then grep for the desired header (e.g. "^/isolation_source" to only keep lines that start with /isolation_source;
       # for some reason, sed include lines that came directly after the intended isolation source match), and use sort and uniq.
@@ -162,9 +151,8 @@ write_metadata() {
         tr -s ' '          # squeeze spaces
       )
 
-      
       # get the sequencing technology
-      seq_tech=$(zcat $genbank_file | grep -oP '(?<=Sequencing Technology  :: ).*' | head -n 1)
+      seq_tech=$(zcat $genbank_file | awk '$0 ~/Sequencing Technology/ { sub(/^[^:]*[: ]+/, ""); print }' | head -n 1 )
       
       # get assembly method and coverage too
       asm_method=$(zcat $genbank_file | awk '$0 ~/Assembly Method/ { sub(/^[^:]*[: ]+/, ""); print }' | head -n 1 )
@@ -183,23 +171,10 @@ write_metadata() {
           tr -d '[:space:]') # in the .gbff, the sequence was split over multiple lines; this combines it into a single line
 
         # write metadata for this protein to the summary file, tab-separated
-        #echo "$genome_id	$contig	$organism	$isolation_source	$title	$locus	$protein_id	$sequence"
-        #echo "Should write to ${outdir}/synteny_summary.tsv"
         echo "$genome_id	$contig	$organism	$isolation_source	$titles	$locus	$protein_id	$sequence	$seq_tech	$asm_method	$genome_coverage	$isolation_site" >> "${outdir}/synteny_summary.tsv"
       done
-    #else
-      #echo "No hits found for ${output_genome}"
     fi
-    
-    #echo $genbank_file
-  #else
-    #echo "$output_genome has no synteny_matched.tsv"
   fi
-  
-  #if [[ -n "$gbff_file" ]]; then
-    #zcat "$gbff_file" | grep "protein_id" >> "${outdir}/synteny_summary.tsv"
-    #echo "$output_genome ${outdir}/synteny_summary.tsv"
-  #fi
 }
 
 # Iterate over column 2 of the input file and parallelize metadata extraction
