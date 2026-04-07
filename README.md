@@ -4,9 +4,9 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Pipeline diagram](#pipeline-diagram)
+- [Nextflow](#nextflow)
 - [GUI](#gui)
 - [Dependencies](#dependencies)
-- [Example run](#example-run)
 - [Acknowledgements](#acknowledgements)
 
 ## Introduction
@@ -17,13 +17,22 @@ As of the time of writing, the [NCBI datasets](https://www.ncbi.nlm.nih.gov/data
 A variety of utilities are provided: you may filter your ortholog dataset in various ways, automatically categorize isolation source metadata into groups such as "host" or "natural environment", generate figures to visualize differences between categories, and run statistical tests on allele properties.
 
 ## Pipeline diagram
-<img width="750" height="863" alt="image" src="https://github.com/user-attachments/assets/3a4290eb-8557-43bd-bae3-5224f98338cc" />
+Stages of the pipeline:
+1. Obtain a BLAST database of bacterial protein sequences. You may download a prebuilt database such as nr, or use make_blastdb_from_genomes.sh to assemble one from a genome database downloaded using download_databases.sh or directly using [ncbi-genome-download](https://github.com/kblin/ncbi-genome-download).
+2. In Nextflow: BLAST for potential orthologs of your bacterial protein sequence of interest, filter the dataset, retrieve the corresponding metadata, and optionally align the sequences. The main outputs of this stage are a **FASTA** and tab-separated **metadata table** for the ortholog dataset.
+3. Optionally, further filter the dataset by filtering the metadata. This step may be necessary if you have specific filtering requirements not accounted for by the pipeline. We provide some helper functions in filter_metadata.py, but usually, filtering can be done in the command line. It is not necessary to filter the corresponding FASTA if using the GUI, as the GUI is able to drop sequences lacking metadata. However, if you need the filtered FASTA, use convert_blast_to_fasta.sh to convert the filtered metadata file to FASTA. (If the metadata is a synteny search summary, you will need to reorder columns to match the script's expected format.)
+4. In R Shiny GUI: Plug in the **FASTA** and **metadata table** to produce figures and run statistical tests.
+<img width="750" height="983" alt="image" src="https://github.com/user-attachments/assets/e0f6993d-b71e-4b17-8bbb-d53fcc2c9ecb" />
 
-Refer to [this page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/scripts_info.md) for additional information.
+## Nextflow
+Refer to [this page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/nextflow_quickstart.md).
+Currently, Conda is supported for dependency management. We are working on adding Singularity support.
 
 ## GUI
+### GUI layout
 Data input tab:
-<img width="3000" height="1750" alt="image" src="https://github.com/user-attachments/assets/f6f8d807-245c-4ae6-a834-ab7189ff8bba" />
+<img width="2439" height="1351" alt="image" src="https://github.com/user-attachments/assets/f048d26e-cbe4-4e0c-9d0f-10ac6803e79c" />
+
 
 Figure generation tab:
 <img width="3000" height="1747" alt="image" src="https://github.com/user-attachments/assets/6f426a2b-4eb9-4d33-8355-b1c697bb6df1" />
@@ -31,74 +40,61 @@ Figure generation tab:
 Statistical test tab:
 <img width="3000" height="1747" alt="image" src="https://github.com/user-attachments/assets/f0fc154c-7af6-4d6c-8be1-ebb796b3c058" />
 
-If running on a Unix server, take the following steps to view the GUI:
+### Opening the GUI
+If running on a Unix/Linux server, take the following steps to view the GUI:
 1. Get your IP address.
    ```bash
    hostname -I
    ```
 2. Launch the GUI.
    ```bash
-   Rscript "/home/kcw2/ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/pipeline_gui.R"
+   Rscript "ortholog-comparison-pipeline/scripts/downstream_analysis/R_scripts/pipeline_gui.R"
    ```
 3. Replace \<server-ip\> with your IP address, and open the link in a web browser.
    ```text
    http://<server-ip>:3838
    ```
 
-Example inputs to GUI (for debugging):  
-### Unaligned FASTA:
+### Example GUI inputs (TODO: replace with mucA and wspF):
+Use absolute paths.
+#### Unaligned FASTA:
 ```text
-"/home/kcw2/data/blast_outputs/pseudomonas_aeruginosa_PA3565_67_synteny_PairwiseBlastIntersected_pident99.fasta"
+"/home/kcw2/ortholog-comparison-pipeline/nextflow/test_results/fasta/not_aligned/results_65_67/results_65_67_filteredSynteny_pident99_qcovs90.fasta"
 ```
 Metadata:
 ```text
-"/home/kcw2/data/results_65_67/synteny_summary.tsv"
+"/home/kcw2/ortholog-comparison-pipeline/nextflow/test_results/metadata/results_65_67_synteny_summary_processedMetadata.blast"
 ```
 Outdir:
 ```text
-/home/kcw2/data/testing/foo
+/home/kcw2/ortholog-comparison-pipeline/nextflow/test_results/gui_unaligned
 ```
 Reference sequence:
 ```text
-GCF_000006765.1-NP_252255.1
+GCA_019434195.1-QYE95824.1-KZ797.12875
 ```
 
-### Aligned FASTA:
+#### Aligned FASTA:
 ```text
-"/home/kcw2/data/PA3565_align_and_tree_new/alignment/aligned.fasta"
+"/home/kcw2/ortholog-comparison-pipeline/nextflow/test_results/fasta/aligned/results_65_67_filteredSynteny_pident99_qcovs90_aligned.fasta"
 ```
 Metadata:
 ```text
-"/home/kcw2/data/results_65_67/synteny_summary.tsv"
+"/home/kcw2/ortholog-comparison-pipeline/nextflow/test_results/metadata/results_65_67_synteny_summary_processedMetadata.blast"
 ```
 Outdir:
 ```text
-/home/kcw2/data/testing/foo
+/home/kcw2/ortholog-comparison-pipeline/nextflow/test_results/gui_aligned
 ```
-Name map:
-```text
-"/home/kcw2/data/PA3565_align_and_tree_new/alignment/name_map.tsv"
-```
+
+### GUI tips
+If filtering the metadata file after conclusion of the Nextflow stage, you don't need to subset the corresponding FASTA file, but you do need to click the "Apply Subset" button in order to remove the rows with no metadata. (Rows with _NA_ metadata do not show up in the group variable selection menu, but they will be removed if you click "Apply Subset", even if all categories are still selected.)
 
 ## Dependencies
-I am working on getting everything into a single conda environment and setting up a YAML file to facilitate installation. For now, you may simply clone the repository. Note the following main dependencies:
-* Command line:
-  * [BLAST](https://anaconda.org/bioconda/blast); pipeline assumes the conda environment is called "blast_env"
-  * [Pynteny](https://github.com/Robaina/Pynteny); pipeline assumes the conda environment is called "pynteny_env"
-  * [seqtk](https://github.com/lh3/seqtk)
-  * The pipeline uses ClustalW for alignment and RAxML to produce a phylogenetic tree in [one wrapper script](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/scripts/alignment_and_tree_wrapper.sh). You can use whichever alignment algorithm you prefer, as long as you run fasta_to_phylip.sh on the aligned FASTA before passing it to RAxML. I am considering replacing ClustalW with MAFFT --auto.
-* R:
-  * reticulate
-  * [seqinr](https://www.rdocumentation.org/packages/seqinr/versions/4.2-36)
-  * [ggseqlogo](https://github.com/omarwagih/ggseqlogo)
-  * [rstatix](https://www.rdocumentation.org/packages/rstatix/versions/0.7.2)
-  * shiny
-  * pdftools
-* Python
-* [iTOL](https://itol.embl.de/) (website): you can drag + drop the phylogenetic tree and annotation files to produce a phylogeny annotated by metadata.
-
-## Example run
-Refer to [this page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/example_run.md).
+It is assumed that the user is running this pipeline on a Unix/Linux server. I have been using Ubuntu 24.04.2 LTS (GNU/Linux 6.8.0-44-generic x86_64).
+* Stage 1: If using the scripts in scripts/setup/ to produce a BLAST db, please create the metadata-magnet-setup-env Conda environment from scripts/setup/makeBlastDB.yaml.
+* Stage 2: Nextflow handles environment creation automatically, but if you would like to run any of the scripts as standalones, the nextflow/envs/metadata-magnet-env.yaml file will account for most scripts. However, if running synteny search or the subsequent intersection of BLAST with synteny search hits, use nextflow/envs/pynteny-env.yaml instead.
+* Stage 4: You will need to install R and the [R Shiny](https://shiny.posit.co/r/getstarted/shiny-basics/lesson1/) package.
 
 ## Acknowledgements
 * Advisor: Dr. Catherine Armbruster
@@ -106,3 +102,8 @@ Refer to [this page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/
    * Dr. Irene Kaplow
    * Dr. Phillip Compeau
 * Assistance with bioinformatic analysis: Dr. Arkadiy Garber
+* Open-source projects used for this pipeline:
+   * [bit](https://github.com/AstrobioMike/bit)
+   * [ncbi-genome-download](https://github.com/kblin/ncbi-genome-download)
+   * [pynteny](https://github.com/Robaina/Pynteny)
+   * [seqtk](https://github.com/lh3/seqtk)
