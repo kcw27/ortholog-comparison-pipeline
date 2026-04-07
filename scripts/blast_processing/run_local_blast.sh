@@ -50,7 +50,7 @@ mkdir -p $(dirname $outfile) # make the outdir if it doesn't exist already
 scriptsdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) # get location of current script; this is where the other scripts are found too
 
 tempBlast=$(mktemp)
-if [[ "$tempInCurrDir" == "true"]]; then
+if [[ "$tempInCurrDir" == "true" ]]; then
   mv $tempBlast $(pwd)
   tempBlast="$(pwd)/$(basename $tempBlast)"
 fi
@@ -72,7 +72,7 @@ fi
 
 # add organisms column
 tempBlastOrgs=$(mktemp)
-if [[ "$tempInCurrDir" == "true"]]; then
+if [[ "$tempInCurrDir" == "true" ]]; then
   mv $tempBlastOrgs $(pwd)
   tempBlastOrgs="$(pwd)/$(basename $tempBlast)"
 fi

@@ -286,22 +286,28 @@ server <- function(input, output, session) {
   output$show_output <- reactive({ show_output() })
   outputOptions(output, "show_output", suspendWhenHidden = FALSE)
 
-  # NEW: Dynamic UI for subset levels - ENHANCED to show only current levels
   output$subset_levels_ui <- renderUI({
     req(df_store())
-    df <- get_current_df()  # CHANGED: Use current df instead of original
+    df <- get_current_df()  # Use current df (subsetted or original)
     group_var <- input$subset_group_var
     
     if (!group_var %in% names(df)) {
       return(div("Selected group variable not found in data"))
     }
     
-    levels <- sort(unique(df[[group_var]]))
-    levels <- levels[!is.na(levels)]  # Remove NA values
+    # Calculate counts for each level
+    level_counts <- table(df[[group_var]], useNA = "no")
+    levels <- sort(names(level_counts))
+    
+    # Create labels with counts
+    level_labels <- glue("{levels} ({level_counts[levels]})")
+    
+    # Get currently selected levels (preserve selection)
+    current_selection <- input$subset_levels %||% levels
     
     checkboxGroupInput("subset_levels", "Select levels to include:",
-                      choices = levels,
-                      selected = levels)  # Default: all current levels selected
+                       choices = setNames(levels, level_labels),
+                       selected = current_selection[current_selection %in% levels])
   })
   
   # Update figure script choices based on FASTA type

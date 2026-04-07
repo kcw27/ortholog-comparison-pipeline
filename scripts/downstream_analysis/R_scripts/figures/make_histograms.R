@@ -32,6 +32,7 @@ save_histograms <- function(df, group_var, outdir, pdf_suffix, column_name = "se
                                labels = c(reference_length = glue("{reference_label} = {reference_length}"),
                                           mean = glue("Mean = {round(mean(.x[[column_name]], na.rm = TRUE), 1)}"),
                                           median = glue("Median = {median(.x[[column_name]], na.rm = TRUE)}"))) +
+            theme(legend.text = element_text(size = 8)) + # in case the reference_label is long
             xlim(x_limits) # notice that we set x limits here, but no y limits yet
           )
   } else {
@@ -139,7 +140,9 @@ histograms_by_source <- function(df, outdir, column_name = "sequence_length", re
                            values = c(reference_length = "blue", mean = "red", median = "green"),
                            labels = c(reference_length = glue("{reference_label} = {reference_length}"),
                            mean = glue("Mean = {round(mean(df[[column_name]], na.rm = TRUE), 1)}"),
-                           median = glue("Median = {median(df[[column_name]], na.rm = TRUE)}")))
+                           median = glue("Median = {median(df[[column_name]], na.rm = TRUE)}"))) +
+      theme(legend.text = element_text(size = 8))
+                           
       ggsave(fname, create.dir=TRUE, width = 8, height = 6)
       print(glue("Histogram saved to {fname}"))
   } else {
