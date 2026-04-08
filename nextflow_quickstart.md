@@ -30,6 +30,7 @@ Execution may take several hours. The most time-consuming steps are the initial 
 * There is a chance that metadata retrieval via NCBI esearch will fail, especially during times of heavy server traffic. Decrease the **--splitSize** parameter (default: split metadata retrieval tasks into files of at most 8000 lines each, then recombine into a single meetadata file) if NCBI esearch fails.  
 * If you have already collected metadata for your dataset via this pipeline, you may use the **--existingMetadata** option to load that metadata file and skip metadata retrieval (unless you attempt to filter to top hit per genome with no genome IDs in the BLAST database, which forces NCBI esearch to retrieve genome accessions among other metadata).  
 * If you would like to keep the FASTA for the full dataset of hits from the synteny search (as opposed to the fasta for the intersection of BLAST and synteny search, which is a subset of the synteny search dataset), or you would like to keep the BLAST db created from the BLAST hits (which in this pipeline is only used for the intersection step), include the **--keepSyntenyFasta** flag.
+* For metadata categorization, the nextflow/data/category_keywords.txt and nextflow/data/subcategory_keywords.txt are used. You may add to these files if you wish. In each section (delimited by ***), the first line is the name of the category or subcategory, and all following lines are the keywords corresponding to that category or subcategory.
 
 ## Pipeline outputs
 my_results/  
