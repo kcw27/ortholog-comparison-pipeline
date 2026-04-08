@@ -4,8 +4,8 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Pipeline diagram](#pipeline-diagram)
-- [Nextflow](#nextflow)
-- [GUI](#gui)
+- [Nextflow](#stage-2-nextflow)
+- [GUI](#stage-4-gui)
 - [Dependencies](#dependencies)
 - [Acknowledgements](#acknowledgements)
 
@@ -24,11 +24,11 @@ Stages of the pipeline:
 4. In R Shiny GUI: Plug in the **FASTA** and **metadata table** to produce figures and run statistical tests.
 <img width="750" height="983" alt="image" src="https://github.com/user-attachments/assets/e0f6993d-b71e-4b17-8bbb-d53fcc2c9ecb" />
 
-## Nextflow
-Refer to [this page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/nextflow_quickstart.md).
+## Stage 2: Nextflow
+Please refer to [the Nextflow Quickstart page](https://github.com/kcw27/ortholog-comparison-pipeline/blob/main/nextflow_quickstart.md) for a tutorial on setting up the input parameter file and running the pipeline.
 Currently, Conda is supported for dependency management. We are working on adding Singularity support.
 
-## GUI
+## Stage 4: GUI
 ### GUI layout
 Data input tab:
 <img width="2439" height="1351" alt="image" src="https://github.com/user-attachments/assets/f048d26e-cbe4-4e0c-9d0f-10ac6803e79c" />
@@ -55,7 +55,8 @@ If running on a Unix/Linux server, take the following steps to view the GUI:
    http://<server-ip>:3838
    ```
 
-### Example GUI inputs (TODO: replace with mucA and wspF):
+### Example GUI inputs:
+(TODO: replace with larger datasets such as mucA and wspF?)  
 Use absolute paths.
 #### Unaligned FASTA:
 ```text
