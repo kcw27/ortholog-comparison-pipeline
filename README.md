@@ -108,3 +108,4 @@ It is assumed that the user is running this pipeline on a Unix/Linux server. I h
    * [ncbi-genome-download](https://github.com/kblin/ncbi-genome-download)
    * [pynteny](https://github.com/Robaina/Pynteny)
    * [seqtk](https://github.com/lh3/seqtk)
+# metadata-magnet
