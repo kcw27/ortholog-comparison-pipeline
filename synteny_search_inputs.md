@@ -10,7 +10,11 @@ This is a database of .gbff.gz files (unzipped is fine). If you created a BLAST 
 
 ### syntenyInput / -i input_file
 Example: 'nextflow/data/synteny_search_inputs/synteny_input.tsv'  
-This is a tab-separated table in which column 1 contains [synteny structures](https://robaina.github.io/Pynteny/subcommands/search/) as expected by Pynteny, and column 2 contains output directories. If using this as part of Nextflow, please use relative paths.
+This is a tab-separated table in which column 1 contains [synteny structures](https://robaina.github.io/Pynteny/subcommands/search/) as expected by Pynteny, and column 2 contains output directories. If using this as part of Nextflow, please use relative paths.  
+synteny_wrapper.sh automatically cleans the file of Windows-style return characters, but if running scripts individiually, please run the following code to clean your file. Otherwise, return characters may become embedded in your filepaths.
+```bash
+sed -i 's/\r$//' my_file.txt
+```
 
 ### hmmsList / -L hmms_list
 Example: 'nextflow/data/synteny_search_inputs/hmms_of_interest.txt'  
