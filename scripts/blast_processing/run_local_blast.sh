@@ -30,7 +30,7 @@ while getopts "p:d:i:o:m:sth" opt; do
     o) outfile="$OPTARG" ;;
     m) max="$OPTARG" ;;
     s) parse="true" ;;
-    t) tempInCurrDir="true" ;;
+    t) tempInCurrDir="true" ;; # currently not using this
     h) print_help; exit 0 ;;
     *) print_help; exit 1 ;; #echo "Invalid option"; exit 1 ;;
   esac
@@ -50,11 +50,6 @@ mkdir -p $(dirname $outfile) # make the outdir if it doesn't exist already
 scriptsdir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) # get location of current script; this is where the other scripts are found too
 
 tempBlast=$(mktemp)
-if [[ "$tempInCurrDir" == "true" ]]; then
-  mv $tempBlast $(pwd)
-  tempBlast="$(pwd)/$(basename $tempBlast)"
-fi
-
 echo "Running BLAST... Temp file at $tempBlast"
 blastp -db "$db_path_and_name" -query "$query" -max_target_seqs "$max" -num_threads $procs_to_use -outfmt "6 sallgi sallseqid sseq evalue salltitles" -out $tempBlast
 
@@ -72,10 +67,6 @@ fi
 
 # add organisms column
 tempBlastOrgs=$(mktemp)
-if [[ "$tempInCurrDir" == "true" ]]; then
-  mv $tempBlastOrgs $(pwd)
-  tempBlastOrgs="$(pwd)/$(basename $tempBlast)"
-fi
 echo "Adding organisms... Temp file at $tempBlastOrgs"
 bash "${scriptsdir}/add_organism_column.sh" "$tempBlast" "$tempBlastOrgs"
 

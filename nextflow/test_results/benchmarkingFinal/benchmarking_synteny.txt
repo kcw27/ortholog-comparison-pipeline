@@ -1,0 +1,24 @@
+[1] TRUE
+Number of BLAST hits: 8
+Number of unique genome IDs: 2
+Number of unique sequence IDs: 5
+Number of unique sequences: 8
+Number of unique titles: 5
+Number of unique organisms: 2
+# A tibble: 2 × 2
+  genome_id           n
+  <chr>           <int>
+1 GCA_000143005.1     7
+2 GCF_000006765.1     1
+Number of hits from original BLAST: 8
+Number of hits remaining after filtering to evalue <= 1e-40: 1
+Number of hits remaining after filtering to top hit per organism: 1
+Number of hits remaining after filtering to top hit per genome: 1
+
+No longer filtering the file from the original BLAST. Instead, for each synteny search, a subset is taken from the hits that closely resemble sequences in the original BLAST.
+There are 15 hits for the synteny structure corresponding to outdir results_65_66_67.
+Of these, 15 hits intersected with the original BLAST for your query.
+(Intersected using a pairwise blast of synteny structure hits against the original BLAST hits, requiring at least 99 pident and 90 qcovs to consider a BLAST hit to be a match.)
+There are 105 hits for the synteny structure corresponding to outdir results_65_67.
+Of these, 15 hits intersected with the original BLAST for your query.
+(Intersected using a pairwise blast of synteny structure hits against the original BLAST hits, requiring at least 99 pident and 90 qcovs to consider a BLAST hit to be a match.)
