@@ -16,7 +16,7 @@ As of the time of writing, the [NCBI datasets](https://www.ncbi.nlm.nih.gov/data
 
 A variety of utilities are provided: you may filter your ortholog dataset in various ways, automatically categorize isolation source metadata into groups such as "host" or "natural environment", generate figures to visualize differences between categories, and run statistical tests on allele properties.
 
-## Pipeline diagram
+## Pipeline overview
 Stages of the pipeline:
 1. Obtain a BLAST database of bacterial protein sequences. You may download a prebuilt database such as nr, or use make_blastdb_from_genomes.sh to assemble one from a genome database downloaded using download_databases.sh or directly using [ncbi-genome-download](https://github.com/kblin/ncbi-genome-download).
 2. In Nextflow: BLAST for potential orthologs of your bacterial protein sequence of interest, filter the dataset, retrieve the corresponding metadata, and optionally align the sequences. The main outputs of this stage are a **FASTA** and tab-separated **metadata table** for the ortholog dataset.
@@ -57,7 +57,7 @@ If running on a Unix/Linux server, take the following steps to view the GUI:
 
 ### Example GUI inputs:
 (TODO: replace with larger datasets such as mucA and wspF?)  
-Use absolute paths.
+Use absolute paths. It is okay if there are quotes around the paths entered. If entering the reference sequence ID, please enter it exactly as it appears in the FASTA. 
 #### Unaligned FASTA:
 ```text
 "/home/kcw2/ortholog-comparison-pipeline/nextflow/test_results/fasta/not_aligned/results_65_67/results_65_67_filteredSynteny_pident99_qcovs90.fasta"
