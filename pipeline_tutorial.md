@@ -5,13 +5,15 @@ Table of contents: TODO
 - [Running the R Shiny GUI on Nextflow pipeline outputs](#running-the-r-shiny-gui-on-nextflow-pipeline-outputs)
 
 # Setup
+It is assumed that the user is running this pipeline on a Unix/Linux server. I have been using Ubuntu 24.04.2 LTS (GNU/Linux 6.8.0-44-generic x86_64).  
 Clone the repository.
 ```bash
 git clone https://github.com/armbrusterlab/metadata-magnet.git
 ```
 [Install Nextflow](https://www.nextflow.io/docs/latest/install.html) to run the pipeline.  
 If you would like to use the GUI to produce figures and statistical analyses from the pipeline outputs, install [R](https://www.anaconda.com/docs/getting-started/working-with-conda/packages/using-r-language) and [R Shiny](https://shiny.posit.co/r/getstarted/shiny-basics/lesson1/). Alternatively, activate the metadata-magnet-env conda environment (explained below).  
-Nextflow automatically handles conda environment management. To use pipeline scripts as standalones, you will need to create and activate conda environments from the corresponding YAML files.
+
+Nextflow automatically handles conda environment management. However, to use pipeline scripts as standalone functions, you will need to create and activate conda environments from the corresponding YAML files.
 ```bash
 # to run scripts in the metadata-magnet/scripts/setup/ dir:
 conda env create -f metadata-magnet/scripts/setup/metadata-magnet-setup-env.yaml
@@ -71,8 +73,6 @@ tree "/home/kcw2/metadata-magnet/nextflow/example_data/genome_db/" # to display 
 ├── GCA_019910225.1
 │   ├── GCA_019910225.1_ASM1991022v1_genomic.gbff.gz
 │   └── MD5SUMS
-<img width="723" height="270" alt="image" src="https://github.com/user-attachments/assets/0b55044c-941f-4329-9555-a9eab071e1e1" />
-
 ```
 ##### Dealing with failed downloads
 On occasion, NCBI's rate-limiting will cause some genome downloads to fail. This may be the case if download_databases.sh prints messages like this: 
@@ -172,7 +172,8 @@ python metadata-magnet/nextflow/input_wizard.py
 The params file used for this example run is [metadata-magnet/nextflow/example_data/input.yaml](https://github.com/armbrusterlab/metadata-magnet/blob/main/nextflow/example_data/input.yaml).
 Here are the responses I entered to produce that file:
 <img width="2058" height="1278" alt="image" src="https://github.com/user-attachments/assets/68615a90-882d-4f26-b5b9-940fed7671fa" />  
-If you would like to first run the BLAST, then manually examine the BLAST outputs, and _then_ configure the filtering settings, you should respond "y" when the input wizard presents this question, and rerun the input wizard to produce a second parameters file with the filtering settings. You may then run the pipeline with the new parameters file and a **-resume** flag in order to use cached results from the BLAST.
+If you would like to first run the BLAST, then manually examine the BLAST outputs, and _then_ configure the filtering settings, you should respond "y" when the input wizard presents this question, and rerun the input wizard to produce a second parameters file with the filtering settings. You may then run the pipeline with the new parameters file and a **-resume** flag in order to use cached results from the BLAST.  
+Please provide a real email address so that NCBI can contact you about issues instead of IP-banning your institution.
 
 #### Additional parameters not configured by the input wizard
 * There is a chance that metadata retrieval via NCBI esearch will fail, especially during times of heavy server traffic. Decrease the **--splitSize** parameter (default: split metadata retrieval tasks into files of at most 8000 lines each, then recombine into a single meetadata file) if NCBI esearch fails.  
@@ -181,7 +182,7 @@ If you would like to first run the BLAST, then manually examine the BLAST output
 * For metadata categorization, the nextflow/data/category_keywords.txt and nextflow/data/subcategory_keywords.txt are used. You may add to these files if you wish. In each section (delimited by ***), the first line is the name of the category or subcategory, and all following lines are the keywords corresponding to that category or subcategory.
 
 ### Run the Nextflow pipeline
-Make sure that Nextflow is installed. You don't need to activate any conda environments; Nextflow will handle it.  
+Make sure that Nextflow is installed. You don't need to activate any Conda environments; Nextflow will handle it. Currently, only Conda is supported for dependency management, but we are working on adding Singularity support.
 Execution may take several hours. The most time-consuming steps are the initial BLAST, the metadata retrieval (especially if retrieving via NCBI esearch, as rate-limiting is necessary), and the synteny search.
 ```bash
 tmux new -s nextflow # optional but recommended for longer runs
@@ -199,6 +200,7 @@ The full output tree may be found [later in this document](#pipeline-outputs).
 ### Optional: additional filtering/processing of metadata
 The GUI is capable of filtering by isolation source category, isolation source subcategory, genus, or species. It also adds a column for sequence length if loading unaligned sequences. If you would like to perform additional filtering of the metadata, you may use helper functions such as those in [filter_metadata.py](https://github.com/armbrusterlab/metadata-magnet/blob/main/scripts/downstream_analysis/filter_metadata.py). You may also add columns to the metadata, e.g. using [find_pq_repeats.py](https://github.com/armbrusterlab/metadata-magnet/blob/main/scripts/downstream_analysis/find_pq_repeats.py) (TODO: refactor the script to take CLIs).  
 If filtering the metadata file after conclusion of the Nextflow stage, you don't need to subset the corresponding FASTA file, as the GUI is able to drop sequences lacking metadata. However, when you load the data in the GUI, you do need to click the "Apply Subset" button in order to remove the rows with no metadata. (Rows with _NA_ metadata do not show up in the group variable selection menu, but they will be removed if you click "Apply Subset", even if all categories are still selected.) If you need the filtered FASTA, use convert_blast_to_fasta.sh to convert the filtered metadata file to FASTA. (If the metadata is a synteny search summary, you will need to reorder columns to match the script's expected format.)
+
 ### Analyze Nextflow outputs in the GUI
 #### Open the GUI
 If running on a Unix/Linux server, take the following steps to view the GUI:
@@ -208,6 +210,7 @@ If running on a Unix/Linux server, take the following steps to view the GUI:
    ```
 2. Launch the GUI in the terminal.
    ```bash
+   conda activate metadata-magnet-env
    Rscript metadata-magnet/scripts/downstream_analysis/R_scripts/pipeline_gui.R
    ```
 3. Replace \<server-ip\> with your IP address, and open the link in a web browser.
